@@ -1,0 +1,15 @@
+Package: squad
+Title: Statistics for QUAternion Data
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Aymeric",
+           family = "Stamm",
+           role = c("aut", "cre"),
+           email = "aymeric.stamm@univ-nantes.fr",
+           comment = c(ORCID = "0000-0002-8725-3654"))
+Description: This package provides a C++ library for quaternion 
+    representation and statistical analysis. It relies on pre-existing 
+    data structure provided by the Eigen library.
+License: AGPL-3.0
+Encoding: UTF-8
+LazyData: true
