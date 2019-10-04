@@ -17,9 +17,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// RegularizeGrid
+Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& x, const Rcpp::NumericMatrix& y, const double step);
+RcppExport SEXP _squad_RegularizeGrid(SEXP xSEXP, SEXP ySEXP, SEXP stepSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const double >::type step(stepSEXP);
+    rcpp_result_gen = Rcpp::wrap(RegularizeGrid(x, y, step));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_squad_GetCostMatrix", (DL_FUNC) &_squad_GetCostMatrix, 2},
+    {"_squad_RegularizeGrid", (DL_FUNC) &_squad_RegularizeGrid, 3},
     {NULL, NULL, 0}
 };
 

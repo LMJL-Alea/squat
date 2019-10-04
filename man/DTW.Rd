@@ -4,12 +4,20 @@
 \alias{DTW}
 \title{Dynamic Time Warping for Quaternion Time Series}
 \usage{
-DTW(s1, s2, distance_only = FALSE)
+DTW(s1, s2, t1, t2, step = 1, distance_only = FALSE)
 }
 \arguments{
 \item{s1}{A QTS stored as an object of class \code{\link[onion]{quaternion}}.}
 
 \item{s2}{A QTS stored as an object of class \code{\link[onion]{quaternion}}.}
+
+\item{t1}{A numeric vector specifying the time points at which the 1st QTS
+has been measured.}
+
+\item{t2}{A numeric vector specifying the time points at which the 2nd QTS
+has been measured.}
+
+\item{step}{A numeric scalar specifying the time unit (default: 1).}
 
 \item{distance_only}{A boolean specifyung whether to only compute distance
 (no backtrack, faster). Default is \code{FALSE}.}

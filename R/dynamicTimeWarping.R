@@ -5,6 +5,11 @@
 #'
 #' @param s1 A QTS stored as an object of class \code{\link[onion]{quaternion}}.
 #' @param s2 A QTS stored as an object of class \code{\link[onion]{quaternion}}.
+#' @param t1 A numeric vector specifying the time points at which the 1st QTS
+#'   has been measured.
+#' @param t2 A numeric vector specifying the time points at which the 2nd QTS
+#'   has been measured.
+#' @param step A numeric scalar specifying the time unit (default: 1).
 #' @param distance_only A boolean specifyung whether to only compute distance
 #'   (no backtrack, faster). Default is \code{FALSE}.
 #'
@@ -20,7 +25,11 @@
 #' s2 <- s2.brut / Mod(s2.brut)
 #'
 #' DTW(s1, s2)
-DTW <- function(s1, s2, distance_only = FALSE) {
+DTW <- function(s1, s2, t1, t2, step = 1, distance_only = FALSE) {
+  s1 <- as.matrix(s1)
+  s2 <- as.matrix(s2)
+  s1 <- RegularizeGrid(t1, s1, step = step)
+  s2 <- RegularizeGrid(t2, s2, step = step)
   M <- GetCostMatrix(as.matrix(s1), as.matrix(s2))
   dtw::dtw(M, distance.only = distance_only)
 }

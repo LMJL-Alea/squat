@@ -5,3 +5,7 @@ GetCostMatrix <- function(x, y) {
     .Call('_squad_GetCostMatrix', PACKAGE = 'squad', x, y)
 }
 
+RegularizeGrid <- function(x, y, step = 1) {
+    .Call('_squad_RegularizeGrid', PACKAGE = 'squad', x, y, step)
+}
+

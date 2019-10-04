@@ -4,12 +4,14 @@
 \alias{distDTW}
 \title{Distance Matrix for Quaternion Time Series Samples}
 \usage{
-distDTW(t, q, labels = NULL)
+distDTW(t, q, step = 1, labels = NULL)
 }
 \arguments{
 \item{t}{A list of time grids over which the QTS are measured.}
 
 \item{q}{A list of QTS.}
+
+\item{step}{A numeric scalar specifying the time unit (default: 1).}
 
 \item{labels}{A character vector specifying labels for each QTS.}
 }
