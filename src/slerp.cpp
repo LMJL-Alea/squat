@@ -36,7 +36,6 @@ Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0, const Rcpp::NumericVect
   {
     // If the inputs are too close for comfort, linearly interpolate
     // and normalize the result.
-
     Rcpp::NumericVector result = q0 + t * (q1 - q0);
     Normalize(result, result);
     return result;
@@ -73,8 +72,10 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::Num
       xinf = x[pos];
     }
     if (pos > 0)
+    {
       pos -= 1;
-    xinf = x[pos];
+      xinf = x[pos];
+    }
     Qinf = y(Rcpp::_, pos);
 
     pos = gridSize - 1;
@@ -85,11 +86,13 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::Num
       xsup = x[pos];
     }
     if (pos < gridSize - 1)
+    {
       pos += 1;
-    xsup = x[pos];
+      xsup = x[pos];
+    }
     Qsup = y(Rcpp::_, pos);
 
-    double p = (newx - xinf) / (xsup - xinf);
+    double p = (xsup - newx) / (xsup - xinf);
     interpolatedValues.push_back(slerp(Qinf, Qsup, p));
 
     newx += step;
