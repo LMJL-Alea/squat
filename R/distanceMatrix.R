@@ -21,7 +21,7 @@ distDTW <- function(t, q, step = 10, labels = NULL) {
         s1 = q[[i]], s2 = q[[j]],
         t1 = t[[i]], t2 = t[[j]],
         step = step, distance_only = TRUE
-      )$distance
+      )$normalizedDistance
     }
   }
   attributes(d) <- NULL

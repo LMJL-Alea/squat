@@ -18,6 +18,5 @@ Rcpp::NumericMatrix GetCostMatrix(const Rcpp::NumericMatrix &x, const Rcpp::Nume
       costMatrix(i, j) = 2.0 * std::acos(realPart);
     }
   }
-  costMatrix = costMatrix / (double)std::min(nx, ny);
   return costMatrix;
 }
