@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' # TO DO
-distDTW <- function(t, q, step = 1, labels = NULL) {
+distDTW <- function(t, q, step = 10, labels = NULL) {
   n <- length(t)
   if (is.null(labels)) labels <- 1:n
   d <- numeric(n * (n - 1) / 2)
