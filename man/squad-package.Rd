@@ -11,6 +11,6 @@ This package provides a C++ library for quaternion
     data structure provided by the Eigen library.
 }
 \author{
-\strong{Maintainer}: Aymeric Stamm \email{aymeric.stamm@univ-nantes.fr} (0000-0002-8725-3654)
+\strong{Maintainer}: Aymeric Stamm \email{aymeric.stamm@math.cnrs.fr} (0000-0002-8725-3654)
 
 }
