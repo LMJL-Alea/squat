@@ -5,7 +5,7 @@ Authors@R:
     person(given = "Aymeric",
            family = "Stamm",
            role = c("aut", "cre"),
-           email = "aymeric.stamm@univ-nantes.fr",
+           email = "aymeric.stamm@math.cnrs.fr",
            comment = c(ORCID = "0000-0002-8725-3654"))
 Description: This package provides a C++ library for quaternion 
     representation and statistical analysis. It relies on pre-existing 
@@ -18,4 +18,5 @@ LinkingTo:
     Rcpp
 Imports:
     dtw,
+    onion,
     Rcpp
