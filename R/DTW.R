@@ -3,13 +3,15 @@
 #' This function evaluates the Dynamic Time Warping (DTW) distance between two
 #' quaternion time series (QTS).
 #'
-#' @param s1 A QTS stored as an object of class \code{\link[onion]{quaternion}}.
-#' @param s2 A QTS stored as an object of class \code{\link[onion]{quaternion}}.
+#' @param s1 A QTS stored as a numeric 4-row matrix.
+#' @param s2 A QTS stored as a numeric 4-row matrix.
 #' @param t1 A numeric vector specifying the time points at which the 1st QTS
-#'   has been measured.
+#'   has been measured. Its size should match the number of columns in
+#'   \code{s1}.
 #' @param t2 A numeric vector specifying the time points at which the 2nd QTS
-#'   has been measured.
-#' @param step A numeric scalar specifying the time unit (default: 1).
+#'   has been measured. Its size should match the number of columns in
+#'   \code{s2}.
+#' @param step A numeric scalar specifying the time unit (default: 10 [ms]).
 #' @param distance_only A boolean specifyung whether to only compute distance
 #'   (no backtrack, faster). Default is \code{FALSE}.
 #'
@@ -18,19 +20,19 @@
 #' @export
 #'
 #' @examples
-#' # Pour générer 2 séries de quaternions :
-#' s1.brut <- onion::rquat(15, rand = "norm")
-#' s1 <- s1.brut / Mod(s1.brut)
-#' s2.brut <- onion::rquat(20, rand = "norm")
-#' s2 <- s2.brut / Mod(s2.brut)
-#'
-#' DTW(s1, s2)
-DTW <- function(s1, s2, t1, t2, step = 1, distance_only = FALSE) {
+#' s1_raw <- onion::rquat(15, rand = "norm")
+#' s1 <- s1_raw / Mod(s1_raw)
+#' s2_raw <- onion::rquat(20, rand = "norm")
+#' s2 <- s2_raw / Mod(s2_raw)
+#' t1 <- seq(0, 1, length.out = 15)
+#' t2 <- seq(0, 1, length.out = 20)
+#' DTW(s1, s2, t1, t2)
+DTW <- function(s1, s2, t1, t2, step = 10, distance_only = FALSE) {
   s1 <- as.matrix(s1)
   s2 <- as.matrix(s2)
   s1 <- RegularizeGrid(t1, s1, step = step)
   s2 <- RegularizeGrid(t2, s2, step = step)
-  M <- GetCostMatrix(as.matrix(s1), as.matrix(s2))
+  M <- GetCostMatrix(s1, s2)
   dtw::dtw(M, distance.only = distance_only)
 }
 
