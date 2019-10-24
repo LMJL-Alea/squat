@@ -11,7 +11,7 @@
 #' @param t2 A numeric vector specifying the time points at which the 2nd QTS
 #'   has been measured. Its size should match the number of columns in
 #'   \code{s2}.
-#' @param step A numeric scalar specifying the time unit (default: 10 [ms]).
+#' @param step A numeric scalar specifying the time unit (default: 0.01 [s]).
 #' @param distance_only A boolean specifyung whether to only compute distance
 #'   (no backtrack, faster). Default is \code{FALSE}.
 #'
@@ -27,7 +27,7 @@
 #' t1 <- seq(0, 1, length.out = 15)
 #' t2 <- seq(0, 1, length.out = 20)
 #' DTW(s1, s2, t1, t2)
-DTW <- function(s1, s2, t1, t2, step = 10, distance_only = FALSE) {
+DTW <- function(s1, s2, t1, t2, step = 0.01, distance_only = FALSE) {
   s1 <- as.matrix(s1)
   s2 <- as.matrix(s2)
   s1 <- RegularizeGrid(t1, s1, step = step)
