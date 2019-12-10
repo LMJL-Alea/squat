@@ -83,6 +83,11 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::Num
       pos -= 1;
       xinf = x[pos];
     }
+    if (pos >= sizeIn)
+    {
+      pos = sizeIn - 1;
+      xinf = x[pos];
+    }
     Qinf = y(Rcpp::_, pos);
 
     pos = sizeIn - 1;
@@ -97,11 +102,20 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::Num
       pos += 1;
       xsup = x[pos];
     }
+    if (pos < 0)
+    {
+      pos = 0;
+      xsup = x[pos];
+    }
     Qsup = y(Rcpp::_, pos);
 
-    double p = (xsup - newx) / (xsup - xinf);
-
-    yOut(Rcpp::_, i) = slerp(Qinf, Qsup, p);
+    if (xsup == xinf)
+      yOut(Rcpp::_, i) = Qinf;
+    else
+    {
+      double p = (xsup - newx) / (xsup - xinf);
+      yOut(Rcpp::_, i) = slerp(Qinf, Qsup, p);
+    }
   }
 
   return yOut;
