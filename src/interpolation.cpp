@@ -59,6 +59,7 @@ Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0, const Rcpp::NumericVect
 // [[Rcpp::export]]
 Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::NumericMatrix &y, const unsigned int outSize = 0)
 {
+  // Assumes x is sorted in ascending order
   unsigned int sizeIn = x.size();
   unsigned int sizeOut = (outSize == 0) ? sizeIn : outSize;
   double xmin = x[0];
@@ -66,48 +67,48 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::Num
   double step = (xmax - xmin) / (sizeOut - 1.0);
   Rcpp::NumericVector Qinf, Qsup;
   Rcpp::NumericMatrix yOut(4, sizeOut);
+  unsigned int posInf = 0;
+  unsigned int posSup = sizeIn - 1;
 
   for (unsigned int i = 0;i < sizeOut;++i)
   {
     double newx = xmin + (double)i * step;
 
-    unsigned int pos = 0;
-    double xinf = x[pos];
+    double xinf = x[posInf];
     while (xinf < newx)
     {
-      pos += 1;
-      xinf = x[pos];
+      posInf += 1;
+      xinf = x[posInf];
     }
-    if (pos > 0)
+    if (posInf > 0)
     {
-      pos -= 1;
-      xinf = x[pos];
+      posInf -= 1;
+      xinf = x[posInf];
     }
-    if (pos >= sizeIn)
+    if (posInf >= sizeIn)
     {
-      pos = sizeIn - 1;
-      xinf = x[pos];
+      posInf = sizeIn - 1;
+      xinf = x[posInf];
     }
-    Qinf = y(Rcpp::_, pos);
+    Qinf = y(Rcpp::_, posInf);
 
-    pos = sizeIn - 1;
-    double xsup = x[pos];
+    double xsup = x[posSup];
     while (xsup > newx)
     {
-      pos -= 1;
-      xsup = x[pos];
+      posSup -= 1;
+      xsup = x[posSup];
     }
-    if (pos < sizeIn - 1)
+    if (posSup < sizeIn - 1)
     {
-      pos += 1;
-      xsup = x[pos];
+      posSup += 1;
+      xsup = x[posSup];
     }
-    if (pos < 0)
+    if (posSup < 0)
     {
-      pos = 0;
-      xsup = x[pos];
+      posSup = 0;
+      xsup = x[posSup];
     }
-    Qsup = y(Rcpp::_, pos);
+    Qsup = y(Rcpp::_, posSup);
 
     if (xsup == xinf)
       yOut(Rcpp::_, i) = Qinf;
