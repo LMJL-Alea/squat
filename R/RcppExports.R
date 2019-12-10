@@ -5,7 +5,15 @@ GetCostMatrix <- function(x, y) {
     .Call('_squad_GetCostMatrix', PACKAGE = 'squad', x, y)
 }
 
-RegularizeGrid <- function(x, y, step = 1) {
-    .Call('_squad_RegularizeGrid', PACKAGE = 'squad', x, y, step)
+GetSquaredL2Distance <- function(x, y) {
+    .Call('_squad_GetSquaredL2Distance', PACKAGE = 'squad', x, y)
+}
+
+slerp <- function(v0, v1, t) {
+    .Call('_squad_slerp', PACKAGE = 'squad', v0, v1, t)
+}
+
+RegularizeGrid <- function(x, y, sizeOut = 0L) {
+    .Call('_squad_RegularizeGrid', PACKAGE = 'squad', x, y, sizeOut)
 }
 

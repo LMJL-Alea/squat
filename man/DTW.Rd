@@ -4,7 +4,7 @@
 \alias{DTW}
 \title{Dynamic Time Warping for Quaternion Time Series}
 \usage{
-DTW(s1, s2, t1, t2, step = 10, distance_only = FALSE)
+DTW(s1, s2, t1, t2, distance_only = FALSE)
 }
 \arguments{
 \item{s1}{A QTS stored as a numeric 4-row matrix.}
@@ -18,8 +18,6 @@ has been measured. Its size should match the number of columns in
 \item{t2}{A numeric vector specifying the time points at which the 2nd QTS
 has been measured. Its size should match the number of columns in
 \code{s2}.}
-
-\item{step}{A numeric scalar specifying the time unit (default: 10 [ms]).}
 
 \item{distance_only}{A boolean specifyung whether to only compute distance
 (no backtrack, faster). Default is \code{FALSE}.}

@@ -2,7 +2,6 @@
 #'
 #' @param t A list of time grids over which the QTS are measured.
 #' @param q A list of QTS.
-#' @param step A numeric scalar specifying the time unit (default: 0.01 [s]).
 #' @param labels A character vector specifying labels for each QTS.
 #'
 #' @return A \code{\link[stats]{dist}} object storing the distance matrix
@@ -11,7 +10,7 @@
 #'
 #' @examples
 #' # TO DO
-distDTW <- function(t, q, step = 0.01, labels = NULL) {
+distDTW <- function(t, q, labels = NULL) {
   n <- length(t)
   if (is.null(labels)) labels <- 1:n
   d <- numeric(n * (n - 1) / 2)
@@ -20,7 +19,7 @@ distDTW <- function(t, q, step = 0.01, labels = NULL) {
       d[n*(i-1) - i*(i-1)/2 + j-i] <- DTW(
         s1 = q[[i]], s2 = q[[j]],
         t1 = t[[i]], t2 = t[[j]],
-        step = step, distance_only = TRUE
+        distance_only = TRUE
       )$normalizedDistance
     }
   }

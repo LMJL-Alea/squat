@@ -9,6 +9,7 @@ void Normalize(const Rcpp::NumericVector &input, Rcpp::NumericVector &output)
   output = input / norm;
 }
 
+// [[Rcpp::export]]
 Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0, const Rcpp::NumericVector &v1, const double t) {
   // Only unit quaternions are valid rotations.
   // Normalize to avoid undefined behavior.
@@ -54,16 +55,20 @@ Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0, const Rcpp::NumericVect
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::NumericMatrix &y, const double step = 1)
+Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::NumericMatrix &y, const unsigned int sizeOut = 0)
 {
-  unsigned int gridSize = x.size();
-  double xmin = x[0], xmax = x[gridSize - 1];
-  std::vector<Rcpp::NumericVector> interpolatedValues;
+  unsigned int sizeIn = x.size();
+  double xmin = x[0];
+  double xmax = x[sizeIn - 1];
+  double step = (xmax - xmin);
+  step /= (sizeOut == 0) ? sizeIn - 1.0 : sizeOut - 1.0;
   Rcpp::NumericVector Qinf, Qsup;
-  double newx = xmin;
+  Rcpp::NumericMatrix yOut(4, sizeOut);
 
-  while (newx < xmax)
+  for (unsigned int i = 0;i < sizeOut;++i)
   {
+    double newx = xmin + (double)i * step;
+
     unsigned int pos = 0;
     double xinf = x[pos];
     while (xinf < newx)
@@ -78,14 +83,14 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::Num
     }
     Qinf = y(Rcpp::_, pos);
 
-    pos = gridSize - 1;
+    pos = sizeIn - 1;
     double xsup = x[pos];
     while (xsup > newx)
     {
       pos -= 1;
       xsup = x[pos];
     }
-    if (pos < gridSize - 1)
+    if (pos < sizeIn - 1)
     {
       pos += 1;
       xsup = x[pos];
@@ -93,16 +98,9 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::Num
     Qsup = y(Rcpp::_, pos);
 
     double p = (xsup - newx) / (xsup - xinf);
-    interpolatedValues.push_back(slerp(Qinf, Qsup, p));
 
-    newx += step;
+    yOut(Rcpp::_, i) = slerp(Qinf, Qsup, p);
   }
 
-  gridSize = interpolatedValues.size();
-  Rcpp::NumericMatrix yreg(4, gridSize);
-  for (unsigned int i = 0;i < 4;++i)
-    for (unsigned int j = 0;j < gridSize;++j)
-      yreg(i, j) = interpolatedValues[j][i];
-
-  return yreg;
+  return yOut;
 }
