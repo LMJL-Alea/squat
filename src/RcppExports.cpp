@@ -43,15 +43,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // RegularizeGrid
-Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& x, const Rcpp::NumericMatrix& y, const unsigned int sizeOut);
-RcppExport SEXP _squad_RegularizeGrid(SEXP xSEXP, SEXP ySEXP, SEXP sizeOutSEXP) {
+Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& x, const Rcpp::NumericMatrix& y, const unsigned int outSize);
+RcppExport SEXP _squad_RegularizeGrid(SEXP xSEXP, SEXP ySEXP, SEXP outSizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type sizeOut(sizeOutSEXP);
-    rcpp_result_gen = Rcpp::wrap(RegularizeGrid(x, y, sizeOut));
+    Rcpp::traits::input_parameter< const unsigned int >::type outSize(outSizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(RegularizeGrid(x, y, outSize));
     return rcpp_result_gen;
 END_RCPP
 }

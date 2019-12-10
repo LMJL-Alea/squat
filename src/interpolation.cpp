@@ -10,7 +10,8 @@ void Normalize(const Rcpp::NumericVector &input, Rcpp::NumericVector &output)
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0, const Rcpp::NumericVector &v1, const double t) {
+Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0, const Rcpp::NumericVector &v1, const double t)
+{
   // Only unit quaternions are valid rotations.
   // Normalize to avoid undefined behavior.
   Rcpp::NumericVector q0, q1;
@@ -54,14 +55,15 @@ Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0, const Rcpp::NumericVect
   return (s0 * q0) + (s1 * q1);
 }
 
+//' @export
 // [[Rcpp::export]]
-Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::NumericMatrix &y, const unsigned int sizeOut = 0)
+Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::NumericMatrix &y, const unsigned int outSize = 0)
 {
   unsigned int sizeIn = x.size();
+  unsigned int sizeOut = (outSize == 0) ? sizeIn : outSize;
   double xmin = x[0];
   double xmax = x[sizeIn - 1];
-  double step = (xmax - xmin);
-  step /= (sizeOut == 0) ? sizeIn - 1.0 : sizeOut - 1.0;
+  double step = (xmax - xmin) / (sizeOut - 1.0);
   Rcpp::NumericVector Qinf, Qsup;
   Rcpp::NumericMatrix yOut(4, sizeOut);
 

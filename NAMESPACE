@@ -2,6 +2,8 @@
 
 S3method(mean,quaternion)
 export(DTW)
+export(GetSquaredL2Distance)
+export(RegularizeGrid)
 export(distDTW)
 export(geodesic)
 import(onion)

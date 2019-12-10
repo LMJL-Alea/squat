@@ -1,7 +1,9 @@
 #include <Rcpp.h>
 
+//' @export
 // [[Rcpp::export]]
-double GetSquaredL2Distance(const Rcpp::NumericMatrix &x, const Rcpp::NumericMatrix &y) {
+double GetSquaredL2Distance(const Rcpp::NumericMatrix &x, const Rcpp::NumericMatrix &y)
+{
   unsigned int nx = x.ncol();
   unsigned int ny = y.ncol();
 
