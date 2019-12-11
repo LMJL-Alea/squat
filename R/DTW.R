@@ -26,12 +26,16 @@
 #' t1 <- seq(0, 1, length.out = 15)
 #' t2 <- seq(0, 1, length.out = 20)
 #' DTW(s1, s2, t1, t2)
-DTW <- function(s1, s2, t1, t2, distance_only = FALSE) {
+DTW <- function(s1, s2, t1 = NULL, t2 = NULL, distance_only = FALSE) {
   s1 <- as.matrix(s1)
   s2 <- as.matrix(s2)
-  s1 <- RegularizeGrid(t1, s1)
-  s2 <- RegularizeGrid(t2, s2)
+  if (!is.null(t1))
+    s1 <- RegularizeGrid(t1, s1)
+  if (!is.null(t2))
+    s2 <- RegularizeGrid(t2, s2)
   M <- GetCostMatrix(s1, s2)
+  # print(anyNA(s1))
+  # print(anyNA(M))
   dtw::dtw(M, distance.only = distance_only)
 }
 

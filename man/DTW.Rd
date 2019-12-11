@@ -4,7 +4,7 @@
 \alias{DTW}
 \title{Dynamic Time Warping for Quaternion Time Series}
 \usage{
-DTW(s1, s2, t1, t2, distance_only = FALSE)
+DTW(s1, s2, t1 = NULL, t2 = NULL, distance_only = FALSE)
 }
 \arguments{
 \item{s1}{A QTS stored as a numeric 4-row matrix.}
