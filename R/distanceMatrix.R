@@ -10,17 +10,23 @@
 #'
 #' @examples
 #' # TO DO
-distDTW <- function(t, q, labels = NULL) {
-  n <- length(t)
+distDTW <- function(q, t = NULL, labels = NULL) {
+  n <- length(q)
   if (is.null(labels)) labels <- 1:n
   d <- numeric(n * (n - 1) / 2)
   for (i in 1:(n-1)) {
     for (j in (i+1):n) {
-      d[n*(i-1) - i*(i-1)/2 + j-i] <- DTW(
-        s1 = q[[i]], s2 = q[[j]],
-        t1 = t[[i]], t2 = t[[j]],
-        distance_only = TRUE
-      )$normalizedDistance
+      if (is.null(t))
+        d[n*(i-1) - i*(i-1)/2 + j-i] <- DTW(
+          s1 = q[[i]], s2 = q[[j]],
+          distance_only = TRUE
+        )$normalizedDistance
+      else
+        d[n*(i-1) - i*(i-1)/2 + j-i] <- DTW(
+          s1 = q[[i]], s2 = q[[j]],
+          t1 = t[[i]], t2 = t[[j]],
+          distance_only = TRUE
+        )$normalizedDistance
     }
   }
   attributes(d) <- NULL
