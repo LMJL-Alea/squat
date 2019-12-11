@@ -17,8 +17,11 @@ double GetSquaredL2Distance(const Rcpp::NumericMatrix &x, const Rcpp::NumericMat
     for (unsigned int j = 0;j < 4;++j)
       realPart += x(j, i) * y(j, i);
     realPart = std::abs(realPart);
-    if (realPart >  1.0)
-      realPart =  1.0;
+
+    const double DOT_THRESHOLD = 0.9995;
+    if (realPart > DOT_THRESHOLD)
+      continue;
+
     sqDistance += 2.0 * std::acos(realPart);
   }
 

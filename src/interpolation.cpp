@@ -38,9 +38,9 @@ Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0, const Rcpp::NumericVect
   {
     // If the inputs are too close for comfort, linearly interpolate
     // and normalize the result.
-    Rcpp::NumericVector result = q0 + t * (q1 - q0);
-    Normalize(result, result);
-    return result;
+    q0 += t * (q1 - q0);
+    Normalize(q0, q0);
+    return q0;
   }
 
   // Since dot is in range [0, DOT_THRESHOLD], acos is safe
@@ -52,7 +52,9 @@ Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0, const Rcpp::NumericVect
   double s0 = std::cos(theta) - dot * sin_theta / sin_theta_0;  // == sin(theta_0 - theta) / sin(theta_0)
   double s1 = sin_theta / sin_theta_0;
 
-  return (s0 * q0) + (s1 * q1);
+  q0 = (s0 * q0) + (s1 * q1);
+  Normalize(q0, q0);
+  return q0;
 }
 
 //' @export
@@ -98,8 +100,11 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::Num
       posSup = 0;
     Qsup = y(Rcpp::_, posSup);
 
-    if (xsup == xinf)
+    if (std::abs(xsup - xinf) < std::numeric_limits<double>::epsilon())
+    {
+      Normalize(Qinf, Qinf);
       yOut(Rcpp::_, i) = Qinf;
+    }
     else
     {
       double p = (xsup - newx) / (xsup - xinf);
