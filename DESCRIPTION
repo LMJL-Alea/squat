@@ -20,4 +20,6 @@ Imports:
     dtw,
     onion,
     Rcpp,
-    rotations
+    rotations,
+    future,
+    furrr
