@@ -2,10 +2,10 @@
 % Please edit documentation in R/means.R
 \name{averages}
 \alias{averages}
-\alias{mean.quaternion}
+\alias{mean_qts}
 \title{Fréchet Means for Quaternions}
 \usage{
-\method{mean}{quaternion}(x)
+mean_qts(q, t = NULL)
 }
 \arguments{
 \item{x}{An object of class \code{\link[onion]{quaternion}} storing a sample

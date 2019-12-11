@@ -17,7 +17,16 @@ NULL
 
 #' @export
 #' @rdname averages
-mean.quaternion <- function(x) {
-  M <- x %*% t(x)
-  onion::as.quaternion(svd(M)$u[, 1, drop = FALSE])
+mean_qts <- function(q, t = NULL) {
+  grid_size <- 101
+  # Regularise if not already done
+  if (!is.null(t))
+    q <- purrr::map2(t, q, RegularizeGrid, outSize = grid_size)
+  1:grid_size %>%
+    purrr::map(~ t(sapply(q, function(.y) .y[, .x]))) %>%
+    sapply(function(.x) {
+    .x %>%
+      rotations::as.Q4() %>%
+      mean(type = "geometric")
+  })
 }
