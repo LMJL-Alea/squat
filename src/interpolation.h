@@ -1,6 +1,9 @@
-#pragma once
+#ifndef INTERPOLATION_H
+#define INTERPOLATION_H
 
 #include <Rcpp.h>
+
+// [[Rcpp::interfaces(r, cpp)]]
 
 void Normalize(const Rcpp::NumericVector &input,
                Rcpp::NumericVector &output);
@@ -27,3 +30,5 @@ Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0,
 Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x,
                                    const Rcpp::NumericMatrix &y,
                                    const unsigned int outSize = 0);
+
+#endif /* INTERPOLATION_H */

@@ -1,7 +1,11 @@
-#pragma once
+#ifndef DISTANCES_H
+#define DISTANCES_H
 
 #include <Rcpp.h>
 
+// [[Rcpp::interfaces(r, cpp)]]
+
+// [[Rcpp::export]]
 double GeodesicQuaternionDistance(const Rcpp::NumericMatrix &x,
                                   const Rcpp::NumericMatrix &y,
                                   const unsigned int xIndex,
@@ -32,3 +36,5 @@ Rcpp::NumericMatrix GetCostMatrix(const Rcpp::NumericMatrix &x,
 // [[Rcpp::export]]
 double GetL2Distance(const Rcpp::NumericMatrix &x,
                      const Rcpp::NumericMatrix &y);
+
+#endif /* DISTANCES_H */
