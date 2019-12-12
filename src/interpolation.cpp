@@ -1,6 +1,7 @@
-#include <Rcpp.h>
+#include "interpolation.h"
 
-void Normalize(const Rcpp::NumericVector &input, Rcpp::NumericVector &output)
+void Normalize(const Rcpp::NumericVector &input,
+               Rcpp::NumericVector &output)
 {
   double norm = 0.0;
   for (unsigned int i = 0;i < 4;++i)
@@ -9,8 +10,9 @@ void Normalize(const Rcpp::NumericVector &input, Rcpp::NumericVector &output)
   output = input / norm;
 }
 
-// [[Rcpp::export]]
-Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0, const Rcpp::NumericVector &v1, const double t)
+Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0,
+                          const Rcpp::NumericVector &v1,
+                          const double t)
 {
   // Only unit quaternions are valid rotations.
   // Normalize to avoid undefined behavior.
@@ -57,9 +59,9 @@ Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0, const Rcpp::NumericVect
   return q0;
 }
 
-//' @export
-// [[Rcpp::export]]
-Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x, const Rcpp::NumericMatrix &y, const unsigned int outSize = 0)
+Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x,
+                                   const Rcpp::NumericMatrix &y,
+                                   const unsigned int outSize)
 {
   // Assumes x is sorted in ascending order
   unsigned int sizeIn = x.size();

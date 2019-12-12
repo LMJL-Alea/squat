@@ -9,7 +9,8 @@ distDTW(q, t = NULL, labels = NULL)
 \arguments{
 \item{q}{A list of QTS.}
 
-\item{t}{A list of time grids over which the QTS are measured.}
+\item{t}{An optional list of the same size as \code{q} containing evaluation
+grids for each QTS.}
 
 \item{labels}{A character vector specifying labels for each QTS.}
 }

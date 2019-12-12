@@ -1,8 +1,41 @@
-#include <Rcpp.h>
+#include "distances.h"
 
-//' @export
-// [[Rcpp::export]]
-double GetSquaredL2Distance(const Rcpp::NumericMatrix &x, const Rcpp::NumericMatrix &y)
+double GeodesicQuaternionDistance(const Rcpp::NumericMatrix &x,
+                                  const Rcpp::NumericMatrix &y,
+                                  const unsigned int xIndex,
+                                  const unsigned int yIndex)
+{
+  double realPart = 0.0;
+
+  for (unsigned int j = 0;j < 4;++j)
+    realPart += x(j, xIndex) * y(j, yIndex);
+
+  realPart = std::abs(realPart);
+
+  const double DOT_THRESHOLD = 0.9995;
+
+  if (realPart > DOT_THRESHOLD)
+    return 0.0;
+
+  return 2.0 * std::acos(realPart);
+}
+
+Rcpp::NumericMatrix GetCostMatrix(const Rcpp::NumericMatrix &x,
+                                  const Rcpp::NumericMatrix &y)
+{
+  unsigned int nx = x.ncol();
+  unsigned int ny = y.ncol();
+  Rcpp::NumericMatrix costMatrix(nx, ny);
+
+  for (unsigned int i = 0;i < nx;++i)
+    for (unsigned int j = 0;j < ny;++j)
+      costMatrix(i, j) = GeodesicQuaternionDistance(x, y, i, j);
+
+  return costMatrix;
+}
+
+double GetL2Distance(const Rcpp::NumericMatrix &x,
+                     const Rcpp::NumericMatrix &y)
 {
   unsigned int nx = x.ncol();
   unsigned int ny = y.ncol();
@@ -13,17 +46,9 @@ double GetSquaredL2Distance(const Rcpp::NumericMatrix &x, const Rcpp::NumericMat
   double sqDistance = 0.0;
   for (unsigned int i = 0;i < nx;++i)
   {
-    double realPart = 0.0;
-    for (unsigned int j = 0;j < 4;++j)
-      realPart += x(j, i) * y(j, i);
-    realPart = std::abs(realPart);
-
-    const double DOT_THRESHOLD = 0.9995;
-    if (realPart > DOT_THRESHOLD)
-      continue;
-
-    sqDistance += 2.0 * std::acos(realPart);
+    double distValue = GeodesicQuaternionDistance(x, y, i, i);
+    sqDistance += distValue * distValue;
   }
 
-  return sqDistance;
+  return std::sqrt(sqDistance);
 }

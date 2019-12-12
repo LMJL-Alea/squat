@@ -9,16 +9,22 @@ kmeans_qts(q, t = NULL, k = 2, iter_max = 20, nstart = 1000)
 \arguments{
 \item{q}{A list of quaternion time series. Each QTS is a 4-row matrix.}
 
-\item{t}{An optional list of evaluation grids for the QTS. By default, if you do not supply it, the function assumes that all QTS are evaluated on the same grid.}
+\item{t}{An optional list of evaluation grids for the QTS. By default, if you
+do not supply it, the function assumes that all QTS are evaluated on the
+same grid.}
 
 \item{k}{The number of clusters (default: 2).}
 
-\item{iter_max}{The maximum number of iterations before stopping the k-means algorithm if it failed converging (default: 20).}
+\item{iter_max}{The maximum number of iterations before stopping the k-means
+algorithm if it failed converging (default: 20).}
 
-\item{nstart}{The number of random restarts for the initial centers (default: 1000).}
+\item{nstart}{The number of random restarts for the initial centers (default:
+1000).}
 }
 \value{
-A list with two components: \code{memberships} is an integer vector specifying the membership of each data point and \code{Var} is the sum of within-sum-of-squares.
+A list with two components: \code{memberships} is an integer vector
+  specifying the membership of each data point and \code{Var} is the sum of
+  within-sum-of-squares.
 }
 \description{
 K-Means for Quaternion Time Series

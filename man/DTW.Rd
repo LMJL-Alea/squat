@@ -7,20 +7,18 @@
 DTW(s1, s2, t1 = NULL, t2 = NULL, distance_only = FALSE)
 }
 \arguments{
-\item{s1}{A QTS stored as a numeric 4-row matrix.}
+\item{t1}{An optional numeric vector of size \code{p1} specifying the
+evaluation grid for the first QTS.}
 
-\item{s2}{A QTS stored as a numeric 4-row matrix.}
-
-\item{t1}{A numeric vector specifying the time points at which the 1st QTS
-has been measured. Its size should match the number of columns in
-\code{s1}.}
-
-\item{t2}{A numeric vector specifying the time points at which the 2nd QTS
-has been measured. Its size should match the number of columns in
-\code{s2}.}
+\item{t2}{An optional numeric vector of size \code{p2} specifying the
+evaluation grid for the second QTS.}
 
 \item{distance_only}{A boolean specifyung whether to only compute distance
 (no backtrack, faster). Default is \code{FALSE}.}
+
+\item{q1}{A \code{4 x p1} matrix representing the first QTS.}
+
+\item{q2}{A \code{4 x p2} matrix representing the second QTS.}
 }
 \value{
 An object of class \code{\link[dtw]{dtw}} storing the dynamic time
@@ -29,6 +27,10 @@ An object of class \code{\link[dtw]{dtw}} storing the dynamic time
 \description{
 This function evaluates the Dynamic Time Warping (DTW) distance between two
 quaternion time series (QTS).
+}
+\details{
+If no evaluation grid is provided, the function assumes that the two input
+QTS are evaluated on the same grid.
 }
 \examples{
 s1_raw <- onion::rquat(15, rand = "norm")

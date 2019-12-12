@@ -8,8 +8,10 @@
 mean_qts(q, t = NULL)
 }
 \arguments{
-\item{x}{An object of class \code{\link[onion]{quaternion}} storing a sample
-of quaternions.}
+\item{q}{A list of QTS.}
+
+\item{t}{An optional list of the same size as \code{q} containing evaluation
+grids for each QTS.}
 }
 \value{
 An object of class \code{\link[onion]{quaternion}} and size 1 storing

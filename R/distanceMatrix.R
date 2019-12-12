@@ -1,7 +1,8 @@
 #' Distance Matrix for Quaternion Time Series Samples
 #'
-#' @param t A list of time grids over which the QTS are measured.
 #' @param q A list of QTS.
+#' @param t An optional list of the same size as \code{q} containing evaluation
+#'   grids for each QTS.
 #' @param labels A character vector specifying labels for each QTS.
 #'
 #' @return A \code{\link[stats]{dist}} object storing the distance matrix

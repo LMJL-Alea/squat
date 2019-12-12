@@ -3,8 +3,9 @@
 #' This is a collection of functions that provide access to Fréchet means of
 #' quaternion samples according to various distances.
 #'
-#' @param x An object of class \code{\link[onion]{quaternion}} storing a sample
-#'   of quaternions.
+#' @param q A list of QTS.
+#' @param t An optional list of the same size as \code{q} containing evaluation
+#'   grids for each QTS.
 #'
 #' @return An object of class \code{\link[onion]{quaternion}} and size 1 storing
 #'   the sample mean of the input sample of quaternions.

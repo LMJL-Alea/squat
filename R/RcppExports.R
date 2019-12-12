@@ -5,15 +5,41 @@ GetCostMatrix <- function(x, y) {
     .Call('_squad_GetCostMatrix', PACKAGE = 'squad', x, y)
 }
 
+#' L2 Distance for Quaternion Time Series
+#'
+#' This function computes the L2 distance between two quaternion
+#' time series, using the geodesic distance as inter-point
+#' quaternion distance.
+#'
+#' The function currently assumes that the two QTS are evaluated
+#' on the same grid.
+#'
+#' @param x A \code{4 x p} matrix representing the first
+#'   quaternion time series.
+#' @param y A \code{4 x p} matrix representing the second
+#'   quaternion time series.
+#'
+#' @return A positive scalar providing a measure of distance
+#'   between the two input quaternion time series.
+#'
 #' @export
-GetSquaredL2Distance <- function(x, y) {
-    .Call('_squad_GetSquaredL2Distance', PACKAGE = 'squad', x, y)
+GetL2Distance <- function(x, y) {
+    .Call('_squad_GetL2Distance', PACKAGE = 'squad', x, y)
 }
 
-slerp <- function(v0, v1, t) {
-    .Call('_squad_slerp', PACKAGE = 'squad', v0, v1, t)
-}
-
+#' Grid regularization
+#'
+#' This function makes sure that a quaternion time series
+#' is evaluated on a grid with fixed step size.
+#'
+#' @param x A numeric vector providing the original evaluation grid.
+#' @param y A \code{4 x length(x)} matrix providing the original QTS.
+#' @param outSize An integer specifying the size of the output
+#'   evaluation grid. By default, it takes the same size as the input
+#'   evaluation grid.
+#'
+#' @return A \code{4 x length(x)} matrix providing the regularized QTS.
+#'
 #' @export
 RegularizeGrid <- function(x, y, outSize = 0L) {
     .Call('_squad_RegularizeGrid', PACKAGE = 'squad', x, y, outSize)
