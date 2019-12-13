@@ -61,6 +61,8 @@ Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0,
 
 Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x,
                                    const Rcpp::NumericMatrix &y,
+                                   const double xmin,
+                                   const double xmax,
                                    const unsigned int outSize)
 {
   // Assumes x is sorted in ascending order
@@ -68,8 +70,8 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x,
   unsigned int sizeOut = (outSize == 0) ? sizeIn : outSize;
   unsigned int posInf = 0;
   unsigned int posSup = sizeIn - 1;
-  double xmin = x[posInf];
-  double xmax = x[posSup];
+  // double xmin = x[posInf];
+  // double xmax = x[posSup];
   double step = (xmax - xmin) / (sizeOut - 1.0);
   Rcpp::NumericVector Qinf, Qsup;
   Rcpp::NumericMatrix yOut(4, sizeOut);

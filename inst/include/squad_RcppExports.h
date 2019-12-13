@@ -87,17 +87,17 @@ namespace squad {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
-    inline Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& x, const Rcpp::NumericMatrix& y, const unsigned int outSize = 0) {
-        typedef SEXP(*Ptr_RegularizeGrid)(SEXP,SEXP,SEXP);
+    inline Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& x, const Rcpp::NumericMatrix& y, const double xmin, const double xmax, const unsigned int outSize = 0) {
+        typedef SEXP(*Ptr_RegularizeGrid)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_RegularizeGrid p_RegularizeGrid = NULL;
         if (p_RegularizeGrid == NULL) {
-            validateSignature("Rcpp::NumericMatrix(*RegularizeGrid)(const Rcpp::NumericVector&,const Rcpp::NumericMatrix&,const unsigned int)");
+            validateSignature("Rcpp::NumericMatrix(*RegularizeGrid)(const Rcpp::NumericVector&,const Rcpp::NumericMatrix&,const double,const double,const unsigned int)");
             p_RegularizeGrid = (Ptr_RegularizeGrid)R_GetCCallable("squad", "_squad_RegularizeGrid");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_RegularizeGrid(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(y)), Shield<SEXP>(Rcpp::wrap(outSize)));
+            rcpp_result_gen = p_RegularizeGrid(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(y)), Shield<SEXP>(Rcpp::wrap(xmin)), Shield<SEXP>(Rcpp::wrap(xmax)), Shield<SEXP>(Rcpp::wrap(outSize)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

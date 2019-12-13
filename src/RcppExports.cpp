@@ -116,22 +116,24 @@ RcppExport SEXP _squad_GetL2Distance(SEXP xSEXP, SEXP ySEXP) {
     return rcpp_result_gen;
 }
 // RegularizeGrid
-Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& x, const Rcpp::NumericMatrix& y, const unsigned int outSize);
-static SEXP _squad_RegularizeGrid_try(SEXP xSEXP, SEXP ySEXP, SEXP outSizeSEXP) {
+Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& x, const Rcpp::NumericMatrix& y, const double xmin, const double xmax, const unsigned int outSize);
+static SEXP _squad_RegularizeGrid_try(SEXP xSEXP, SEXP ySEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP outSizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const double >::type xmin(xminSEXP);
+    Rcpp::traits::input_parameter< const double >::type xmax(xmaxSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type outSize(outSizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(RegularizeGrid(x, y, outSize));
+    rcpp_result_gen = Rcpp::wrap(RegularizeGrid(x, y, xmin, xmax, outSize));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _squad_RegularizeGrid(SEXP xSEXP, SEXP ySEXP, SEXP outSizeSEXP) {
+RcppExport SEXP _squad_RegularizeGrid(SEXP xSEXP, SEXP ySEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP outSizeSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_squad_RegularizeGrid_try(xSEXP, ySEXP, outSizeSEXP));
+        rcpp_result_gen = PROTECT(_squad_RegularizeGrid_try(xSEXP, ySEXP, xminSEXP, xmaxSEXP, outSizeSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -159,7 +161,7 @@ static int _squad_RcppExport_validate(const char* sig) {
         signatures.insert("double(*GeodesicQuaternionDistance)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&,const unsigned int,const unsigned int)");
         signatures.insert("Rcpp::NumericMatrix(*GetCostMatrix)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&)");
         signatures.insert("double(*GetL2Distance)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&)");
-        signatures.insert("Rcpp::NumericMatrix(*RegularizeGrid)(const Rcpp::NumericVector&,const Rcpp::NumericMatrix&,const unsigned int)");
+        signatures.insert("Rcpp::NumericMatrix(*RegularizeGrid)(const Rcpp::NumericVector&,const Rcpp::NumericMatrix&,const double,const double,const unsigned int)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -178,7 +180,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squad_GeodesicQuaternionDistance", (DL_FUNC) &_squad_GeodesicQuaternionDistance, 4},
     {"_squad_GetCostMatrix", (DL_FUNC) &_squad_GetCostMatrix, 2},
     {"_squad_GetL2Distance", (DL_FUNC) &_squad_GetL2Distance, 2},
-    {"_squad_RegularizeGrid", (DL_FUNC) &_squad_RegularizeGrid, 3},
+    {"_squad_RegularizeGrid", (DL_FUNC) &_squad_RegularizeGrid, 5},
     {"_squad_RcppExport_registerCCallable", (DL_FUNC) &_squad_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };
