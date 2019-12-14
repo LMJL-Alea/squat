@@ -2,6 +2,7 @@
 // Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #include "../inst/include/squad.h"
+#include <RcppArmadillo.h>
 #include <Rcpp.h>
 #include <string>
 #include <set>
@@ -153,6 +154,42 @@ RcppExport SEXP _squad_RegularizeGrid(SEXP xSEXP, SEXP ySEXP, SEXP xminSEXP, SEX
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// GetGeodesicMean
+Rcpp::NumericMatrix GetGeodesicMean(const Rcpp::NumericMatrix& quaternionSample, unsigned int maxIterations, double maxEpsilon);
+static SEXP _squad_GetGeodesicMean_try(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type quaternionSample(quaternionSampleSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type maxIterations(maxIterationsSEXP);
+    Rcpp::traits::input_parameter< double >::type maxEpsilon(maxEpsilonSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetGeodesicMean(quaternionSample, maxIterations, maxEpsilon));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _squad_GetGeodesicMean(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_squad_GetGeodesicMean_try(quaternionSampleSEXP, maxIterationsSEXP, maxEpsilonSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _squad_RcppExport_validate(const char* sig) { 
@@ -162,6 +199,7 @@ static int _squad_RcppExport_validate(const char* sig) {
         signatures.insert("Rcpp::NumericMatrix(*GetCostMatrix)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&)");
         signatures.insert("double(*GetL2Distance)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&)");
         signatures.insert("Rcpp::NumericMatrix(*RegularizeGrid)(const Rcpp::NumericVector&,const Rcpp::NumericMatrix&,const double,const double,const unsigned int)");
+        signatures.insert("Rcpp::NumericMatrix(*GetGeodesicMean)(const Rcpp::NumericMatrix&,unsigned int,double)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -172,6 +210,7 @@ RcppExport SEXP _squad_RcppExport_registerCCallable() {
     R_RegisterCCallable("squad", "_squad_GetCostMatrix", (DL_FUNC)_squad_GetCostMatrix_try);
     R_RegisterCCallable("squad", "_squad_GetL2Distance", (DL_FUNC)_squad_GetL2Distance_try);
     R_RegisterCCallable("squad", "_squad_RegularizeGrid", (DL_FUNC)_squad_RegularizeGrid_try);
+    R_RegisterCCallable("squad", "_squad_GetGeodesicMean", (DL_FUNC)_squad_GetGeodesicMean_try);
     R_RegisterCCallable("squad", "_squad_RcppExport_validate", (DL_FUNC)_squad_RcppExport_validate);
     return R_NilValue;
 }
@@ -181,6 +220,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squad_GetCostMatrix", (DL_FUNC) &_squad_GetCostMatrix, 2},
     {"_squad_GetL2Distance", (DL_FUNC) &_squad_GetL2Distance, 2},
     {"_squad_RegularizeGrid", (DL_FUNC) &_squad_RegularizeGrid, 5},
+    {"_squad_GetGeodesicMean", (DL_FUNC) &_squad_GetGeodesicMean, 3},
     {"_squad_RcppExport_registerCCallable", (DL_FUNC) &_squad_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

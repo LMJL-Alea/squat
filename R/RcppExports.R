@@ -35,6 +35,10 @@ RegularizeGrid <- function(x, y, xmin, xmax, outSize = 0L) {
     .Call('_squad_RegularizeGrid', PACKAGE = 'squad', x, y, xmin, xmax, outSize)
 }
 
+GetGeodesicMean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
+    .Call('_squad_GetGeodesicMean', PACKAGE = 'squad', quaternionSample, maxIterations, maxEpsilon)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_squad_RcppExport_registerCCallable', PACKAGE = 'squad')

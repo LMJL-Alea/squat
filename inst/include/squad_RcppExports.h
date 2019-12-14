@@ -4,6 +4,7 @@
 #ifndef RCPP_squad_RCPPEXPORTS_H_GEN_
 #define RCPP_squad_RCPPEXPORTS_H_GEN_
 
+#include <RcppArmadillo.h>
 #include <Rcpp.h>
 
 namespace squad {
@@ -98,6 +99,27 @@ namespace squad {
         {
             RNGScope RCPP_rngScope_gen;
             rcpp_result_gen = p_RegularizeGrid(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(y)), Shield<SEXP>(Rcpp::wrap(xmin)), Shield<SEXP>(Rcpp::wrap(xmax)), Shield<SEXP>(Rcpp::wrap(outSize)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::NumericMatrix >(rcpp_result_gen);
+    }
+
+    inline Rcpp::NumericMatrix GetGeodesicMean(const Rcpp::NumericMatrix& quaternionSample, unsigned int maxIterations = 2000, double maxEpsilon = 1.0e-5) {
+        typedef SEXP(*Ptr_GetGeodesicMean)(SEXP,SEXP,SEXP);
+        static Ptr_GetGeodesicMean p_GetGeodesicMean = NULL;
+        if (p_GetGeodesicMean == NULL) {
+            validateSignature("Rcpp::NumericMatrix(*GetGeodesicMean)(const Rcpp::NumericMatrix&,unsigned int,double)");
+            p_GetGeodesicMean = (Ptr_GetGeodesicMean)R_GetCCallable("squad", "_squad_GetGeodesicMean");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_GetGeodesicMean(Shield<SEXP>(Rcpp::wrap(quaternionSample)), Shield<SEXP>(Rcpp::wrap(maxIterations)), Shield<SEXP>(Rcpp::wrap(maxEpsilon)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
