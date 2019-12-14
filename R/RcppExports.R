@@ -31,22 +31,12 @@ GetL2Distance <- function(x, y) {
     .Call('_squad_GetL2Distance', PACKAGE = 'squad', x, y)
 }
 
-#' Grid regularization
-#'
-#' This function makes sure that a quaternion time series
-#' is evaluated on a grid with fixed step size.
-#'
-#' @param x A numeric vector providing the original evaluation grid.
-#' @param y A \code{4 x length(x)} matrix providing the original QTS.
-#' @param outSize An integer specifying the size of the output
-#'   evaluation grid. By default, it takes the same size as the input
-#'   evaluation grid.
-#'
-#' @return A \code{4 x length(x)} matrix providing the regularized QTS.
-#'
-#' @export
-RegularizeGrid <- function(x, y, outSize = 0L) {
-    .Call('_squad_RegularizeGrid', PACKAGE = 'squad', x, y, outSize)
+RegularizeGrid <- function(x, y, xmin, xmax, outSize = 0L) {
+    .Call('_squad_RegularizeGrid', PACKAGE = 'squad', x, y, xmin, xmax, outSize)
+}
+
+GetGeodesicMean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
+    .Call('_squad_GetGeodesicMean', PACKAGE = 'squad', quaternionSample, maxIterations, maxEpsilon)
 }
 
 # Register entry points for exported C++ functions

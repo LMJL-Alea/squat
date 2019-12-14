@@ -59,17 +59,83 @@ Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0,
   return q0;
 }
 
+// Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x,
+//                                    const Rcpp::NumericMatrix &y,
+//                                    const double xmin,
+//                                    const double xmax,
+//                                    const unsigned int outSize)
+// {
+//   // Assumes x is sorted in ascending order
+//   unsigned int sizeIn = x.size();
+//   unsigned int sizeOut = (outSize == 0) ? sizeIn : outSize;
+//   int posInf = 0;
+//   int posSup = sizeIn - 1;
+//   double step = (xmax - xmin) / (sizeOut - 1.0);
+//   Rcpp::NumericVector Qinf, Qsup;
+//   Rcpp::NumericMatrix yOut(4, sizeOut);
+//
+//   for (unsigned int i = 0;i < sizeOut;++i)
+//   {
+//     double newx = xmin + (double)i * step;
+//
+//     posInf = std::lower_bound(x.begin(), x.end(), newx) - x.begin();
+//     if (posInf == 0) // first element is already greater or equal
+//     {
+//       if (std::abs(x[0] - newx) < std::numeric_limits<double>::epsilon())
+//         posInf = 0;
+//       else
+//         Rcpp::stop("inf not allowed");
+//     }
+//     else if (posInf == sizeIn) // last element is still smaller
+//       posInf = sizeIn - 1;
+//     else if (x[posInf] > newx)
+//       posInf -= 1;
+//     double xinf = x[posInf];
+//     Qinf = y(Rcpp::_, posInf);
+//
+//     posSup = std::upper_bound(x.begin(), x.end(), newx) - x.begin();
+//     if (posSup == sizeIn) // all elements are smaller or equal
+//     {
+//       if (std::abs(x[sizeIn - 1] - newx) < std::numeric_limits<double>::epsilon())
+//         posSup = sizeIn - 1;
+//       else
+//         Rcpp::stop("sup not allowed");
+//     }
+//     else if (posSup == 0) // first element is still larger
+//       posSup = 0;
+//     else if (x[posSup - 1] == newx)
+//       posSup -= 1;
+//     double xsup = x[posSup];
+//     Qsup = y(Rcpp::_, posSup);
+//
+//     double range = xsup - xinf;
+//
+//     if (xsup <= xinf)
+//     {
+//       Normalize(Qsup, Qsup);
+//       yOut(Rcpp::_, i) = Qsup;
+//     }
+//     else
+//     {
+//       double p = (newx - xinf) / range;
+//       yOut(Rcpp::_, i) = slerp(Qinf, Qsup, p);
+//     }
+//   }
+//
+//   return yOut;
+// }
+
 Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x,
                                    const Rcpp::NumericMatrix &y,
+                                   const double xmin,
+                                   const double xmax,
                                    const unsigned int outSize)
 {
   // Assumes x is sorted in ascending order
   unsigned int sizeIn = x.size();
   unsigned int sizeOut = (outSize == 0) ? sizeIn : outSize;
-  unsigned int posInf = 0;
-  unsigned int posSup = sizeIn - 1;
-  double xmin = x[posInf];
-  double xmax = x[posSup];
+  int posInf = 0;
+  int posSup = sizeIn - 1;
   double step = (xmax - xmin) / (sizeOut - 1.0);
   Rcpp::NumericVector Qinf, Qsup;
   Rcpp::NumericMatrix yOut(4, sizeOut);
@@ -79,37 +145,42 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x,
     double newx = xmin + (double)i * step;
 
     double xinf = x[posInf];
-    while (xinf <= newx & posInf < sizeIn)
+    while (xinf <= newx && posInf < sizeIn)
     {
       posInf += 1;
       xinf = x[posInf];
     }
-    if (posInf > 0)
+    if (xinf > newx && posInf > 0)
       posInf -= 1;
-    if (posInf >= sizeIn)
+    else if (posInf >= sizeIn)
       posInf = sizeIn - 1;
+    xinf = x[posInf];
     Qinf = y(Rcpp::_, posInf);
 
+    posSup = sizeIn - 1;
     double xsup = x[posSup];
-    while (xsup > newx & posSup >= 0)
+    while (xsup >= newx && posSup >= 0)
     {
       posSup -= 1;
       xsup = x[posSup];
     }
-    if (posSup < sizeIn - 1)
+    if (xsup < newx && posSup < sizeIn - 1)
       posSup += 1;
-    if (posSup < 0)
+    else if (posSup < 0)
       posSup = 0;
+    xsup = x[posSup];
     Qsup = y(Rcpp::_, posSup);
 
-    if (std::abs(xsup - xinf) < std::numeric_limits<double>::epsilon())
+    double range = xsup - xinf;
+
+    if (xsup <= xinf)
     {
       Normalize(Qinf, Qinf);
       yOut(Rcpp::_, i) = Qinf;
     }
     else
     {
-      double p = (xsup - newx) / (xsup - xinf);
+      double p = (newx - xinf) / range;
       yOut(Rcpp::_, i) = slerp(Qinf, Qsup, p);
     }
   }
