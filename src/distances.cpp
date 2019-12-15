@@ -12,9 +12,7 @@ double GeodesicQuaternionDistance(const Rcpp::NumericMatrix &x,
 
   realPart = std::abs(realPart);
 
-  const double DOT_THRESHOLD = 0.9995;
-
-  if (realPart > DOT_THRESHOLD)
+  if (realPart >= 1.0)
     return 0.0;
 
   return 2.0 * std::acos(realPart);
