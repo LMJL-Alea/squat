@@ -22,6 +22,5 @@ Imports:
     dtw,
     onion,
     Rcpp,
-    rotations,
     future,
     furrr

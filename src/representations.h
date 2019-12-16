@@ -1,7 +1,6 @@
 #ifndef REPRESENTATIONS_H
 #define REPRESENTATIONS_H
 
-// [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppArmadillo.h>
 
 // [[Rcpp::interfaces(r, cpp)]]

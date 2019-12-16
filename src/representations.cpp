@@ -1,6 +1,4 @@
-// [[Rcpp::depends(rotations)]]
 #include <rotations.h>
-
 #include "representations.h"
 
 Rcpp::NumericMatrix GetAxisFromQuaternion(const Rcpp::NumericMatrix &quaternionSample)
