@@ -3,6 +3,7 @@
 export(DTW)
 export(GetL2Distance)
 export(distDTW)
+export(gdistance)
 export(kmeans_qts)
 export(mean_qts)
 export(regularize_grid)
