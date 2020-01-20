@@ -50,7 +50,8 @@ qprod <- function(x, y) {
 #' qts <- matrix(rnorm(40), 4, 10)
 #' qts <- apply(qts, 2, function(.x) .x / sqrt(sum(.x^2)))
 #' normalize_qts(qts)
-normalize_qts <- function(x) {
-  q_init <- qinv(x[, 1])
+normalize_qts <- function(x, normalizer = NULL) {
+  if (is.null(normalizer)) normalizer <- x[, 1]
+  q_init <- qinv(normalizer)
   apply(x, 2, function(.x) qprod(q_init, .x))
 }

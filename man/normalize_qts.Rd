@@ -4,7 +4,7 @@
 \alias{normalize_qts}
 \title{Quaternion time series normalization}
 \usage{
-normalize_qts(x)
+normalize_qts(x, normalizer = NULL)
 }
 \arguments{
 \item{x}{A 4-row numeric matrix.}
