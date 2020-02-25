@@ -17,11 +17,13 @@ gdistance <- function(x, y) {
   2 * acos(x)
 }
 
+#' @export
 qinv <- function(x) {
   x[2:4] <- -x[2:4]
   x
 }
 
+#' @export
 qprod <- function(x, y) {
   x1 <- x[1]
   x2 <- x[2]
