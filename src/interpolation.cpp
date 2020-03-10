@@ -132,7 +132,7 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x,
                                    const unsigned int outSize)
 {
   // Assumes x is sorted in ascending order
-  unsigned int sizeIn = x.size();
+  int sizeIn = x.size();
   unsigned int sizeOut = (outSize == 0) ? sizeIn : outSize;
   int posInf = 0;
   int posSup = sizeIn - 1;
