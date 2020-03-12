@@ -26,4 +26,4 @@ Imports:
 Suggests: 
     furrr
 Remotes: 
-    astamm/rotationsC
+    astamm/rotationsC/rotations
