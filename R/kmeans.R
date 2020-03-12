@@ -27,15 +27,26 @@ kmeans_qts <-function(q, t = NULL, k = 2, iter_max = 20, nstart = 1000) {
   else
     init <- replicate(nstart, sample.int(n, k), simplify = FALSE)
 
-  future::plan(future::multiprocess)
-  solutions <- init %>%
-    furrr::future_map(
-      .f = kmeans_qts_single,
-      q = q,
-      t = t,
-      iter_max = iter_max,
-      .progress = TRUE
-    )
+  if (requireNamespace("furrr", quietly = TRUE)) {
+    future::plan(future::multiprocess)
+    solutions <- init %>%
+      furrr::future_map(
+        .f = kmeans_qts_single,
+        q = q,
+        t = t,
+        iter_max = iter_max,
+        .progress = TRUE
+      )
+  } else {
+    solutions <- init %>%
+      purrr::map(
+        .f = kmeans_qts_single,
+        q = q,
+        t = t,
+        iter_max = iter_max
+      )
+  }
+
 
   wss_vector <- purrr::map_dbl(solutions, "Var")
   solutions[[which.min(wss_vector)]]
