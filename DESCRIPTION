@@ -22,7 +22,8 @@ Imports:
     dtw,
     onion,
     Rcpp,
-    rotations (>= 1.6)
+    rotations (>= 1.6),
+    magrittr
 Suggests: 
     furrr
 Remotes: 
