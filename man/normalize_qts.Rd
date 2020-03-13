@@ -8,9 +8,13 @@ normalize_qts(x, normalizer = NULL)
 }
 \arguments{
 \item{x}{A 4-row numeric matrix.}
+
+\item{normalizer}{A length-4 vector storing a quaternion to use as origin.
+Defaults to \code{NULL}, which takes the first quaternion in QTS \code{x}
+as origin.}
 }
 \value{
-A 4-row numeric matrix.
+A 4-row numeric matrix storing the normalized QTS.
 }
 \description{
 Quaternion time series normalization

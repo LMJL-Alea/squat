@@ -7,6 +7,10 @@
 DTW(s1, s2, t1 = NULL, t2 = NULL, distance_only = FALSE)
 }
 \arguments{
+\item{s1}{A \code{4 x p1} matrix representing the first QTS.}
+
+\item{s2}{A \code{4 x p2} matrix representing the second QTS.}
+
 \item{t1}{An optional numeric vector of size \code{p1} specifying the
 evaluation grid for the first QTS.}
 
@@ -15,10 +19,6 @@ evaluation grid for the second QTS.}
 
 \item{distance_only}{A boolean specifyung whether to only compute distance
 (no backtrack, faster). Default is \code{FALSE}.}
-
-\item{q1}{A \code{4 x p1} matrix representing the first QTS.}
-
-\item{q2}{A \code{4 x p2} matrix representing the second QTS.}
 }
 \value{
 An object of class \code{\link[dtw]{dtw}} storing the dynamic time

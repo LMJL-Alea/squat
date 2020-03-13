@@ -6,8 +6,8 @@
 #' If no evaluation grid is provided, the function assumes that the two input
 #' QTS are evaluated on the same grid.
 #'
-#' @param q1 A \code{4 x p1} matrix representing the first QTS.
-#' @param q2 A \code{4 x p2} matrix representing the second QTS.
+#' @param s1 A \code{4 x p1} matrix representing the first QTS.
+#' @param s2 A \code{4 x p2} matrix representing the second QTS.
 #' @param t1 An optional numeric vector of size \code{p1} specifying the
 #'   evaluation grid for the first QTS.
 #' @param t2 An optional numeric vector of size \code{p2} specifying the

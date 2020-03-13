@@ -17,13 +17,37 @@ gdistance <- function(x, y) {
   2 * acos(x)
 }
 
+#' Quaternion Inverse
+#'
+#' @param x A length-4 vector storing a quaternion.
+#'
+#' @return A length-4 vector storing the inverse of the input quaternion.
 #' @export
+#'
+#' @examples
+#' q <- rnorm(4)
+#' q <- q / sqrt(sum(q^2))
+#' q
+#' qinv(q)
 qinv <- function(x) {
   x[2:4] <- -x[2:4]
   x
 }
 
+#' Quaternion Product
+#'
+#' @param x A length-4 vector storing a quaternion.
+#' @param y A length-4 vector storing a quaternion.
+#'
+#' @return A length-4 vector storing the product of the two input quaternions.
 #' @export
+#'
+#' @examples
+#' q1 <- rnorm(4)
+#' q1 <- q1 / sqrt(sum(q1^2))
+#' q2 <- rnorm(4)
+#' q2 <- q2 / sqrt(sum(q2^2))
+#' qprod(q1, q2)
 qprod <- function(x, y) {
   x1 <- x[1]
   x2 <- x[2]
@@ -44,8 +68,11 @@ qprod <- function(x, y) {
 #' Quaternion time series normalization
 #'
 #' @param x A 4-row numeric matrix.
+#' @param normalizer A length-4 vector storing a quaternion to use as origin.
+#'   Defaults to \code{NULL}, which takes the first quaternion in QTS \code{x}
+#'   as origin.
 #'
-#' @return A 4-row numeric matrix.
+#' @return A 4-row numeric matrix storing the normalized QTS.
 #'
 #' @export
 #' @examples

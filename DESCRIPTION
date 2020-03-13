@@ -10,7 +10,7 @@ Authors@R:
 Description: This package provides a C++ library for quaternion 
     representation and statistical analysis. It relies on pre-existing 
     data structure provided by the Eigen library.
-License: AGPL-3.0
+License: AGPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0
@@ -23,8 +23,10 @@ Imports:
     onion,
     Rcpp,
     rotations (>= 1.6),
-    magrittr
+    magrittr,
+    purrr
 Suggests: 
-    furrr
+    furrr,
+    future
 Remotes: 
     astamm/rotationsC/rotations

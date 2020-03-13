@@ -23,7 +23,7 @@ kmeans_qts <-function(q, t = NULL, k = 2, iter_max = 20, nstart = 1000) {
   B <- choose(n, k)
 
   if (nstart > B)
-    init <- combn(n, k, simplify = FALSE)
+    init <- utils::combn(n, k, simplify = FALSE)
   else
     init <- replicate(nstart, sample.int(n, k), simplify = FALSE)
 
