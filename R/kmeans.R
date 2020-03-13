@@ -83,8 +83,7 @@ kmeans_qts_single <- function(init, q, t = NULL, iter_max = 20) {
 
     # Step 3: Update centers
     centers <- centers %>%
-      seq_along() %>%
-      purrr::map(~ squad::mean_qts(q[memberships == .x]))
+      purrr::imap(~ squad::mean_qts(q[memberships == .y]))
 
     wss <- sum(dist_to_centers)
     iter <- iter + 1
