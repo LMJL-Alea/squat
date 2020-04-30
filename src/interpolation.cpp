@@ -144,6 +144,12 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x,
   {
     double newx = xmin + (double)i * step;
 
+    if (newx < x[posInf] || newx > x[posSup])
+    {
+      yOut(Rcpp::_, i) = Rcpp::rep(R_NaN, 4);
+      continue;
+    }
+
     double xinf = x[posInf];
     while (xinf <= newx && posInf < sizeIn)
     {
