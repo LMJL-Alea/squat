@@ -139,10 +139,17 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x,
   double step = (xmax - xmin) / (sizeOut - 1.0);
   Rcpp::NumericVector Qinf, Qsup;
   Rcpp::NumericMatrix yOut(4, sizeOut);
+  double epsValue = std::sqrt(std::numeric_limits<double>::epsilon());
 
   for (unsigned int i = 0;i < sizeOut;++i)
   {
     double newx = xmin + (double)i * step;
+
+    if (std::abs(newx - x[0]) < epsValue)
+      newx = x[0];
+
+    if (std::abs(newx - x[sizeIn - 1]) < epsValue)
+      newx = x[sizeIn - 1];
 
     if (newx < x[0] || newx > x[sizeIn - 1])
     {
