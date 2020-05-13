@@ -12,14 +12,14 @@
 #'
 #' @export
 gdistance <- function(x, y) {
-  x <- abs(sum(x * y))
+  x <- abs(1 - sum((x - y)^2) / 2)
   if (x > 1) x <- 1
   2 * acos(x)
 }
 
 #' Quaternion Inverse
 #'
-#' @param x A length-4 vector storing a quaternion.
+#' @param q A length-4 vector storing a quaternion.
 #'
 #' @return A length-4 vector storing the inverse of the input quaternion.
 #' @export
@@ -29,15 +29,15 @@ gdistance <- function(x, y) {
 #' q <- q / sqrt(sum(q^2))
 #' q
 #' qinv(q)
-qinv <- function(x) {
-  x[2:4] <- -x[2:4]
-  x
+qinv <- function(q) {
+  q[2:4] <- -q[2:4]
+  q
 }
 
 #' Quaternion Product
 #'
-#' @param x A length-4 vector storing a quaternion.
-#' @param y A length-4 vector storing a quaternion.
+#' @param q1 A length-4 vector storing a quaternion.
+#' @param q2 A length-4 vector storing a quaternion.
 #'
 #' @return A length-4 vector storing the product of the two input quaternions.
 #' @export
@@ -48,20 +48,22 @@ qinv <- function(x) {
 #' q2 <- rnorm(4)
 #' q2 <- q2 / sqrt(sum(q2^2))
 #' qprod(q1, q2)
-qprod <- function(x, y) {
-  x1 <- x[1]
-  x2 <- x[2]
-  x3 <- x[3]
-  x4 <- x[4]
-  y1 <- y[1]
-  y2 <- y[2]
-  y3 <- y[3]
-  y4 <- y[4]
+qprod <- function(q1, q2) {
+  q1 <- as.numeric(q1)
+  q2 <- as.numeric(q2)
+  x1 <- q1[1]
+  x2 <- q1[2]
+  x3 <- q1[3]
+  x4 <- q1[4]
+  y1 <- q2[1]
+  y2 <- q2[2]
+  y3 <- q2[3]
+  y4 <- q2[4]
   c(
-    x1 * y1 - x2 * y2 - x3 * y3 - x4 * y4,
-    x1 * y2 + x2 * y1 + x3 * y4 - x4 * y3,
-    x1 * y3 + x3 * y1 - x2 * y4 + x4 * y2,
-    x4 * y1 + x1 * y4 + x2 * y3 - x3 * y2
+    w = x1 * y1 - x2 * y2 - x3 * y3 - x4 * y4,
+    x = x1 * y2 + x2 * y1 + x3 * y4 - x4 * y3,
+    y = x1 * y3 + x3 * y1 - x2 * y4 + x4 * y2,
+    z = x4 * y1 + x1 * y4 + x2 * y3 - x3 * y2
   )
 }
 

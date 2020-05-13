@@ -4,12 +4,12 @@
 \alias{qprod}
 \title{Quaternion Product}
 \usage{
-qprod(x, y)
+qprod(q1, q2)
 }
 \arguments{
-\item{x}{A length-4 vector storing a quaternion.}
+\item{q1}{A length-4 vector storing a quaternion.}
 
-\item{y}{A length-4 vector storing a quaternion.}
+\item{q2}{A length-4 vector storing a quaternion.}
 }
 \value{
 A length-4 vector storing the product of the two input quaternions.

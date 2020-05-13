@@ -4,10 +4,10 @@
 \alias{qinv}
 \title{Quaternion Inverse}
 \usage{
-qinv(x)
+qinv(q)
 }
 \arguments{
-\item{x}{A length-4 vector storing a quaternion.}
+\item{q}{A length-4 vector storing a quaternion.}
 }
 \value{
 A length-4 vector storing the inverse of the input quaternion.
