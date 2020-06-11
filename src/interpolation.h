@@ -8,6 +8,7 @@
 void Normalize(const Rcpp::NumericVector &input,
                Rcpp::NumericVector &output);
 
+// [[Rcpp::export]]
 Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0,
                           const Rcpp::NumericVector &v1,
                           const double t);
