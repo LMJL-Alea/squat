@@ -88,6 +88,27 @@ namespace squad {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
+    inline Rcpp::NumericVector slerp(const Rcpp::NumericVector& v0, const Rcpp::NumericVector& v1, const double t) {
+        typedef SEXP(*Ptr_slerp)(SEXP,SEXP,SEXP);
+        static Ptr_slerp p_slerp = NULL;
+        if (p_slerp == NULL) {
+            validateSignature("Rcpp::NumericVector(*slerp)(const Rcpp::NumericVector&,const Rcpp::NumericVector&,const double)");
+            p_slerp = (Ptr_slerp)R_GetCCallable("squad", "_squad_slerp");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_slerp(Shield<SEXP>(Rcpp::wrap(v0)), Shield<SEXP>(Rcpp::wrap(v1)), Shield<SEXP>(Rcpp::wrap(t)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::NumericVector >(rcpp_result_gen);
+    }
+
     inline Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& x, const Rcpp::NumericMatrix& y, const double xmin, const double xmax, const unsigned int outSize = 0) {
         typedef SEXP(*Ptr_RegularizeGrid)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_RegularizeGrid p_RegularizeGrid = NULL;

@@ -116,6 +116,42 @@ RcppExport SEXP _squad_GetL2Distance(SEXP xSEXP, SEXP ySEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// slerp
+Rcpp::NumericVector slerp(const Rcpp::NumericVector& v0, const Rcpp::NumericVector& v1, const double t);
+static SEXP _squad_slerp_try(SEXP v0SEXP, SEXP v1SEXP, SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type v0(v0SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type v1(v1SEXP);
+    Rcpp::traits::input_parameter< const double >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(slerp(v0, v1, t));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _squad_slerp(SEXP v0SEXP, SEXP v1SEXP, SEXP tSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_squad_slerp_try(v0SEXP, v1SEXP, tSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // RegularizeGrid
 Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& x, const Rcpp::NumericMatrix& y, const double xmin, const double xmax, const unsigned int outSize);
 static SEXP _squad_RegularizeGrid_try(SEXP xSEXP, SEXP ySEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP outSizeSEXP) {
@@ -198,6 +234,7 @@ static int _squad_RcppExport_validate(const char* sig) {
         signatures.insert("double(*GeodesicQuaternionDistance)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&,const unsigned int,const unsigned int)");
         signatures.insert("Rcpp::NumericMatrix(*GetCostMatrix)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&)");
         signatures.insert("double(*GetL2Distance)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&)");
+        signatures.insert("Rcpp::NumericVector(*slerp)(const Rcpp::NumericVector&,const Rcpp::NumericVector&,const double)");
         signatures.insert("Rcpp::NumericMatrix(*RegularizeGrid)(const Rcpp::NumericVector&,const Rcpp::NumericMatrix&,const double,const double,const unsigned int)");
         signatures.insert("Rcpp::NumericMatrix(*GetGeodesicMean)(const Rcpp::NumericMatrix&,unsigned int,double)");
     }
@@ -209,6 +246,7 @@ RcppExport SEXP _squad_RcppExport_registerCCallable() {
     R_RegisterCCallable("squad", "_squad_GeodesicQuaternionDistance", (DL_FUNC)_squad_GeodesicQuaternionDistance_try);
     R_RegisterCCallable("squad", "_squad_GetCostMatrix", (DL_FUNC)_squad_GetCostMatrix_try);
     R_RegisterCCallable("squad", "_squad_GetL2Distance", (DL_FUNC)_squad_GetL2Distance_try);
+    R_RegisterCCallable("squad", "_squad_slerp", (DL_FUNC)_squad_slerp_try);
     R_RegisterCCallable("squad", "_squad_RegularizeGrid", (DL_FUNC)_squad_RegularizeGrid_try);
     R_RegisterCCallable("squad", "_squad_GetGeodesicMean", (DL_FUNC)_squad_GetGeodesicMean_try);
     R_RegisterCCallable("squad", "_squad_RcppExport_validate", (DL_FUNC)_squad_RcppExport_validate);
@@ -219,6 +257,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squad_GeodesicQuaternionDistance", (DL_FUNC) &_squad_GeodesicQuaternionDistance, 4},
     {"_squad_GetCostMatrix", (DL_FUNC) &_squad_GetCostMatrix, 2},
     {"_squad_GetL2Distance", (DL_FUNC) &_squad_GetL2Distance, 2},
+    {"_squad_slerp", (DL_FUNC) &_squad_slerp, 3},
     {"_squad_RegularizeGrid", (DL_FUNC) &_squad_RegularizeGrid, 5},
     {"_squad_GetGeodesicMean", (DL_FUNC) &_squad_GetGeodesicMean, 3},
     {"_squad_RcppExport_registerCCallable", (DL_FUNC) &_squad_RcppExport_registerCCallable, 0},

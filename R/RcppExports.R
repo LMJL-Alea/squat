@@ -31,6 +31,10 @@ GetL2Distance <- function(x, y) {
     .Call(`_squad_GetL2Distance`, x, y)
 }
 
+slerp <- function(v0, v1, t) {
+    .Call(`_squad_slerp`, v0, v1, t)
+}
+
 RegularizeGrid <- function(x, y, xmin, xmax, outSize = 0L) {
     .Call(`_squad_RegularizeGrid`, x, y, xmin, xmax, outSize)
 }
