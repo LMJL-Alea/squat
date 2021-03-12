@@ -12,7 +12,7 @@
 #'
 #' @export
 #' @examples
-#' qdata <- onion::rquat(15, rand = "norm")
+#' qdata <- onion::rquat(15)
 #' mean(qdata)
 mean_qts <- function(q, t = NULL) {
   grid_size <- 101

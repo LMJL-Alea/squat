@@ -33,9 +33,9 @@ If no evaluation grid is provided, the function assumes that the two input
 QTS are evaluated on the same grid.
 }
 \examples{
-s1_raw <- onion::rquat(15, rand = "norm")
+s1_raw <- onion::rquat(15)
 s1 <- s1_raw / Mod(s1_raw)
-s2_raw <- onion::rquat(20, rand = "norm")
+s2_raw <- onion::rquat(20)
 s2 <- s2_raw / Mod(s2_raw)
 t1 <- seq(0, 1, length.out = 15)
 t2 <- seq(0, 1, length.out = 20)

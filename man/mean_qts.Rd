@@ -21,6 +21,6 @@ This is a collection of functions that provide access to Fréchet means of
 quaternion samples according to various distances.
 }
 \examples{
-qdata <- onion::rquat(15, rand = "norm")
+qdata <- onion::rquat(15)
 mean(qdata)
 }
