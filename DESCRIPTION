@@ -29,4 +29,4 @@ Suggests:
     furrr,
     future
 Remotes:  
-    astamm/rotationsC
+    astamm/rotationsC/rotations
