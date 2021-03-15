@@ -28,5 +28,3 @@ Imports:
 Suggests: 
     furrr,
     future
-Remotes:  
-    astamm/rotationsC/rotations
