@@ -14,7 +14,8 @@
 #'   evaluation grid for the second QTS.
 #' @param distance_only A boolean specifyung whether to only compute distance
 #'   (no backtrack, faster). Default is \code{FALSE}.
-#'
+#' @param step_pattern The choice for the step pattern of the warping path (see
+#'  \code{\link[dtw]{stepPattern}} for more information)
 #' @return An object of class \code{\link[dtw]{dtw}} storing the dynamic time
 #'   warping results.
 #' @export
@@ -27,13 +28,14 @@
 #' t1 <- seq(0, 1, length.out = 15)
 #' t2 <- seq(0, 1, length.out = 20)
 #' DTW(s1, s2, t1, t2)
-DTW <- function(s1, s2, t1 = NULL, t2 = NULL, distance_only = FALSE) {
+DTW <- function (s1, s2, t1 = NULL, t2 = NULL, distance_only = FALSE, step_pattern = dtw::symmetric2)
+{
   s1 <- as.matrix(s1)
   s2 <- as.matrix(s2)
   if (!is.null(t1))
-    s1 <- RegularizeGrid(t1, s1, min(t1), max(t1))
+    s1 <- squad:::RegularizeGrid(t1, s1, min(t1), max(t1))
   if (!is.null(t2))
-    s2 <- RegularizeGrid(t2, s2, min(t2), max(t2))
-  M <- GetCostMatrix(s1, s2)
-  dtw::dtw(M, distance.only = distance_only)
+    s2 <- squad:::RegularizeGrid(t2, s2, min(t2), max(t2))
+  M <- squad:::GetCostMatrix(s1, s2)
+  dtw::dtw(M, distance.only = distance_only, step.pattern = step_pattern)
 }
