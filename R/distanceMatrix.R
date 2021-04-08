@@ -13,6 +13,7 @@
 #'
 #' @examples
 #' # TO DO
+
 distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2)
 {
   n <- length(q)

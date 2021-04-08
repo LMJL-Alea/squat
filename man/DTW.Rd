@@ -4,7 +4,14 @@
 \alias{DTW}
 \title{Dynamic Time Warping for Quaternion Time Series}
 \usage{
-DTW(s1, s2, t1 = NULL, t2 = NULL, distance_only = FALSE)
+DTW(
+  s1,
+  s2,
+  t1 = NULL,
+  t2 = NULL,
+  distance_only = FALSE,
+  step_pattern = dtw::symmetric2
+)
 }
 \arguments{
 \item{s1}{A \code{4 x p1} matrix representing the first QTS.}
@@ -19,6 +26,9 @@ evaluation grid for the second QTS.}
 
 \item{distance_only}{A boolean specifyung whether to only compute distance
 (no backtrack, faster). Default is \code{FALSE}.}
+
+\item{step_pattern}{The choice for the step pattern of the warping path (see
+\code{\link[dtw]{stepPattern}} for more information)}
 }
 \value{
 An object of class \code{\link[dtw]{dtw}} storing the dynamic time

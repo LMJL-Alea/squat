@@ -4,7 +4,7 @@
 \alias{distDTW}
 \title{Distance Matrix for Quaternion Time Series Samples}
 \usage{
-distDTW(q, t = NULL, labels = NULL)
+distDTW(q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2)
 }
 \arguments{
 \item{q}{A list of QTS.}
@@ -13,6 +13,9 @@ distDTW(q, t = NULL, labels = NULL)
 grids for each QTS.}
 
 \item{labels}{A character vector specifying labels for each QTS.}
+
+\item{step_pattern}{The choice for the step pattern of the warping path (see
+\code{\link[dtw]{stepPattern}} for more information)}
 }
 \value{
 A \code{\link[stats]{dist}} object storing the distance matrix
