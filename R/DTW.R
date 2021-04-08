@@ -35,7 +35,7 @@ DTW <- function (s1, s2, t1 = NULL, t2 = NULL, distance_only = FALSE, step_patte
   if (!is.null(t1))
     s1 <- RegularizeGrid(t1, s1, min(t1), max(t1))
   if (!is.null(t2))
-    s2 <- squad:::RegularizeGrid(t2, s2, min(t2), max(t2))
+    s2 <- RegularizeGrid(t2, s2, min(t2), max(t2))
   M <- GetCostMatrix(s1, s2)
   dtw::dtw(M, distance.only = distance_only, step.pattern = step_pattern)
 }
