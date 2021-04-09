@@ -24,25 +24,25 @@ evaluation grid for the first QTS.}
 \item{t2}{An optional numeric vector of size \code{p2} specifying the
 evaluation grid for the second QTS.}
 
-\item{distance_only}{A boolean specifyng whether to only compute distance (no
-backtrack, faster). Default is \code{FALSE}.}
+\item{distance_only}{A boolean specifyng whether to only compute distance
+(no backtrack, faster). Default is \code{FALSE}.}
 
 \item{step_pattern}{The choice for the step pattern of the warping path.
-Defaults to \code{dtw::symmetric2}, which is symmetric, normalizable with no
-local slope constraints. See \code{\link[dtw]{stepPattern}} for more
-information.}
+Defaults to \code{dtw::symmetric2}, which is symmetric,
+normalizable with no local slope constraints.
+See \code{\link[dtw]{stepPattern}} for more information.}
 }
 \value{
 An object of class \code{\link[dtw]{dtw}} storing the dynamic time
- warping results.
+  warping results.
 }
 \description{
 This function evaluates the Dynamic Time Warping (DTW) distance between two
 quaternion time series (QTS).
 }
 \details{
-If no evaluation grid is provided, the function assumes that the two input QTS
-are evaluated on the same grid.
+If no evaluation grid is provided, the function assumes that the two input
+QTS are evaluated on the same grid.
 }
 \examples{
 s1_raw <- onion::rquat(15)
