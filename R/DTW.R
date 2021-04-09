@@ -30,14 +30,7 @@
 #' t1 <- seq(0, 1, length.out = 15)
 #' t2 <- seq(0, 1, length.out = 20)
 #' DTW(s1, s2, t1, t2)
-DTW <-
-  function (s1,
-            s2,
-            t1 = NULL,
-            t2 = NULL,
-            distance_only = FALSE,
-            step_pattern = dtw::symmetric2)
-  {
+DTW <- function (s1, s2, t1 = NULL, t2 = NULL, distance_only = FALSE, step_pattern = dtw::symmetric2){
     s1 <- as.matrix(s1)
     s2 <- as.matrix(s2)
     if (!is.null(t1))
