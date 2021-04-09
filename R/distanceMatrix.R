@@ -4,9 +4,11 @@
 #' @param t An optional list of the same size as \code{q} containing evaluation
 #'   grids for each QTS.
 #' @param labels A character vector specifying labels for each QTS.
-#' @param step_pattern The choice for the step pattern of the warping path. (default to \code{dtw::symmetric2},
-#' which is symmetric, normalizable with no local slope constraints. See \code{\link[dtw]{stepPattern}} for more information).
-#'
+#' @inheritParams DTW
+#' @param normalized A boolean specifyng whether to compute normalized distance
+#'   between QTS.
+#'   Please note that not all step patterns are normalizable
+#'   (default: \code{FALSE}).
 #' @return A \code{\link[stats]{dist}} object storing the distance matrix
 #'   between QTS in a sample via DTW.
 #' @export
@@ -14,7 +16,7 @@
 #' @examples
 #' # TO DO
 
-distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2)
+distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2, normalized = FALSE)
 {
   n <- length(q)
   if (is.null(labels))
@@ -23,13 +25,34 @@ distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2)
   for (i in 1:(n - 1)) {
     for (j in (i + 1):n) {
       if (is.null(t))
-        d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
+        if(normalized){
+          d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
             s1 = q[[i]],
             s2 = q[[j]],
             distance_only = TRUE,
             step_pattern = step_pattern
+          )$normalizedDistance
+        }else{
+          d[n * (i - 1) - i * (i - 1) / 2 + j - i] <- DTW(
+          s1 = q[[i]],
+          s2 = q[[j]],
+          distance_only = TRUE,
+          step_pattern = step_pattern
           )$distance
-      else d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
+        }
+
+      else{
+        if(normalized){
+          d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
+            s1 = q[[i]],
+            s2 = q[[j]],
+            t1 = t[[i]],
+            t2 = t[[j]],
+            distance_only = TRUE,
+            step_pattern = step_pattern
+          )$normalizedDistance
+        }else{
+          d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
             s1 = q[[i]],
             s2 = q[[j]],
             t1 = t[[i]],
@@ -37,8 +60,12 @@ distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2)
             distance_only = TRUE,
             step_pattern = step_pattern
           )$distance
+        }
+
+      }
     }
   }
+  if(any(is.na(d))& normalized) warning('NAs produced : Normalized distance may not be available for the chosen step pattern')
   attributes(d) <- NULL
   attr(d, "Labels") <- labels
   attr(d, "Size") <- n

@@ -4,7 +4,13 @@
 \alias{distDTW}
 \title{Distance Matrix for Quaternion Time Series Samples}
 \usage{
-distDTW(q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2)
+distDTW(
+  q,
+  t = NULL,
+  labels = NULL,
+  step_pattern = dtw::symmetric2,
+  normalized = FALSE
+)
 }
 \arguments{
 \item{q}{A list of QTS.}
@@ -14,8 +20,15 @@ grids for each QTS.}
 
 \item{labels}{A character vector specifying labels for each QTS.}
 
-\item{step_pattern}{The choice for the step pattern of the warping path. (default to \code{dtw::symmetric2},
-which is symmetric, normalizable with no local slope constraints. See \code{\link[dtw]{stepPattern}} for more information).}
+\item{step_pattern}{The choice for the step pattern of the warping path.
+Defaults to \code{dtw::symmetric2}, which is symmetric,
+normalizable with no local slope constraints.
+See \code{\link[dtw]{stepPattern}} for more information.}
+
+\item{normalized}{A boolean specifyng whether to compute normalized distance
+between QTS.
+Please note that not all step patterns are normalizable
+(default: \code{FALSE}).}
 }
 \value{
 A \code{\link[stats]{dist}} object storing the distance matrix
