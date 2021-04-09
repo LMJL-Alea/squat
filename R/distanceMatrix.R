@@ -17,7 +17,7 @@
 #' # TO DO
 
 distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2, normalize = FALSE) {
-  if (normalize && is.na(attr(step_pattern, "norm"))) stop("The provided step pattern is not normalizable")
+  if (normalize && is.na(attr(step_pattern, "norm"))) stop("The provided step pattern is not normalizable.")
   n <- length(q)
   if (is.null(labels))
     labels <- 1:n
@@ -25,7 +25,7 @@ distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2,
   for (i in 1:(n - 1)) {
     for (j in (i + 1):n) {
       if (is.null(t))
-        if(normalize){
+        if(normalize) {
           d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
             s1 = q[[i]],
             s2 = q[[j]],
@@ -42,7 +42,7 @@ distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2,
         }
 
       else{
-        if(normalize){
+        if(normalize) {
           d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
             s1 = q[[i]],
             s2 = q[[j]],
