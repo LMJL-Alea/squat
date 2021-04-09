@@ -24,7 +24,7 @@ distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2,
   d <- numeric(n * (n - 1)/2)
   for (i in 1:(n - 1)) {
     for (j in (i + 1):n) {
-      if (is.null(t))
+      if (is.null(t)) {
         if(normalize) {
           d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
             s1 = q[[i]],
@@ -32,7 +32,7 @@ distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2,
             distance_only = TRUE,
             step_pattern = step_pattern
           )$normalizedDistance
-        }else{
+        } else {
           d[n * (i - 1) - i * (i - 1) / 2 + j - i] <- DTW(
           s1 = q[[i]],
           s2 = q[[j]],
@@ -40,8 +40,7 @@ distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2,
           step_pattern = step_pattern
           )$distance
         }
-
-      else{
+      } else {
         if(normalize) {
           d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
             s1 = q[[i]],
@@ -51,7 +50,7 @@ distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2,
             distance_only = TRUE,
             step_pattern = step_pattern
           )$normalizedDistance
-        }else{
+        } else {
           d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
             s1 = q[[i]],
             s2 = q[[j]],
@@ -61,7 +60,6 @@ distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2,
             step_pattern = step_pattern
           )$distance
         }
-
       }
     }
   }
