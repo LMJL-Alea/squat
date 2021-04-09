@@ -24,7 +24,7 @@ evaluation grid for the first QTS.}
 \item{t2}{An optional numeric vector of size \code{p2} specifying the
 evaluation grid for the second QTS.}
 
-\item{distance_only}{A boolean specifyng whether to only compute distance
+\item{distance_only}{A boolean specifying whether to only compute distance
 (no backtrack, faster). Default is \code{FALSE}.}
 
 \item{step_pattern}{The choice for the step pattern of the warping path.

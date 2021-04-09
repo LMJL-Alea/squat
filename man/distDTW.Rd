@@ -9,7 +9,7 @@ distDTW(
   t = NULL,
   labels = NULL,
   step_pattern = dtw::symmetric2,
-  normalized = FALSE
+  normalize = FALSE
 )
 }
 \arguments{
@@ -25,7 +25,7 @@ Defaults to \code{dtw::symmetric2}, which is symmetric,
 normalizable with no local slope constraints.
 See \code{\link[dtw]{stepPattern}} for more information.}
 
-\item{normalized}{A boolean specifyng whether to compute normalized distance
+\item{normalize}{A boolean specifying whether to compute normalized distance
 between QTS.
 Please note that not all step patterns are normalizable
 (default: \code{FALSE}).}
