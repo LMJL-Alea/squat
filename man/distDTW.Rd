@@ -14,8 +14,8 @@ grids for each QTS.}
 
 \item{labels}{A character vector specifying labels for each QTS.}
 
-\item{step_pattern}{The choice for the step pattern of the warping path (see
-\code{\link[dtw]{stepPattern}} for more information)}
+\item{step_pattern}{The choice for the step pattern of the warping path. (default to \code{dtw::symmetric2},
+which is symmetric, normalizable with no local slope constraints. See \code{\link[dtw]{stepPattern}} for more information).}
 }
 \value{
 A \code{\link[stats]{dist}} object storing the distance matrix
