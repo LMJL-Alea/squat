@@ -5,9 +5,8 @@
 #'   grids for each QTS.
 #' @param labels A character vector specifying labels for each QTS.
 #' @inheritParams DTW
-#' @param normalized A boolean specifyng whether to compute normalized distance
-#'   between QTS.
-#'   Please note that not all step patterns are normalizable
+#' @param normalized A boolean specifying whether to compute normalized distance
+#'   between QTS. Please note that not all step patterns are normalizable
 #'   (default: \code{FALSE}).
 #' @return A \code{\link[stats]{dist}} object storing the distance matrix
 #'   between QTS in a sample via DTW.
@@ -25,14 +24,14 @@ distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2,
   for (i in 1:(n - 1)) {
     for (j in (i + 1):n) {
       if (is.null(t))
-        if(normalized){
+        if (normalized) {
           d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
             s1 = q[[i]],
             s2 = q[[j]],
             distance_only = TRUE,
             step_pattern = step_pattern
           )$normalizedDistance
-        }else{
+        } else {
           d[n * (i - 1) - i * (i - 1) / 2 + j - i] <- DTW(
           s1 = q[[i]],
           s2 = q[[j]],
@@ -42,7 +41,7 @@ distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2,
         }
 
       else{
-        if(normalized){
+        if (normalized) {
           d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
             s1 = q[[i]],
             s2 = q[[j]],
@@ -51,7 +50,7 @@ distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2,
             distance_only = TRUE,
             step_pattern = step_pattern
           )$normalizedDistance
-        }else{
+        } else {
           d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
             s1 = q[[i]],
             s2 = q[[j]],

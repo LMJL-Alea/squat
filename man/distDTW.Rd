@@ -21,13 +21,12 @@ grids for each QTS.}
 \item{labels}{A character vector specifying labels for each QTS.}
 
 \item{step_pattern}{The choice for the step pattern of the warping path.
-Defaults to \code{dtw::symmetric2}, which is symmetric,
-normalizable with no local slope constraints.
-See \code{\link[dtw]{stepPattern}} for more information.}
+Defaults to \code{dtw::symmetric2}, which is symmetric, normalizable with no
+local slope constraints. See \code{\link[dtw]{stepPattern}} for more
+information.}
 
-\item{normalized}{A boolean specifyng whether to compute normalized distance
-between QTS.
-Please note that not all step patterns are normalizable
+\item{normalized}{A boolean specifying whether to compute normalized distance
+between QTS. Please note that not all step patterns are normalizable
 (default: \code{FALSE}).}
 }
 \value{
