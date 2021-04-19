@@ -2,11 +2,11 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 GeodesicQuaternionDistance <- function(x, y, xIndex, yIndex) {
-    .Call(`_squad_GeodesicQuaternionDistance`, x, y, xIndex, yIndex)
+    .Call(`_squat_GeodesicQuaternionDistance`, x, y, xIndex, yIndex)
 }
 
 GetCostMatrix <- function(x, y) {
-    .Call(`_squad_GetCostMatrix`, x, y)
+    .Call(`_squat_GetCostMatrix`, x, y)
 }
 
 #' L2 Distance for Quaternion Time Series
@@ -28,22 +28,22 @@ GetCostMatrix <- function(x, y) {
 #'
 #' @export
 GetL2Distance <- function(x, y) {
-    .Call(`_squad_GetL2Distance`, x, y)
+    .Call(`_squat_GetL2Distance`, x, y)
 }
 
 slerp <- function(v0, v1, t) {
-    .Call(`_squad_slerp`, v0, v1, t)
+    .Call(`_squat_slerp`, v0, v1, t)
 }
 
 RegularizeGrid <- function(x, y, xmin, xmax, outSize = 0L) {
-    .Call(`_squad_RegularizeGrid`, x, y, xmin, xmax, outSize)
+    .Call(`_squat_RegularizeGrid`, x, y, xmin, xmax, outSize)
 }
 
 GetGeodesicMean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
-    .Call(`_squad_GetGeodesicMean`, quaternionSample, maxIterations, maxEpsilon)
+    .Call(`_squat_GetGeodesicMean`, quaternionSample, maxIterations, maxEpsilon)
 }
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call('_squad_RcppExport_registerCCallable', PACKAGE = 'squad')
+    .Call('_squat_RcppExport_registerCCallable', PACKAGE = 'squat')
 })

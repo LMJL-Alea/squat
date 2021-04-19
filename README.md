@@ -1,2 +1,2 @@
-# squad
-Statistics for QUAternion Data
+# squat
+Statistics for QUAternion Temporal data

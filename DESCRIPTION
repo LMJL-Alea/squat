@@ -1,5 +1,5 @@
-Package: squad
-Title: Statistics for QUAternion Data
+Package: squat
+Title: Statistics for QUAternion Temporal Data
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Aymeric",

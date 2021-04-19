@@ -67,7 +67,7 @@ kmeans_qts_single <- function(init, q, t = NULL, iter_max = 20) {
       purrr::map(function(.x) {
         centers %>%
           purrr::map_dbl(function(.y) {
-            squad::DTW(
+            DTW(
               s1 = .x, s2 = .y,
               t1 = t, t2 = t,
               distance_only = TRUE
@@ -83,7 +83,7 @@ kmeans_qts_single <- function(init, q, t = NULL, iter_max = 20) {
 
     # Step 3: Update centers
     centers <- centers %>%
-      purrr::imap(~ squad::mean_qts(q[memberships == .y]))
+      purrr::imap(~ mean_qts(q[memberships == .y]))
 
     wss <- sum(dist_to_centers)
     iter <- iter + 1
