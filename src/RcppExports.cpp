@@ -2,66 +2,43 @@
 // Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #include "../inst/include/squat.h"
-#include <RcppArmadillo.h>
+#include <RcppEigen.h>
 #include <Rcpp.h>
 #include <string>
 #include <set>
 
 using namespace Rcpp;
 
-// GeodesicQuaternionDistance
-double GeodesicQuaternionDistance(const Rcpp::NumericMatrix& x, const Rcpp::NumericMatrix& y, const unsigned int xIndex, const unsigned int yIndex);
-static SEXP _squat_GeodesicQuaternionDistance_try(SEXP xSEXP, SEXP ySEXP, SEXP xIndexSEXP, SEXP yIndexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type xIndex(xIndexSEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type yIndex(yIndexSEXP);
-    rcpp_result_gen = Rcpp::wrap(GeodesicQuaternionDistance(x, y, xIndex, yIndex));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _squat_GeodesicQuaternionDistance(SEXP xSEXP, SEXP ySEXP, SEXP xIndexSEXP, SEXP yIndexSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_squat_GeodesicQuaternionDistance_try(xSEXP, ySEXP, xIndexSEXP, yIndexSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
 // GetCostMatrix
-Rcpp::NumericMatrix GetCostMatrix(const Rcpp::NumericMatrix& x, const Rcpp::NumericMatrix& y);
-static SEXP _squat_GetCostMatrix_try(SEXP xSEXP, SEXP ySEXP) {
+Rcpp::NumericMatrix GetCostMatrix(const Rcpp::DataFrame& qts1, const Rcpp::DataFrame& qts2, const bool disable_normalization);
+RcppExport SEXP _squat_GetCostMatrix(SEXP qts1SEXP, SEXP qts2SEXP, SEXP disable_normalizationSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(GetCostMatrix(x, y));
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts1(qts1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts2(qts2SEXP);
+    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetCostMatrix(qts1, qts2, disable_normalization));
+    return rcpp_result_gen;
+END_RCPP
+}
+// resample_qts
+Rcpp::DataFrame resample_qts(const Rcpp::DataFrame& qts, const unsigned int nout, const bool disable_normalization);
+static SEXP _squat_resample_qts_try(SEXP qtsSEXP, SEXP noutSEXP, SEXP disable_normalizationSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nout(noutSEXP);
+    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
+    rcpp_result_gen = Rcpp::wrap(resample_qts(qts, nout, disable_normalization));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _squat_GetCostMatrix(SEXP xSEXP, SEXP ySEXP) {
+RcppExport SEXP _squat_resample_qts(SEXP qtsSEXP, SEXP noutSEXP, SEXP disable_normalizationSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_squat_GetCostMatrix_try(xSEXP, ySEXP));
+        rcpp_result_gen = PROTECT(_squat_resample_qts_try(qtsSEXP, noutSEXP, disable_normalizationSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -81,121 +58,47 @@ RcppExport SEXP _squat_GetCostMatrix(SEXP xSEXP, SEXP ySEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// GetL2Distance
-double GetL2Distance(const Rcpp::NumericMatrix& x, const Rcpp::NumericMatrix& y);
-static SEXP _squat_GetL2Distance_try(SEXP xSEXP, SEXP ySEXP) {
+// qts2angle
+Rcpp::DataFrame qts2angle(const Rcpp::DataFrame& qts, const bool disable_normalization);
+RcppExport SEXP _squat_qts2angle(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(GetL2Distance(x, y));
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
+    rcpp_result_gen = Rcpp::wrap(qts2angle(qts, disable_normalization));
     return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
+END_RCPP
 }
-RcppExport SEXP _squat_GetL2Distance(SEXP xSEXP, SEXP ySEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_squat_GetL2Distance_try(xSEXP, ySEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// slerp
-Rcpp::NumericVector slerp(const Rcpp::NumericVector& v0, const Rcpp::NumericVector& v1, const double t);
-static SEXP _squat_slerp_try(SEXP v0SEXP, SEXP v1SEXP, SEXP tSEXP) {
+// reorient_qts
+Rcpp::DataFrame reorient_qts(const Rcpp::DataFrame& qts, const bool disable_normalization);
+RcppExport SEXP _squat_reorient_qts(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type v0(v0SEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type v1(v1SEXP);
-    Rcpp::traits::input_parameter< const double >::type t(tSEXP);
-    rcpp_result_gen = Rcpp::wrap(slerp(v0, v1, t));
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
+    rcpp_result_gen = Rcpp::wrap(reorient_qts(qts, disable_normalization));
     return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
+END_RCPP
 }
-RcppExport SEXP _squat_slerp(SEXP v0SEXP, SEXP v1SEXP, SEXP tSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_squat_slerp_try(v0SEXP, v1SEXP, tSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// RegularizeGrid
-Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& x, const Rcpp::NumericMatrix& y, const double xmin, const double xmax, const unsigned int outSize);
-static SEXP _squat_RegularizeGrid_try(SEXP xSEXP, SEXP ySEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP outSizeSEXP) {
+// normalize_qts
+Rcpp::DataFrame normalize_qts(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_normalize_qts(SEXP qtsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< const double >::type xmin(xminSEXP);
-    Rcpp::traits::input_parameter< const double >::type xmax(xmaxSEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type outSize(outSizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(RegularizeGrid(x, y, xmin, xmax, outSize));
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    rcpp_result_gen = Rcpp::wrap(normalize_qts(qts));
     return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _squat_RegularizeGrid(SEXP xSEXP, SEXP ySEXP, SEXP xminSEXP, SEXP xmaxSEXP, SEXP outSizeSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_squat_RegularizeGrid_try(xSEXP, ySEXP, xminSEXP, xmaxSEXP, outSizeSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
+END_RCPP
 }
 // GetGeodesicMean
-Rcpp::NumericMatrix GetGeodesicMean(const Rcpp::NumericMatrix& quaternionSample, unsigned int maxIterations, double maxEpsilon);
+Eigen::VectorXd GetGeodesicMean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
 static SEXP _squat_GetGeodesicMean_try(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type quaternionSample(quaternionSampleSEXP);
+    Rcpp::traits::input_parameter< const std::vector<Eigen::VectorXd>& >::type quaternionSample(quaternionSampleSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type maxIterations(maxIterationsSEXP);
     Rcpp::traits::input_parameter< double >::type maxEpsilon(maxEpsilonSEXP);
     rcpp_result_gen = Rcpp::wrap(GetGeodesicMean(quaternionSample, maxIterations, maxEpsilon));
@@ -231,34 +134,26 @@ RcppExport SEXP _squat_GetGeodesicMean(SEXP quaternionSampleSEXP, SEXP maxIterat
 static int _squat_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("double(*GeodesicQuaternionDistance)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&,const unsigned int,const unsigned int)");
-        signatures.insert("Rcpp::NumericMatrix(*GetCostMatrix)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&)");
-        signatures.insert("double(*GetL2Distance)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&)");
-        signatures.insert("Rcpp::NumericVector(*slerp)(const Rcpp::NumericVector&,const Rcpp::NumericVector&,const double)");
-        signatures.insert("Rcpp::NumericMatrix(*RegularizeGrid)(const Rcpp::NumericVector&,const Rcpp::NumericMatrix&,const double,const double,const unsigned int)");
-        signatures.insert("Rcpp::NumericMatrix(*GetGeodesicMean)(const Rcpp::NumericMatrix&,unsigned int,double)");
+        signatures.insert("Rcpp::DataFrame(*resample_qts)(const Rcpp::DataFrame&,const unsigned int,const bool)");
+        signatures.insert("Eigen::VectorXd(*GetGeodesicMean)(const std::vector<Eigen::VectorXd>&,unsigned int,double)");
     }
     return signatures.find(sig) != signatures.end();
 }
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP _squat_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("squat", "_squat_GeodesicQuaternionDistance", (DL_FUNC)_squat_GeodesicQuaternionDistance_try);
-    R_RegisterCCallable("squat", "_squat_GetCostMatrix", (DL_FUNC)_squat_GetCostMatrix_try);
-    R_RegisterCCallable("squat", "_squat_GetL2Distance", (DL_FUNC)_squat_GetL2Distance_try);
-    R_RegisterCCallable("squat", "_squat_slerp", (DL_FUNC)_squat_slerp_try);
-    R_RegisterCCallable("squat", "_squat_RegularizeGrid", (DL_FUNC)_squat_RegularizeGrid_try);
+    R_RegisterCCallable("squat", "_squat_resample_qts", (DL_FUNC)_squat_resample_qts_try);
     R_RegisterCCallable("squat", "_squat_GetGeodesicMean", (DL_FUNC)_squat_GetGeodesicMean_try);
     R_RegisterCCallable("squat", "_squat_RcppExport_validate", (DL_FUNC)_squat_RcppExport_validate);
     return R_NilValue;
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_squat_GeodesicQuaternionDistance", (DL_FUNC) &_squat_GeodesicQuaternionDistance, 4},
-    {"_squat_GetCostMatrix", (DL_FUNC) &_squat_GetCostMatrix, 2},
-    {"_squat_GetL2Distance", (DL_FUNC) &_squat_GetL2Distance, 2},
-    {"_squat_slerp", (DL_FUNC) &_squat_slerp, 3},
-    {"_squat_RegularizeGrid", (DL_FUNC) &_squat_RegularizeGrid, 5},
+    {"_squat_GetCostMatrix", (DL_FUNC) &_squat_GetCostMatrix, 3},
+    {"_squat_resample_qts", (DL_FUNC) &_squat_resample_qts, 3},
+    {"_squat_qts2angle", (DL_FUNC) &_squat_qts2angle, 2},
+    {"_squat_reorient_qts", (DL_FUNC) &_squat_reorient_qts, 2},
+    {"_squat_normalize_qts", (DL_FUNC) &_squat_normalize_qts, 1},
     {"_squat_GetGeodesicMean", (DL_FUNC) &_squat_GetGeodesicMean, 3},
     {"_squat_RcppExport_registerCCallable", (DL_FUNC) &_squat_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}

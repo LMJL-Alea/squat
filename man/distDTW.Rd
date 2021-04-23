@@ -5,34 +5,38 @@
 \title{Distance Matrix for Quaternion Time Series Samples}
 \usage{
 distDTW(
-  q,
-  t = NULL,
+  qts_list,
+  normalize_distance = TRUE,
   labels = NULL,
-  step_pattern = dtw::symmetric2,
-  normalize = FALSE
+  resample = TRUE,
+  disable_normalization = FALSE,
+  step_pattern = dtw::symmetric2
 )
 }
 \arguments{
-\item{q}{A list of QTS.}
+\item{qts_list}{A list of \code{\link[tibble]{tibble}}s storing a sample of quaternion time series.}
 
-\item{t}{An optional list of the same size as \code{q} containing evaluation
-grids for each QTS.}
+\item{normalize_distance}{A boolean specifying whether to compute normalized
+distance between QTS. Please note that not all step patterns are
+normalizable. Defaults to \code{FALSE}.}
 
-\item{labels}{A character vector specifying labels for each QTS.}
+\item{labels}{A character vector specifying labels for each QTS. Defaults to \code{NULL} which uses row numbers as labels.}
 
-\item{step_pattern}{The choice for the step pattern of the warping path.
-Defaults to \code{dtw::symmetric2}, which is symmetric,
-normalizable with no local slope constraints.
-See \code{\link[dtw]{stepPattern}} for more information.}
+\item{resample}{A boolean specifying whether the QTS should be uniformly
+resampled on their domain before computing distances. Defaults to \code{TRUE}.}
 
-\item{normalize}{A boolean specifying whether to compute normalized distance
-between QTS.
-Please note that not all step patterns are normalizable
-(default: \code{FALSE}).}
+\item{disable_normalization}{A boolean specifying whether quaternion
+normalization should be disabled. Defaults to \code{FALSE} which ensures that we
+always deal with unit quaternions.}
+
+\item{step_pattern}{A \code{\link[dtw]{stepPattern}} specifying the local
+constraints on the warping path. Defaults to \code{\link[dtw]{symmetric2}}
+which uses symmetric and normalizable warping paths with no local slope
+constraints. See \code{\link[dtw]{stepPattern}} for more information.}
 }
 \value{
 A \code{\link[stats]{dist}} object storing the distance matrix
-  between QTS in a sample via DTW.
+between QTS in a sample via DTW.
 }
 \description{
 Distance Matrix for Quaternion Time Series Samples

@@ -1,66 +1,54 @@
 #' Distance Matrix for Quaternion Time Series Samples
 #'
-#' @param q A list of QTS.
-#' @param t An optional list of the same size as \code{q} containing evaluation
-#'   grids for each QTS.
-#' @param labels A character vector specifying labels for each QTS.
+#' @param qts_list A list of \code{\link[tibble]{tibble}}s storing a sample of quaternion time series.
+#' @param normalize_distance A boolean specifying whether to compute normalized
+#'   distance between QTS. Please note that not all step patterns are
+#'   normalizable. Defaults to `FALSE`.
+#' @param labels A character vector specifying labels for each QTS. Defaults to `NULL` which uses row numbers as labels.
 #' @inheritParams DTW
-#' @param normalize A boolean specifying whether to compute normalized distance
-#'   between QTS.
-#'   Please note that not all step patterns are normalizable
-#'   (default: \code{FALSE}).
+#'
 #' @return A \code{\link[stats]{dist}} object storing the distance matrix
 #'   between QTS in a sample via DTW.
 #' @export
 #'
 #' @examples
 #' # TO DO
+distDTW <- function(qts_list,
+                    normalize_distance = TRUE,
+                    labels = NULL,
+                    resample = TRUE,
+                    disable_normalization = FALSE,
+                    step_pattern = dtw::symmetric2) {
+  if (normalize_distance && is.na(attr(step_pattern, "norm")))
+    stop("The provided step pattern is not normalizable.")
 
-distDTW <- function (q, t = NULL, labels = NULL, step_pattern = dtw::symmetric2, normalize = FALSE) {
-  if (normalize && is.na(attr(step_pattern, "norm"))) stop("The provided step pattern is not normalizable.")
-  n <- length(q)
+  if (!disable_normalization) {
+    qts_list <- lapply(qts_list, normalize_qts)
+  }
+
+  if (resample) {
+    qts_list <- lapply(qts_list, resample_qts, disable_normalization = TRUE)
+  }
+
+  n <- length(qts_list)
   if (is.null(labels))
     labels <- 1:n
+
   d <- numeric(n * (n - 1)/2)
   for (i in 1:(n - 1)) {
     for (j in (i + 1):n) {
-      if (is.null(t)) {
-        if(normalize) {
-          d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
-            s1 = q[[i]],
-            s2 = q[[j]],
-            distance_only = TRUE,
-            step_pattern = step_pattern
-          )$normalizedDistance
-        } else {
-          d[n * (i - 1) - i * (i - 1) / 2 + j - i] <- DTW(
-          s1 = q[[i]],
-          s2 = q[[j]],
-          distance_only = TRUE,
-          step_pattern = step_pattern
-          )$distance
-        }
-      } else {
-        if(normalize) {
-          d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
-            s1 = q[[i]],
-            s2 = q[[j]],
-            t1 = t[[i]],
-            t2 = t[[j]],
-            distance_only = TRUE,
-            step_pattern = step_pattern
-          )$normalizedDistance
-        } else {
-          d[n * (i - 1) - i * (i - 1)/2 + j - i] <- DTW(
-            s1 = q[[i]],
-            s2 = q[[j]],
-            t1 = t[[i]],
-            t2 = t[[j]],
-            distance_only = TRUE,
-            step_pattern = step_pattern
-          )$distance
-        }
-      }
+      dtw_data <- DTW(
+        qts1 = qts_list[[i]],
+        qts2 = qts_list[[j]],
+        resample = FALSE,
+        disable_normalization = TRUE,
+        distance_only = TRUE,
+        step_pattern = step_pattern
+      )
+      d[n * (i - 1) - i * (i - 1)/2 + j - i] <- if (normalize_distance)
+        dtw_data$normalizedDistance
+      else
+        dtw_data$distance
     }
   }
   attributes(d) <- NULL

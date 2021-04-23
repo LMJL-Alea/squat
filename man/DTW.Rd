@@ -5,36 +5,39 @@
 \title{Dynamic Time Warping for Quaternion Time Series}
 \usage{
 DTW(
-  s1,
-  s2,
-  t1 = NULL,
-  t2 = NULL,
+  qts1,
+  qts2,
+  resample = TRUE,
+  disable_normalization = FALSE,
   distance_only = FALSE,
   step_pattern = dtw::symmetric2
 )
 }
 \arguments{
-\item{s1}{A \code{4 x p1} matrix representing the first QTS.}
+\item{qts1}{A \code{\link[tibble]{tibble}} storing the 1st quaternion time
+series.}
 
-\item{s2}{A \code{4 x p2} matrix representing the second QTS.}
+\item{qts2}{A \code{\link[tibble]{tibble}} storing the 2nd quaternion time
+series.}
 
-\item{t1}{An optional numeric vector of size \code{p1} specifying the
-evaluation grid for the first QTS.}
+\item{resample}{A boolean specifying whether the QTS should be uniformly
+resampled on their domain before computing distances. Defaults to \code{TRUE}.}
 
-\item{t2}{An optional numeric vector of size \code{p2} specifying the
-evaluation grid for the second QTS.}
+\item{disable_normalization}{A boolean specifying whether quaternion
+normalization should be disabled. Defaults to \code{FALSE} which ensures that we
+always deal with unit quaternions.}
 
 \item{distance_only}{A boolean specifying whether to only compute distance
-(no backtrack, faster). Default is \code{FALSE}.}
+(no backtrack, faster). Defaults to \code{FALSE}.}
 
-\item{step_pattern}{The choice for the step pattern of the warping path.
-Defaults to \code{dtw::symmetric2}, which is symmetric,
-normalizable with no local slope constraints.
-See \code{\link[dtw]{stepPattern}} for more information.}
+\item{step_pattern}{A \code{\link[dtw]{stepPattern}} specifying the local
+constraints on the warping path. Defaults to \code{\link[dtw]{symmetric2}}
+which uses symmetric and normalizable warping paths with no local slope
+constraints. See \code{\link[dtw]{stepPattern}} for more information.}
 }
 \value{
 An object of class \code{\link[dtw]{dtw}} storing the dynamic time
-  warping results.
+warping results.
 }
 \description{
 This function evaluates the Dynamic Time Warping (DTW) distance between two
@@ -45,11 +48,5 @@ If no evaluation grid is provided, the function assumes that the two input
 QTS are evaluated on the same grid.
 }
 \examples{
-s1_raw <- onion::rquat(15)
-s1 <- s1_raw / Mod(s1_raw)
-s2_raw <- onion::rquat(20)
-s2 <- s2_raw / Mod(s2_raw)
-t1 <- seq(0, 1, length.out = 15)
-t2 <- seq(0, 1, length.out = 20)
-DTW(s1, s2, t1, t2)
+TO DO
 }

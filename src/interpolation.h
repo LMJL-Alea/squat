@@ -5,19 +5,12 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 
-void Normalize(const Rcpp::NumericVector &input,
-               Rcpp::NumericVector &output);
-
+//' @export
 // [[Rcpp::export]]
-Rcpp::NumericVector slerp(const Rcpp::NumericVector &v0,
-                          const Rcpp::NumericVector &v1,
-                          const double t);
-
-// [[Rcpp::export]]
-Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &x,
-                                   const Rcpp::NumericMatrix &y,
-                                   const double xmin,
-                                   const double xmax,
-                                   const unsigned int outSize = 0);
+Rcpp::DataFrame resample_qts(
+    const Rcpp::DataFrame &qts,
+    const unsigned int nout = 0,
+    const bool disable_normalization = false
+);
 
 #endif /* INTERPOLATION_H */

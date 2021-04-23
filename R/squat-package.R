@@ -1,4 +1,5 @@
 #' @useDynLib squat, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
-#' @import onion
+#' @importFrom tibble tibble
+#' @import RcppEigen
 NULL
