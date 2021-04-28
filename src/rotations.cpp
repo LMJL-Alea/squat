@@ -70,3 +70,36 @@ Eigen::Matrix3d meanSO3C(const Eigen::MatrixXd &Rs)
 
   return projectSO3C(Rbar);
 }
+
+Eigen::Vector4d exp_quat(const Eigen::Map<Eigen::VectorXd> &x)
+{
+  Eigen::Vector4d xx(x);
+  Eigen::QuaternionMapAlignedd q(xx.data());
+  q = expq<double>(q);
+  return xx;
+}
+
+Eigen::Vector4d log_quat(const Eigen::Map<Eigen::VectorXd> &x)
+{
+  Eigen::Vector4d xx(x);
+  Eigen::QuaternionMapAlignedd q(xx.data());
+  q = logq<double>(q);
+  return xx;
+}
+
+//' @export
+// [[Rcpp::export]]
+double geodist(const Eigen::Map<Eigen::VectorXd> &x1, const Eigen::Map<Eigen::VectorXd> &x2)
+{
+  Eigen::Quaterniond q1, q2;
+  q1.w() = x1(0);
+  q1.x() = x1(1);
+  q1.y() = x1(2);
+  q1.z() = x1(3);
+  q2.w() = x2(0);
+  q2.x() = x2(1);
+  q2.y() = x2(2);
+  q2.z() = x2(3);
+
+  return q1.angularDistance(q2);
+}

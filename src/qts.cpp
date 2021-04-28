@@ -108,3 +108,37 @@ Rcpp::DataFrame normalize_qts(const Rcpp::DataFrame &qts)
 
   return outValue;
 }
+
+Rcpp::DataFrame derivative_qts(const Rcpp::DataFrame &qts)
+{
+  unsigned int nGrid = qts.nrows();
+  Rcpp::DataFrame outValue = Rcpp::clone(qts);
+  Rcpp::NumericVector wValues = outValue["w"];
+  Rcpp::NumericVector xValues = outValue["x"];
+  Rcpp::NumericVector yValues = outValue["y"];
+  Rcpp::NumericVector zValues = outValue["z"];
+  Eigen::Quaterniond currentQValue, previousQvalue;
+  currentQValue.w() = wValues(nGrid - 1);
+  currentQValue.x() = xValues(nGrid - 1);
+  currentQValue.y() = yValues(nGrid - 1);
+  currentQValue.z() = zValues(nGrid - 1);
+
+  for (unsigned int i = nGrid - 1;i > 0;--i)
+  {
+    previousQvalue.w() = wValues(i - 1);
+    previousQvalue.x() = xValues(i - 1);
+    previousQvalue.y() = yValues(i - 1);
+    previousQvalue.z() = zValues(i - 1);
+
+    currentQValue = previousQvalue.inverse() * currentQValue;
+
+    wValues(i) = currentQValue.w();
+    xValues(i) = currentQValue.x();
+    yValues(i) = currentQValue.y();
+    zValues(i) = currentQValue.z();
+
+    currentQValue = previousQvalue;
+  }
+
+  return outValue;
+}

@@ -52,13 +52,6 @@ Rcpp::NumericMatrix GetCostMatrix(const Rcpp::DataFrame &qts1,
       }
 
       costMatrix(i, j) = q1Value.angularDistance(q2Value);
-
-      // double dotValue = q1Value.dot(q2Value);
-      // dotValue = std::abs(dotValue);
-      // if (dotValue >= 1.0)
-      //   costMatrix(i, j) = 0.0;
-      // else
-      //   costMatrix(i, j) = 2.0 * std::acos(dotValue);
     }
   }
 

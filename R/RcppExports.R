@@ -5,9 +5,57 @@ GetCostMatrix <- function(qts1, qts2, disable_normalization = FALSE) {
     .Call(`_squat_GetCostMatrix`, qts1, qts2, disable_normalization)
 }
 
+#' QTS Resampling
+#'
+#' This function performs uniform resampling using SLERP.
+#'
+#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z`.
+#' @param tmin A numeric value specifying the lower bound of the time interval
+#'   over which uniform resampling should take place. It must satisfy `tmin >=
+#'   min(qts$time)`. Defaults to `NA` in which case it is set to
+#'   `min(qts$time)`.
+#' @param tmax A numeric value specifying the upper bound of the time interval
+#'   over which uniform resampling should take place. It must satisfy `tmax <=
+#'   max(qts$time)`. Defaults to `NA` in which case it is set to
+#'   `max(qts$time)`.
+#' @param nout An integer specifying the size of the uniform grid for time
+#'   resampling. Defaults to `0L` in which case it uses the same grid size as
+#'   the input QTS.
+#' @param disable_normalization A boolean specifying whether quaternion
+#'   normalization should be disabled. Defaults to `FALSE` in which case the
+#'   function makes sure that quaternions are normalized prior to performing
+#'   SLERP interpolation.
+#'
+#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions are
+#'   uniformly sampled in the range `[tmin, tmax]`.
+#'
 #' @export
-resample_qts <- function(qts, nout = 0L, disable_normalization = FALSE) {
-    .Call(`_squat_resample_qts`, qts, nout, disable_normalization)
+#' @examples
+#' TO DO
+resample_qts <- function(qts, tmin = NA_real_, tmax = NA_real_, nout = 0L, disable_normalization = FALSE) {
+    .Call(`_squat_resample_qts`, qts, tmin, tmax, nout, disable_normalization)
+}
+
+#' @export
+smooth_qts <- function(qts, alpha = 0.5) {
+    .Call(`_squat_smooth_qts`, qts, alpha)
+}
+
+#' @export
+inner_product_with_yinit <- function(q, qinit) {
+    .Call(`_squat_inner_product_with_yinit`, q, qinit)
+}
+
+#' @export
+calibrate_xy <- function(qts, q0) {
+    .Call(`_squat_calibrate_xy`, qts, q0)
+}
+
+#' @export
+rot_q <- function(axis1, axis2) {
+    .Call(`_squat_rot_q`, axis1, axis2)
 }
 
 #' QTS Transformation To Angle Time Series
@@ -71,9 +119,44 @@ normalize_qts <- function(qts) {
     .Call(`_squat_normalize_qts`, qts)
 }
 
+#' QTS Derivative
+#'
+#' This function computes the first derivative of a quaternion time series with
+#' respect to time.
+#'
+#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z`.
+#'
+#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions measure
+#'   the rotation to be applied to transform attitude at previous time point to
+#'   attitude at the current time point.
+#'
+#' @export
+#' @examples
+#' TO DO
+derivative_qts <- function(qts) {
+    .Call(`_squat_derivative_qts`, qts)
+}
+
 #' @export
 GetGeodesicMean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
     .Call(`_squat_GetGeodesicMean`, quaternionSample, maxIterations, maxEpsilon)
+}
+
+#' @export
+geodist <- function(x1, x2) {
+    .Call(`_squat_geodist`, x1, x2)
+}
+
+#' @export
+exp_quat <- function(x) {
+    .Call(`_squat_exp_quat`, x)
+}
+
+#' @export
+log_quat <- function(x) {
+    .Call(`_squat_log_quat`, x)
 }
 
 # Register entry points for exported C++ functions

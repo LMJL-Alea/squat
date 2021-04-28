@@ -4,6 +4,8 @@
 #include <algorithm>
 
 Rcpp::DataFrame resample_qts(const Rcpp::DataFrame &qts,
+                             double tmin,
+                             double tmax,
                              const unsigned int nout,
                              const bool disable_normalization)
 {
@@ -20,9 +22,15 @@ Rcpp::DataFrame resample_qts(const Rcpp::DataFrame &qts,
   Rcpp::NumericVector inputYValues = qts["y"];
   Rcpp::NumericVector inputZValues = qts["z"];
 
-  double xmin = inputTimeValues(0);
-  double xmax = inputTimeValues(sizeIn - 1);
-  double step = (xmax - xmin) / (sizeOut - 1.0);
+  if (R_IsNA(tmin))
+    tmin = inputTimeValues(0);
+  else if (tmin < inputTimeValues(0))
+    Rcpp::exception("The lower bound of the time interval for resampling cannot be smaller than the smallest time point.");
+  if (R_IsNA(tmax))
+    tmax = inputTimeValues(sizeIn - 1);
+  else if (tmax > inputTimeValues(sizeIn - 1))
+    Rcpp::exception("The upper bound of the time interval for resampling cannot be smaller than the largest time point.");
+  double step = (tmax - tmin) / (sizeOut - 1.0);
 
   auto posInf = inputTimeValues.begin();
   auto posSup = inputTimeValues.begin();
@@ -47,10 +55,10 @@ Rcpp::DataFrame resample_qts(const Rcpp::DataFrame &qts,
 
   for (unsigned int i = 0;i < sizeOut;++i)
   {
-    double newx = xmin + (double)i * step;
-    outputTimeValues(i) = newx;
+    double tnew = tmin + (double)i * step;
+    outputTimeValues(i) = tnew;
 
-    if (*posInf == newx)
+    if (*posInf == tnew)
     {
       unsigned int idxInf = posInf - inputTimeValues.begin();
       Qinf.w() = inputWValues(idxInf);
@@ -72,9 +80,9 @@ Rcpp::DataFrame resample_qts(const Rcpp::DataFrame &qts,
       auto oldPosInf = posInf;
       auto oldPosSup = posSup;
 
-      if (*posSup <= newx)
+      if (*posSup <= tnew)
       {
-        posSup = std::upper_bound(posInf, inputTimeValues.end(), newx);
+        posSup = std::upper_bound(posInf, inputTimeValues.end(), tnew);
         if (posSup == inputTimeValues.end())
         {
           posSup = inputTimeValues.end() - 1;
@@ -111,7 +119,7 @@ Rcpp::DataFrame resample_qts(const Rcpp::DataFrame &qts,
       if (xsup > xinf)
       {
         double range = xsup - xinf;
-        double alpha = (newx - xinf) / range;
+        double alpha = (tnew - xinf) / range;
 
         if (posSup != oldPosSup)
         {
@@ -143,3 +151,33 @@ Rcpp::DataFrame resample_qts(const Rcpp::DataFrame &qts,
   return outputValue;
 }
 
+Rcpp::DataFrame smooth_qts(const Rcpp::DataFrame &qts,
+                           const double alpha)
+{
+  unsigned int nGrid = qts.nrows();
+  Rcpp::DataFrame outValue = Rcpp::clone(qts);
+  Rcpp::NumericVector wValues = outValue["w"];
+  Rcpp::NumericVector xValues = outValue["x"];
+  Rcpp::NumericVector yValues = outValue["y"];
+  Rcpp::NumericVector zValues = outValue["z"];
+  std::vector<Eigen::Quaterniond> qValues(nGrid);
+
+  for (unsigned int i = 0;i < nGrid;++i)
+  {
+    qValues[i] = Eigen::Quaterniond(wValues(i), xValues(i), yValues(i), zValues(i));
+    if (i == 0)
+      continue;
+    qValues[i] = qValues[i].slerp(alpha, qValues[i - 1]);
+  }
+
+  for (int i = nGrid - 2;i >= 0;--i)
+  {
+    qValues[i] = qValues[i].slerp(alpha, qValues[i + 1]);
+    wValues(i) = qValues[i].w();
+    xValues(i) = qValues[i].x();
+    yValues(i) = qValues[i].y();
+    zValues(i) = qValues[i].z();
+  }
+
+  return outValue;
+}
