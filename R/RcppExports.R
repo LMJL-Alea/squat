@@ -139,24 +139,52 @@ derivative_qts <- function(qts) {
     .Call(`_squat_derivative_qts`, qts)
 }
 
+#' QTS Logarithm
+#'
+#' This function computes the logarithm of a quaternion time series as the time
+#' series of the quaternion logarithms.
+#'
+#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z`.
+#'
+#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions have been
+#'   replaced by their logarithm.
+#'
 #' @export
-GetGeodesicMean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
-    .Call(`_squat_GetGeodesicMean`, quaternionSample, maxIterations, maxEpsilon)
+#' @examples
+#' TO DO
+log_qts <- function(qts) {
+    .Call(`_squat_log_qts`, qts)
+}
+
+#' QTS Exponential
+#'
+#' This function computes the exponential of a quaternion time series as the
+#' time series of the quaternion exponentials.
+#'
+#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z`.
+#'
+#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions have been
+#'   replaced by their exponential.
+#'
+#' @export
+#' @examples
+#' TO DO
+exp_qts <- function(qts) {
+    .Call(`_squat_exp_qts`, qts)
 }
 
 #' @export
-geodist <- function(x1, x2) {
-    .Call(`_squat_geodist`, x1, x2)
+gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
+    .Call(`_squat_gmean`, quaternionSample, maxIterations, maxEpsilon)
 }
 
 #' @export
-exp_quat <- function(x) {
-    .Call(`_squat_exp_quat`, x)
-}
-
-#' @export
-log_quat <- function(x) {
-    .Call(`_squat_log_quat`, x)
+gmedian <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
+    .Call(`_squat_gmedian`, quaternionSample, maxIterations, maxEpsilon)
 }
 
 # Register entry points for exported C++ functions

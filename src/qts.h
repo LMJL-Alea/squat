@@ -86,4 +86,40 @@ Rcpp::DataFrame normalize_qts(const Rcpp::DataFrame &qts);
 // [[Rcpp::export]]
 Rcpp::DataFrame derivative_qts(const Rcpp::DataFrame &qts);
 
+//' QTS Logarithm
+//'
+//' This function computes the logarithm of a quaternion time series as the time
+//' series of the quaternion logarithms.
+//'
+//' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+//'   with columns `time`, `w`, `x`, `y` and `z`.
+//'
+//' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+//'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions have been
+//'   replaced by their logarithm.
+//'
+//' @export
+//' @examples
+//' TO DO
+// [[Rcpp::export]]
+Rcpp::DataFrame log_qts(const Rcpp::DataFrame &qts);
+
+//' QTS Exponential
+//'
+//' This function computes the exponential of a quaternion time series as the
+//' time series of the quaternion exponentials.
+//'
+//' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+//'   with columns `time`, `w`, `x`, `y` and `z`.
+//'
+//' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+//'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions have been
+//'   replaced by their exponential.
+//'
+//' @export
+//' @examples
+//' TO DO
+// [[Rcpp::export]]
+Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts);
+
 #endif /* QTS_H */

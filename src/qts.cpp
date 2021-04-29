@@ -1,5 +1,5 @@
 #include "qts.h"
-
+#include "rotations.h"
 #include <RcppEigen.h>
 
 Rcpp::DataFrame qts2angle(const Rcpp::DataFrame &qts,
@@ -138,6 +138,52 @@ Rcpp::DataFrame derivative_qts(const Rcpp::DataFrame &qts)
     zValues(i) = currentQValue.z();
 
     currentQValue = previousQvalue;
+  }
+
+  return outValue;
+}
+
+Rcpp::DataFrame log_qts(const Rcpp::DataFrame &qts)
+{
+  unsigned int nGrid = qts.nrows();
+  Rcpp::DataFrame outValue = Rcpp::clone(qts);
+  Rcpp::NumericVector wValues = outValue["w"];
+  Rcpp::NumericVector xValues = outValue["x"];
+  Rcpp::NumericVector yValues = outValue["y"];
+  Rcpp::NumericVector zValues = outValue["z"];
+  Eigen::Quaterniond qValue;
+
+  for (unsigned int i = 0;i < nGrid;++i)
+  {
+    qValue = Eigen::Quaterniond(wValues(i), xValues(i), yValues(i), zValues(i));
+    qValue = logq<double>(qValue);
+    wValues(i) = qValue.w();
+    xValues(i) = qValue.x();
+    yValues(i) = qValue.y();
+    zValues(i) = qValue.z();
+  }
+
+  return outValue;
+}
+
+Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts)
+{
+  unsigned int nGrid = qts.nrows();
+  Rcpp::DataFrame outValue = Rcpp::clone(qts);
+  Rcpp::NumericVector wValues = outValue["w"];
+  Rcpp::NumericVector xValues = outValue["x"];
+  Rcpp::NumericVector yValues = outValue["y"];
+  Rcpp::NumericVector zValues = outValue["z"];
+  Eigen::Quaterniond qValue;
+
+  for (unsigned int i = 0;i < nGrid;++i)
+  {
+    qValue = Eigen::Quaterniond(wValues(i), xValues(i), yValues(i), zValues(i));
+    qValue = expq<double>(qValue);
+    wValues(i) = qValue.w();
+    xValues(i) = qValue.x();
+    yValues(i) = qValue.y();
+    zValues(i) = qValue.z();
   }
 
   return outValue;

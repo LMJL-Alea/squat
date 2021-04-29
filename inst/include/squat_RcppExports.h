@@ -67,27 +67,6 @@ namespace squat {
         return Rcpp::as<Rcpp::DataFrame >(rcpp_result_gen);
     }
 
-    inline Eigen::VectorXd GetGeodesicMean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations = 2000, double maxEpsilon = 1.0e-5) {
-        typedef SEXP(*Ptr_GetGeodesicMean)(SEXP,SEXP,SEXP);
-        static Ptr_GetGeodesicMean p_GetGeodesicMean = NULL;
-        if (p_GetGeodesicMean == NULL) {
-            validateSignature("Eigen::VectorXd(*GetGeodesicMean)(const std::vector<Eigen::VectorXd>&,unsigned int,double)");
-            p_GetGeodesicMean = (Ptr_GetGeodesicMean)R_GetCCallable("squat", "_squat_GetGeodesicMean");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_GetGeodesicMean(Shield<SEXP>(Rcpp::wrap(quaternionSample)), Shield<SEXP>(Rcpp::wrap(maxIterations)), Shield<SEXP>(Rcpp::wrap(maxEpsilon)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Eigen::VectorXd >(rcpp_result_gen);
-    }
-
 }
 
 #endif // RCPP_squat_RCPPEXPORTS_H_GEN_

@@ -1,47 +1,43 @@
 #include "representations.h"
 #include "rotations.h"
 
-Eigen::MatrixXd GetRotationFromQuaternion(const std::vector<Eigen::VectorXd> &quaternionSample)
+Eigen::MatrixXd GetRotationsFromQuaternions(const std::vector<Eigen::VectorXd> &quaternionSample)
 {
-  unsigned int n = quaternionSample.size();
-  Eigen::MatrixXd rotationSample(n, 9);
-  Eigen::Quaterniond q;
+  unsigned int nQuaternions = quaternionSample.size();
+  Eigen::MatrixXd rotationSample(nQuaternions, 9);
+  Eigen::Quaterniond qValue;
+  Eigen::Vector4d workValue;
 
-  for (unsigned int i = 0;i < n;++i)
+  for (unsigned int i = 0;i < nQuaternions;++i)
   {
-    q.coeffs() = quaternionSample[i];
-    rotationSample.row(i) = Eigen::Map<Eigen::VectorXd>(q.toRotationMatrix().data(), 9);
+    workValue = quaternionSample[i];
+    qValue = Eigen::Quaterniond(workValue(0), workValue(1), workValue(2), workValue(3));
+    rotationSample.row(i) = Eigen::Map<Eigen::VectorXd>(qValue.toRotationMatrix().data(), 9);
   }
 
   return rotationSample;
 }
 
-Eigen::VectorXd GetQuaternionFromRotation(const Eigen::Matrix3d &x)
+Eigen::Vector4d gmean(const std::vector<Eigen::VectorXd> &quaternionSample,
+                      unsigned int maxIterations,
+                      double maxEpsilon)
 {
-  Eigen::Quaterniond q(x);
-  return q.coeffs();
-}
-
-Eigen::VectorXd GetGeodesicMean(const std::vector<Eigen::VectorXd> &quaternionSample,
-                                unsigned int maxIterations,
-                                double maxEpsilon)
-{
-  Eigen::MatrixXd rotationSample = GetRotationFromQuaternion(quaternionSample);
+  Eigen::MatrixXd rotationSample = GetRotationsFromQuaternions(quaternionSample);
   unsigned int numPoints = rotationSample.rows();
   unsigned int iterations = 0;
-  Eigen::MatrixXd Rsi(3, 3);
-  Eigen::MatrixXd r;
-  Eigen::MatrixXd S = meanSO3C(rotationSample);
+  Eigen::Matrix3d Rsi;
+  Eigen::Matrix3d r;
+  Eigen::Matrix3d S = meanSO3C(rotationSample);
   double epsilon = 1.0;
 
   while (epsilon > maxEpsilon && iterations < maxIterations)
   {
-    r = Eigen::MatrixXd::Zero(3, 3);
+    r = Eigen::Matrix3d::Zero();
 
     for (unsigned int i = 0;i < numPoints;++i)
     {
       for (unsigned int j = 0;j < 9;++j)
-        Rsi(j) = rotationSample(i,j);
+        Rsi(j) = rotationSample(i, j);
 
       r += logSO3C(S.transpose() * Rsi);
     }
@@ -52,5 +48,60 @@ Eigen::VectorXd GetGeodesicMean(const std::vector<Eigen::VectorXd> &quaternionSa
     ++iterations;
   }
 
-  return GetQuaternionFromRotation(S);
+  Eigen::Quaterniond meanQValue(S);
+  Eigen::Vector4d outValue;
+  outValue(0) = meanQValue.w();
+  outValue(1) = meanQValue.x();
+  outValue(2) = meanQValue.y();
+  outValue(3) = meanQValue.z();
+  return outValue;
+}
+
+Eigen::Vector4d gmedian(const std::vector<Eigen::VectorXd> &quaternionSample,
+                        const unsigned int maxIterations,
+                        const double maxEpsilon)
+{
+  Eigen::MatrixXd rotationSample = GetRotationsFromQuaternions(quaternionSample);
+  unsigned int numPoints = rotationSample.rows();
+  unsigned int iterations = 0;
+  Eigen::Matrix3d S = meanSO3C(rotationSample);
+  Eigen::Matrix3d Snew;
+  Eigen::Matrix3d delta;
+  Eigen::Matrix3d Rsi;
+  Eigen::Matrix3d vi;
+  double epsilon = 1.0;
+
+  while (epsilon > maxEpsilon && iterations < maxIterations)
+  {
+    delta = Eigen::Matrix3d::Zero();
+    double denom = 0;
+
+    for (unsigned int i = 0;i < numPoints;++i)
+    {
+      for (unsigned int j = 0;j < 9;++j)
+        Rsi(j) = rotationSample(i, j);
+
+      vi = logSO3C(Rsi * S.transpose());
+      double vin = std::max(vi.operatorNorm(), 1.0e-5);
+
+      vin = 1.0 / vin;
+      delta += vi * vin;
+      denom += vin;
+    }
+
+    delta /= denom;
+    Snew = expskewC(delta) * S;
+
+    ++iterations;
+    epsilon = (Snew - S).operatorNorm();
+    S = Snew;
+  }
+
+  Eigen::Quaterniond medianQValue(S);
+  Eigen::Vector4d outValue;
+  outValue(0) = medianQValue.w();
+  outValue(1) = medianQValue.x();
+  outValue(2) = medianQValue.y();
+  outValue(3) = medianQValue.z();
+  return outValue;
 }

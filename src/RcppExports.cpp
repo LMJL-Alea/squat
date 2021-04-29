@@ -177,73 +177,51 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// GetGeodesicMean
-Eigen::VectorXd GetGeodesicMean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
-static SEXP _squat_GetGeodesicMean_try(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
+// log_qts
+Rcpp::DataFrame log_qts(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_log_qts(SEXP qtsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_qts(qts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// exp_qts
+Rcpp::DataFrame exp_qts(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_exp_qts(SEXP qtsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    rcpp_result_gen = Rcpp::wrap(exp_qts(qts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gmean
+Eigen::Vector4d gmean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
+RcppExport SEXP _squat_gmean(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::vector<Eigen::VectorXd>& >::type quaternionSample(quaternionSampleSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type maxIterations(maxIterationsSEXP);
     Rcpp::traits::input_parameter< double >::type maxEpsilon(maxEpsilonSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetGeodesicMean(quaternionSample, maxIterations, maxEpsilon));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _squat_GetGeodesicMean(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_squat_GetGeodesicMean_try(quaternionSampleSEXP, maxIterationsSEXP, maxEpsilonSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// geodist
-double geodist(const Eigen::Map<Eigen::VectorXd>& x1, const Eigen::Map<Eigen::VectorXd>& x2);
-RcppExport SEXP _squat_geodist(SEXP x1SEXP, SEXP x2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::VectorXd>& >::type x1(x1SEXP);
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::VectorXd>& >::type x2(x2SEXP);
-    rcpp_result_gen = Rcpp::wrap(geodist(x1, x2));
+    rcpp_result_gen = Rcpp::wrap(gmean(quaternionSample, maxIterations, maxEpsilon));
     return rcpp_result_gen;
 END_RCPP
 }
-// exp_quat
-Eigen::Vector4d exp_quat(const Eigen::Map<Eigen::VectorXd>& x);
-RcppExport SEXP _squat_exp_quat(SEXP xSEXP) {
+// gmedian
+Eigen::Vector4d gmedian(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
+RcppExport SEXP _squat_gmedian(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::VectorXd>& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(exp_quat(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// log_quat
-Eigen::Vector4d log_quat(const Eigen::Map<Eigen::VectorXd>& x);
-RcppExport SEXP _squat_log_quat(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::VectorXd>& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(log_quat(x));
+    Rcpp::traits::input_parameter< const std::vector<Eigen::VectorXd>& >::type quaternionSample(quaternionSampleSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type maxIterations(maxIterationsSEXP);
+    Rcpp::traits::input_parameter< double >::type maxEpsilon(maxEpsilonSEXP);
+    rcpp_result_gen = Rcpp::wrap(gmedian(quaternionSample, maxIterations, maxEpsilon));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -254,7 +232,6 @@ static int _squat_RcppExport_validate(const char* sig) {
     if (signatures.empty()) {
         signatures.insert("Rcpp::DataFrame(*resample_qts)(const Rcpp::DataFrame&,double,double,const unsigned int,const bool)");
         signatures.insert("Rcpp::DataFrame(*smooth_qts)(const Rcpp::DataFrame&,const double)");
-        signatures.insert("Eigen::VectorXd(*GetGeodesicMean)(const std::vector<Eigen::VectorXd>&,unsigned int,double)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -263,7 +240,6 @@ static int _squat_RcppExport_validate(const char* sig) {
 RcppExport SEXP _squat_RcppExport_registerCCallable() { 
     R_RegisterCCallable("squat", "_squat_resample_qts", (DL_FUNC)_squat_resample_qts_try);
     R_RegisterCCallable("squat", "_squat_smooth_qts", (DL_FUNC)_squat_smooth_qts_try);
-    R_RegisterCCallable("squat", "_squat_GetGeodesicMean", (DL_FUNC)_squat_GetGeodesicMean_try);
     R_RegisterCCallable("squat", "_squat_RcppExport_validate", (DL_FUNC)_squat_RcppExport_validate);
     return R_NilValue;
 }
@@ -279,10 +255,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_reorient_qts", (DL_FUNC) &_squat_reorient_qts, 2},
     {"_squat_normalize_qts", (DL_FUNC) &_squat_normalize_qts, 1},
     {"_squat_derivative_qts", (DL_FUNC) &_squat_derivative_qts, 1},
-    {"_squat_GetGeodesicMean", (DL_FUNC) &_squat_GetGeodesicMean, 3},
-    {"_squat_geodist", (DL_FUNC) &_squat_geodist, 2},
-    {"_squat_exp_quat", (DL_FUNC) &_squat_exp_quat, 1},
-    {"_squat_log_quat", (DL_FUNC) &_squat_log_quat, 1},
+    {"_squat_log_qts", (DL_FUNC) &_squat_log_qts, 1},
+    {"_squat_exp_qts", (DL_FUNC) &_squat_exp_qts, 1},
+    {"_squat_gmean", (DL_FUNC) &_squat_gmean, 3},
+    {"_squat_gmedian", (DL_FUNC) &_squat_gmedian, 3},
     {"_squat_RcppExport_registerCCallable", (DL_FUNC) &_squat_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };
