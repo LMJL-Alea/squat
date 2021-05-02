@@ -43,6 +43,18 @@ smooth_qts <- function(qts, alpha = 0.5) {
     .Call(`_squat_smooth_qts`, qts, alpha)
 }
 
+GeodesicQuaternionDistance <- function(M1, M2, index1, index2) {
+    .Call(`_squat_GeodesicQuaternionDistance`, M1, M2, index1, index2)
+}
+
+RegularizeGrid <- function(grid, values, gridLowerBound, gridUpperBound, numberOfPoints) {
+    .Call(`_squat_RegularizeGrid`, grid, values, gridLowerBound, gridUpperBound, numberOfPoints)
+}
+
+GetGeodesicMean <- function(values) {
+    .Call(`_squat_GetGeodesicMean`, values)
+}
+
 #' @export
 inner_product_with_yinit <- function(q, qinit) {
     .Call(`_squat_inner_product_with_yinit`, q, qinit)

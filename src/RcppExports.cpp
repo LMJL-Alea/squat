@@ -95,6 +95,115 @@ RcppExport SEXP _squat_smooth_qts(SEXP qtsSEXP, SEXP alphaSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// GeodesicQuaternionDistance
+double GeodesicQuaternionDistance(const Rcpp::NumericMatrix& M1, const Rcpp::NumericMatrix& M2, const unsigned int index1, const unsigned int index2);
+static SEXP _squat_GeodesicQuaternionDistance_try(SEXP M1SEXP, SEXP M2SEXP, SEXP index1SEXP, SEXP index2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type M1(M1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type M2(M2SEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type index1(index1SEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type index2(index2SEXP);
+    rcpp_result_gen = Rcpp::wrap(GeodesicQuaternionDistance(M1, M2, index1, index2));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _squat_GeodesicQuaternionDistance(SEXP M1SEXP, SEXP M2SEXP, SEXP index1SEXP, SEXP index2SEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_squat_GeodesicQuaternionDistance_try(M1SEXP, M2SEXP, index1SEXP, index2SEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// RegularizeGrid
+Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& grid, const Rcpp::NumericMatrix& values, const double gridLowerBound, const double gridUpperBound, const unsigned int numberOfPoints);
+static SEXP _squat_RegularizeGrid_try(SEXP gridSEXP, SEXP valuesSEXP, SEXP gridLowerBoundSEXP, SEXP gridUpperBoundSEXP, SEXP numberOfPointsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type grid(gridSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type values(valuesSEXP);
+    Rcpp::traits::input_parameter< const double >::type gridLowerBound(gridLowerBoundSEXP);
+    Rcpp::traits::input_parameter< const double >::type gridUpperBound(gridUpperBoundSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type numberOfPoints(numberOfPointsSEXP);
+    rcpp_result_gen = Rcpp::wrap(RegularizeGrid(grid, values, gridLowerBound, gridUpperBound, numberOfPoints));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _squat_RegularizeGrid(SEXP gridSEXP, SEXP valuesSEXP, SEXP gridLowerBoundSEXP, SEXP gridUpperBoundSEXP, SEXP numberOfPointsSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_squat_RegularizeGrid_try(gridSEXP, valuesSEXP, gridLowerBoundSEXP, gridUpperBoundSEXP, numberOfPointsSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// GetGeodesicMean
+Rcpp::NumericMatrix GetGeodesicMean(const Rcpp::NumericMatrix& values);
+static SEXP _squat_GetGeodesicMean_try(SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type values(valuesSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetGeodesicMean(values));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _squat_GetGeodesicMean(SEXP valuesSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_squat_GetGeodesicMean_try(valuesSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // inner_product_with_yinit
 double inner_product_with_yinit(const Eigen::Map<Eigen::VectorXd>& q, const Eigen::Map<Eigen::VectorXd>& qinit);
 RcppExport SEXP _squat_inner_product_with_yinit(SEXP qSEXP, SEXP qinitSEXP) {
@@ -232,6 +341,9 @@ static int _squat_RcppExport_validate(const char* sig) {
     if (signatures.empty()) {
         signatures.insert("Rcpp::DataFrame(*resample_qts)(const Rcpp::DataFrame&,double,double,const unsigned int,const bool)");
         signatures.insert("Rcpp::DataFrame(*smooth_qts)(const Rcpp::DataFrame&,const double)");
+        signatures.insert("double(*GeodesicQuaternionDistance)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&,const unsigned int,const unsigned int)");
+        signatures.insert("Rcpp::NumericMatrix(*RegularizeGrid)(const Rcpp::NumericVector&,const Rcpp::NumericMatrix&,const double,const double,const unsigned int)");
+        signatures.insert("Rcpp::NumericMatrix(*GetGeodesicMean)(const Rcpp::NumericMatrix&)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -240,6 +352,9 @@ static int _squat_RcppExport_validate(const char* sig) {
 RcppExport SEXP _squat_RcppExport_registerCCallable() { 
     R_RegisterCCallable("squat", "_squat_resample_qts", (DL_FUNC)_squat_resample_qts_try);
     R_RegisterCCallable("squat", "_squat_smooth_qts", (DL_FUNC)_squat_smooth_qts_try);
+    R_RegisterCCallable("squat", "_squat_GeodesicQuaternionDistance", (DL_FUNC)_squat_GeodesicQuaternionDistance_try);
+    R_RegisterCCallable("squat", "_squat_RegularizeGrid", (DL_FUNC)_squat_RegularizeGrid_try);
+    R_RegisterCCallable("squat", "_squat_GetGeodesicMean", (DL_FUNC)_squat_GetGeodesicMean_try);
     R_RegisterCCallable("squat", "_squat_RcppExport_validate", (DL_FUNC)_squat_RcppExport_validate);
     return R_NilValue;
 }
@@ -248,6 +363,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_GetCostMatrix", (DL_FUNC) &_squat_GetCostMatrix, 3},
     {"_squat_resample_qts", (DL_FUNC) &_squat_resample_qts, 5},
     {"_squat_smooth_qts", (DL_FUNC) &_squat_smooth_qts, 2},
+    {"_squat_GeodesicQuaternionDistance", (DL_FUNC) &_squat_GeodesicQuaternionDistance, 4},
+    {"_squat_RegularizeGrid", (DL_FUNC) &_squat_RegularizeGrid, 5},
+    {"_squat_GetGeodesicMean", (DL_FUNC) &_squat_GetGeodesicMean, 1},
     {"_squat_inner_product_with_yinit", (DL_FUNC) &_squat_inner_product_with_yinit, 2},
     {"_squat_calibrate_xy", (DL_FUNC) &_squat_calibrate_xy, 2},
     {"_squat_rot_q", (DL_FUNC) &_squat_rot_q, 2},

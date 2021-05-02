@@ -67,6 +67,69 @@ namespace squat {
         return Rcpp::as<Rcpp::DataFrame >(rcpp_result_gen);
     }
 
+    inline double GeodesicQuaternionDistance(const Rcpp::NumericMatrix& M1, const Rcpp::NumericMatrix& M2, const unsigned int index1, const unsigned int index2) {
+        typedef SEXP(*Ptr_GeodesicQuaternionDistance)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_GeodesicQuaternionDistance p_GeodesicQuaternionDistance = NULL;
+        if (p_GeodesicQuaternionDistance == NULL) {
+            validateSignature("double(*GeodesicQuaternionDistance)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&,const unsigned int,const unsigned int)");
+            p_GeodesicQuaternionDistance = (Ptr_GeodesicQuaternionDistance)R_GetCCallable("squat", "_squat_GeodesicQuaternionDistance");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_GeodesicQuaternionDistance(Shield<SEXP>(Rcpp::wrap(M1)), Shield<SEXP>(Rcpp::wrap(M2)), Shield<SEXP>(Rcpp::wrap(index1)), Shield<SEXP>(Rcpp::wrap(index2)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<double >(rcpp_result_gen);
+    }
+
+    inline Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& grid, const Rcpp::NumericMatrix& values, const double gridLowerBound, const double gridUpperBound, const unsigned int numberOfPoints) {
+        typedef SEXP(*Ptr_RegularizeGrid)(SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_RegularizeGrid p_RegularizeGrid = NULL;
+        if (p_RegularizeGrid == NULL) {
+            validateSignature("Rcpp::NumericMatrix(*RegularizeGrid)(const Rcpp::NumericVector&,const Rcpp::NumericMatrix&,const double,const double,const unsigned int)");
+            p_RegularizeGrid = (Ptr_RegularizeGrid)R_GetCCallable("squat", "_squat_RegularizeGrid");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_RegularizeGrid(Shield<SEXP>(Rcpp::wrap(grid)), Shield<SEXP>(Rcpp::wrap(values)), Shield<SEXP>(Rcpp::wrap(gridLowerBound)), Shield<SEXP>(Rcpp::wrap(gridUpperBound)), Shield<SEXP>(Rcpp::wrap(numberOfPoints)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::NumericMatrix >(rcpp_result_gen);
+    }
+
+    inline Rcpp::NumericMatrix GetGeodesicMean(const Rcpp::NumericMatrix& values) {
+        typedef SEXP(*Ptr_GetGeodesicMean)(SEXP);
+        static Ptr_GetGeodesicMean p_GetGeodesicMean = NULL;
+        if (p_GetGeodesicMean == NULL) {
+            validateSignature("Rcpp::NumericMatrix(*GetGeodesicMean)(const Rcpp::NumericMatrix&)");
+            p_GetGeodesicMean = (Ptr_GetGeodesicMean)R_GetCCallable("squat", "_squat_GetGeodesicMean");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_GetGeodesicMean(Shield<SEXP>(Rcpp::wrap(values)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::NumericMatrix >(rcpp_result_gen);
+    }
+
 }
 
 #endif // RCPP_squat_RCPPEXPORTS_H_GEN_
