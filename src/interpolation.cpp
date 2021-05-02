@@ -24,18 +24,15 @@ Rcpp::DataFrame resample_qts(const Rcpp::DataFrame &qts,
 
   if (R_IsNA(tmin))
     tmin = inputTimeValues(0);
-  else if (tmin < inputTimeValues(0))
-    Rcpp::exception("The lower bound of the time interval for resampling cannot be smaller than the smallest time point.");
   if (R_IsNA(tmax))
     tmax = inputTimeValues(sizeIn - 1);
-  else if (tmax > inputTimeValues(sizeIn - 1))
-    Rcpp::exception("The upper bound of the time interval for resampling cannot be smaller than the largest time point.");
-  double step = (tmax - tmin) / (sizeOut - 1.0);
 
   auto posInf = inputTimeValues.begin();
   auto posSup = inputTimeValues.begin();
+  auto oldPosInf = inputTimeValues.end();
+  auto oldPosSup = inputTimeValues.end();
 
-  Rcpp::NumericVector outputTimeValues = Rcpp::NumericVector(sizeOut);
+  Rcpp::NumericVector outputTimeValues = Rcpp::wrap(Eigen::VectorXd::LinSpaced(sizeOut, tmin, tmax));;
   Rcpp::NumericVector outputWValues = Rcpp::NumericVector(sizeOut);
   Rcpp::NumericVector outputXValues = Rcpp::NumericVector(sizeOut);
   Rcpp::NumericVector outputYValues = Rcpp::NumericVector(sizeOut);
@@ -55,12 +52,35 @@ Rcpp::DataFrame resample_qts(const Rcpp::DataFrame &qts,
 
   for (unsigned int i = 0;i < sizeOut;++i)
   {
-    double tnew = tmin + (double)i * step;
-    outputTimeValues(i) = tnew;
+    // Grab new time point
+    double tnew = outputTimeValues(i);
 
-    if (*posInf == tnew)
+    // Assign NA quaternion to output if new point is not in QTS range
+    if (tnew < inputTimeValues(0) || tnew > inputTimeValues(sizeIn - 1))
+    {
+      outputWValues(i) = NA_REAL;
+      outputXValues(i) = NA_REAL;
+      outputYValues(i) = NA_REAL;
+      outputZValues(i) = NA_REAL;
+      continue;
+    }
+
+    if (posSup == inputTimeValues.end())
+    {
+      outputWValues(i) = inputTimeValues(sizeIn - 1);
+      outputXValues(i) = inputTimeValues(sizeIn - 1);
+      outputYValues(i) = inputTimeValues(sizeIn - 1);
+      outputZValues(i) = inputTimeValues(sizeIn - 1);
+      continue;
+    }
+
+    posSup = std::upper_bound(posSup, inputTimeValues.end(), tnew);
+    posInf = posSup - 1;
+
+    if (posInf != oldPosInf)
     {
       unsigned int idxInf = posInf - inputTimeValues.begin();
+      xinf = *posInf;
       Qinf.w() = inputWValues(idxInf);
       Qinf.x() = inputXValues(idxInf);
       Qinf.y() = inputYValues(idxInf);
@@ -75,69 +95,32 @@ Rcpp::DataFrame resample_qts(const Rcpp::DataFrame &qts,
         isNormalized(idxInf) = true;
       }
     }
-    else
+
+    if (posSup != inputTimeValues.end())
     {
-      auto oldPosInf = posInf;
-      auto oldPosSup = posSup;
-
-      if (*posSup <= tnew)
-      {
-        posSup = std::upper_bound(posInf, inputTimeValues.end(), tnew);
-        if (posSup == inputTimeValues.end())
-        {
-          posSup = inputTimeValues.end() - 1;
-          posInf = inputTimeValues.end() - 1;
-        }
-        else
-          posInf = posSup - 1;
-      }
-
-      unsigned int idxInf = posInf - inputTimeValues.begin();
-      unsigned int idxSup = posSup - inputTimeValues.begin();
-
-      if (posInf != oldPosInf)
-      {
-        xinf = *posInf;
-        Qinf.w() = inputWValues(idxInf);
-        Qinf.x() = inputXValues(idxInf);
-        Qinf.y() = inputYValues(idxInf);
-        Qinf.z() = inputZValues(idxInf);
-        if (!isNormalized(idxInf) && !disable_normalization)
-        {
-          Qinf.normalize();
-          inputWValues(idxInf) = Qinf.w();
-          inputXValues(idxInf) = Qinf.x();
-          inputYValues(idxInf) = Qinf.y();
-          inputZValues(idxInf) = Qinf.z();
-          isNormalized(idxInf) = true;
-        }
-      }
-
       if (posSup != oldPosSup)
+      {
+        unsigned int idxSup = posSup - inputTimeValues.begin();
         xsup = *posSup;
+        Qsup.w() = inputWValues(idxSup);
+        Qsup.x() = inputXValues(idxSup);
+        Qsup.y() = inputYValues(idxSup);
+        Qsup.z() = inputZValues(idxSup);
+        if (!isNormalized(idxSup) && !disable_normalization)
+        {
+          Qsup.normalize();
+          inputWValues(idxSup) = Qsup.w();
+          inputXValues(idxSup) = Qsup.x();
+          inputYValues(idxSup) = Qsup.y();
+          inputZValues(idxSup) = Qsup.z();
+          isNormalized(idxSup) = true;
+        }
+      }
 
       if (xsup > xinf)
       {
         double range = xsup - xinf;
         double alpha = (tnew - xinf) / range;
-
-        if (posSup != oldPosSup)
-        {
-          Qsup.w() = inputWValues(idxSup);
-          Qsup.x() = inputXValues(idxSup);
-          Qsup.y() = inputYValues(idxSup);
-          Qsup.z() = inputZValues(idxSup);
-          if (!isNormalized(idxSup) && !disable_normalization)
-          {
-            Qsup.normalize();
-            inputWValues(idxSup) = Qsup.w();
-            inputXValues(idxSup) = Qsup.x();
-            inputYValues(idxSup) = Qsup.y();
-            inputZValues(idxSup) = Qsup.z();
-            isNormalized(idxSup) = true;
-          }
-        }
-
         Qinf = Qinf.slerp(alpha, Qsup);
       }
     }
@@ -146,6 +129,9 @@ Rcpp::DataFrame resample_qts(const Rcpp::DataFrame &qts,
     outputXValues(i) = Qinf.x();
     outputYValues(i) = Qinf.y();
     outputZValues(i) = Qinf.z();
+
+    oldPosSup = posSup;
+    oldPosInf = posInf;
   }
 
   return outputValue;
