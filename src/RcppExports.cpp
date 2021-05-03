@@ -204,42 +204,6 @@ RcppExport SEXP _squat_GetGeodesicMean(SEXP valuesSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// inner_product_with_yinit
-double inner_product_with_yinit(const Eigen::Map<Eigen::VectorXd>& q, const Eigen::Map<Eigen::VectorXd>& qinit);
-RcppExport SEXP _squat_inner_product_with_yinit(SEXP qSEXP, SEXP qinitSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::VectorXd>& >::type q(qSEXP);
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::VectorXd>& >::type qinit(qinitSEXP);
-    rcpp_result_gen = Rcpp::wrap(inner_product_with_yinit(q, qinit));
-    return rcpp_result_gen;
-END_RCPP
-}
-// calibrate_xy
-Rcpp::DataFrame calibrate_xy(const Rcpp::DataFrame& qts, const Eigen::Map<Eigen::VectorXd>& q0);
-RcppExport SEXP _squat_calibrate_xy(SEXP qtsSEXP, SEXP q0SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::VectorXd>& >::type q0(q0SEXP);
-    rcpp_result_gen = Rcpp::wrap(calibrate_xy(qts, q0));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rot_q
-Eigen::Vector4d rot_q(const Eigen::Map<Eigen::VectorXd>& axis1, const Eigen::Map<Eigen::VectorXd>& axis2);
-RcppExport SEXP _squat_rot_q(SEXP axis1SEXP, SEXP axis2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::VectorXd>& >::type axis1(axis1SEXP);
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::VectorXd>& >::type axis2(axis2SEXP);
-    rcpp_result_gen = Rcpp::wrap(rot_q(axis1, axis2));
-    return rcpp_result_gen;
-END_RCPP
-}
 // qts2angle
 Rcpp::DataFrame qts2angle(const Rcpp::DataFrame& qts, const bool disable_normalization);
 RcppExport SEXP _squat_qts2angle(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
@@ -366,9 +330,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_GeodesicQuaternionDistance", (DL_FUNC) &_squat_GeodesicQuaternionDistance, 4},
     {"_squat_RegularizeGrid", (DL_FUNC) &_squat_RegularizeGrid, 5},
     {"_squat_GetGeodesicMean", (DL_FUNC) &_squat_GetGeodesicMean, 1},
-    {"_squat_inner_product_with_yinit", (DL_FUNC) &_squat_inner_product_with_yinit, 2},
-    {"_squat_calibrate_xy", (DL_FUNC) &_squat_calibrate_xy, 2},
-    {"_squat_rot_q", (DL_FUNC) &_squat_rot_q, 2},
     {"_squat_qts2angle", (DL_FUNC) &_squat_qts2angle, 2},
     {"_squat_reorient_qts", (DL_FUNC) &_squat_reorient_qts, 2},
     {"_squat_normalize_qts", (DL_FUNC) &_squat_normalize_qts, 1},

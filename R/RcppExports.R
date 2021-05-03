@@ -55,21 +55,6 @@ GetGeodesicMean <- function(values) {
     .Call(`_squat_GetGeodesicMean`, values)
 }
 
-#' @export
-inner_product_with_yinit <- function(q, qinit) {
-    .Call(`_squat_inner_product_with_yinit`, q, qinit)
-}
-
-#' @export
-calibrate_xy <- function(qts, q0) {
-    .Call(`_squat_calibrate_xy`, qts, q0)
-}
-
-#' @export
-rot_q <- function(axis1, axis2) {
-    .Call(`_squat_rot_q`, axis1, axis2)
-}
-
 #' QTS Transformation To Angle Time Series
 #'
 #' This function computes a univariate time series representing the angle
