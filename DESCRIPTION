@@ -29,7 +29,11 @@ LinkingTo:
     Rcpp,
     RcppEigen
 Imports:
+    pbapply,
     dtw,
     Rcpp,
-    tibble
+    tibble,
+    fdakmapp (>= 2.1)
 Roxygen: list(markdown = TRUE)
+Remotes:  
+    astamm/fdakmapp
