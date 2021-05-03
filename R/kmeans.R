@@ -70,8 +70,9 @@ kmeans_qts <-function(qts_list,
   else
     init <- replicate(nstart, sample.int(n, k), simplify = FALSE)
 
-  solutions <- init %>%
-    pbapply::pblapply(function(.init) {
+  solutions <- pbapply::pblapply(
+    X = init,
+    FUN = function(.init) {
       fdakmapp::kma(
         x,
         y,
@@ -85,14 +86,33 @@ kmeans_qts <-function(qts_list,
         warping_options = c(0.1, 0.1),
         use_fence = FALSE
       )
-    }, cl = cl)
+    },
+    cl = cl
+  )
 
   if (!is.null(cl))
     parallel::stopCluster(cl)
 
-  wss_vector <- lapply(solutions, function(.sol) {
+  wss_vector <- sapply(solutions, function(.sol) {
     sum(.sol$final_dissimilarity)
   })
 
-  solutions[[which.min(wss_vector)]]
+  opt <- solutions[[which.min(wss_vector)]]
+
+  qts_center <- tibble(
+    time = opt$x_centers_final[1, ],
+    w    = rep(0, length(time)),
+    x    = opt$y_centers_final[1, 1, ],
+    y    = opt$y_centers_final[1, 2, ],
+    z    = opt$y_centers_final[1, 3, ]
+  )
+
+  list(
+    qts_aligned = lapply(1:length(qts_list), function(.idx) {
+      qts_list[[.idx]]$time <- opt$x_final[.idx, ]
+      qts_list[[.idx]]
+    }),
+    qts_center = exp_qts(qts_center),
+    best_kma_result = opt
+  )
 }
