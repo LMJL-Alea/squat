@@ -1,30 +1,39 @@
 Package: squat
 Title: Statistics for QUAternion Temporal Data
 Version: 0.0.0.9000
-Authors@R: 
+Authors@R: c(
+    person(given = "Lise", 
+           family = "Bellanger", 
+           role = "aut", 
+           email = "lise.bellanger@univ-nantes.fr"),
+    person(given = "Pierre", 
+           family = "Drouin", 
+           role = "aut", 
+           email = "pdrouin@umanit.fr"),
     person(given = "Aymeric",
            family = "Stamm",
            role = c("aut", "cre"),
            email = "aymeric.stamm@math.cnrs.fr",
-           comment = c(ORCID = "0000-0002-8725-3654"))
-Description: This package provides a C++ library for quaternion 
-    representation and statistical analysis. It relies on pre-existing 
-    data structure provided by the Eigen library.
-License: AGPL-3 + file LICENSE
+           comment = c(ORCID = "0000-0002-8725-3654")),
+    person(given = "Benjamin", 
+           family = "Martineau", 
+           role = "ctb"))
+Description: An implementation of statistical tools for the analysis 
+    of unit quaternion time series. It relies on pre-existing 
+    quaternion data structure provided by the Eigen library.
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 LinkingTo: 
     Rcpp,
-    RcppArmadillo,
-    rotations
+    RcppEigen
 Imports:
+    pbapply,
     dtw,
-    onion,
     Rcpp,
-    rotations (>= 1.6.1),
-    magrittr,
-    purrr
-Suggests: 
-    furrr,
-    future
+    tibble,
+    fdakmapp (>= 2.1)
+Roxygen: list(markdown = TRUE)
+Remotes:  
+    astamm/fdakmapp

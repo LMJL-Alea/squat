@@ -4,7 +4,7 @@
 #ifndef RCPP_squat_RCPPEXPORTS_H_GEN_
 #define RCPP_squat_RCPPEXPORTS_H_GEN_
 
-#include <RcppArmadillo.h>
+#include <RcppEigen.h>
 #include <Rcpp.h>
 
 namespace squat {
@@ -25,7 +25,49 @@ namespace squat {
         }
     }
 
-    inline double GeodesicQuaternionDistance(const Rcpp::NumericMatrix& x, const Rcpp::NumericMatrix& y, const unsigned int xIndex, const unsigned int yIndex) {
+    inline Rcpp::DataFrame resample_qts(const Rcpp::DataFrame& qts, double tmin = NA_REAL, double tmax = NA_REAL, const unsigned int nout = 0, const bool disable_normalization = false) {
+        typedef SEXP(*Ptr_resample_qts)(SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_resample_qts p_resample_qts = NULL;
+        if (p_resample_qts == NULL) {
+            validateSignature("Rcpp::DataFrame(*resample_qts)(const Rcpp::DataFrame&,double,double,const unsigned int,const bool)");
+            p_resample_qts = (Ptr_resample_qts)R_GetCCallable("squat", "_squat_resample_qts");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_resample_qts(Shield<SEXP>(Rcpp::wrap(qts)), Shield<SEXP>(Rcpp::wrap(tmin)), Shield<SEXP>(Rcpp::wrap(tmax)), Shield<SEXP>(Rcpp::wrap(nout)), Shield<SEXP>(Rcpp::wrap(disable_normalization)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::DataFrame >(rcpp_result_gen);
+    }
+
+    inline Rcpp::DataFrame smooth_qts(const Rcpp::DataFrame& qts, const double alpha = 0.5) {
+        typedef SEXP(*Ptr_smooth_qts)(SEXP,SEXP);
+        static Ptr_smooth_qts p_smooth_qts = NULL;
+        if (p_smooth_qts == NULL) {
+            validateSignature("Rcpp::DataFrame(*smooth_qts)(const Rcpp::DataFrame&,const double)");
+            p_smooth_qts = (Ptr_smooth_qts)R_GetCCallable("squat", "_squat_smooth_qts");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_smooth_qts(Shield<SEXP>(Rcpp::wrap(qts)), Shield<SEXP>(Rcpp::wrap(alpha)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::DataFrame >(rcpp_result_gen);
+    }
+
+    inline double GeodesicQuaternionDistance(const Rcpp::NumericMatrix& M1, const Rcpp::NumericMatrix& M2, const unsigned int index1, const unsigned int index2) {
         typedef SEXP(*Ptr_GeodesicQuaternionDistance)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_GeodesicQuaternionDistance p_GeodesicQuaternionDistance = NULL;
         if (p_GeodesicQuaternionDistance == NULL) {
@@ -35,7 +77,7 @@ namespace squat {
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_GeodesicQuaternionDistance(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(y)), Shield<SEXP>(Rcpp::wrap(xIndex)), Shield<SEXP>(Rcpp::wrap(yIndex)));
+            rcpp_result_gen = p_GeodesicQuaternionDistance(Shield<SEXP>(Rcpp::wrap(M1)), Shield<SEXP>(Rcpp::wrap(M2)), Shield<SEXP>(Rcpp::wrap(index1)), Shield<SEXP>(Rcpp::wrap(index2)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -46,70 +88,7 @@ namespace squat {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
-    inline Rcpp::NumericMatrix GetCostMatrix(const Rcpp::NumericMatrix& x, const Rcpp::NumericMatrix& y) {
-        typedef SEXP(*Ptr_GetCostMatrix)(SEXP,SEXP);
-        static Ptr_GetCostMatrix p_GetCostMatrix = NULL;
-        if (p_GetCostMatrix == NULL) {
-            validateSignature("Rcpp::NumericMatrix(*GetCostMatrix)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&)");
-            p_GetCostMatrix = (Ptr_GetCostMatrix)R_GetCCallable("squat", "_squat_GetCostMatrix");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_GetCostMatrix(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(y)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::NumericMatrix >(rcpp_result_gen);
-    }
-
-    inline double GetL2Distance(const Rcpp::NumericMatrix& x, const Rcpp::NumericMatrix& y) {
-        typedef SEXP(*Ptr_GetL2Distance)(SEXP,SEXP);
-        static Ptr_GetL2Distance p_GetL2Distance = NULL;
-        if (p_GetL2Distance == NULL) {
-            validateSignature("double(*GetL2Distance)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&)");
-            p_GetL2Distance = (Ptr_GetL2Distance)R_GetCCallable("squat", "_squat_GetL2Distance");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_GetL2Distance(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(y)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<double >(rcpp_result_gen);
-    }
-
-    inline Rcpp::NumericVector slerp(const Rcpp::NumericVector& v0, const Rcpp::NumericVector& v1, const double t) {
-        typedef SEXP(*Ptr_slerp)(SEXP,SEXP,SEXP);
-        static Ptr_slerp p_slerp = NULL;
-        if (p_slerp == NULL) {
-            validateSignature("Rcpp::NumericVector(*slerp)(const Rcpp::NumericVector&,const Rcpp::NumericVector&,const double)");
-            p_slerp = (Ptr_slerp)R_GetCCallable("squat", "_squat_slerp");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_slerp(Shield<SEXP>(Rcpp::wrap(v0)), Shield<SEXP>(Rcpp::wrap(v1)), Shield<SEXP>(Rcpp::wrap(t)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::NumericVector >(rcpp_result_gen);
-    }
-
-    inline Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& x, const Rcpp::NumericMatrix& y, const double xmin, const double xmax, const unsigned int outSize = 0) {
+    inline Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector& grid, const Rcpp::NumericMatrix& values, const double gridLowerBound, const double gridUpperBound, const unsigned int numberOfPoints) {
         typedef SEXP(*Ptr_RegularizeGrid)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_RegularizeGrid p_RegularizeGrid = NULL;
         if (p_RegularizeGrid == NULL) {
@@ -119,7 +98,7 @@ namespace squat {
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_RegularizeGrid(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(y)), Shield<SEXP>(Rcpp::wrap(xmin)), Shield<SEXP>(Rcpp::wrap(xmax)), Shield<SEXP>(Rcpp::wrap(outSize)));
+            rcpp_result_gen = p_RegularizeGrid(Shield<SEXP>(Rcpp::wrap(grid)), Shield<SEXP>(Rcpp::wrap(values)), Shield<SEXP>(Rcpp::wrap(gridLowerBound)), Shield<SEXP>(Rcpp::wrap(gridUpperBound)), Shield<SEXP>(Rcpp::wrap(numberOfPoints)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -130,17 +109,17 @@ namespace squat {
         return Rcpp::as<Rcpp::NumericMatrix >(rcpp_result_gen);
     }
 
-    inline Rcpp::NumericMatrix GetGeodesicMean(const Rcpp::NumericMatrix& quaternionSample, unsigned int maxIterations = 2000, double maxEpsilon = 1.0e-5) {
-        typedef SEXP(*Ptr_GetGeodesicMean)(SEXP,SEXP,SEXP);
+    inline Rcpp::NumericMatrix GetGeodesicMean(const Rcpp::NumericMatrix& values) {
+        typedef SEXP(*Ptr_GetGeodesicMean)(SEXP);
         static Ptr_GetGeodesicMean p_GetGeodesicMean = NULL;
         if (p_GetGeodesicMean == NULL) {
-            validateSignature("Rcpp::NumericMatrix(*GetGeodesicMean)(const Rcpp::NumericMatrix&,unsigned int,double)");
+            validateSignature("Rcpp::NumericMatrix(*GetGeodesicMean)(const Rcpp::NumericMatrix&)");
             p_GetGeodesicMean = (Ptr_GetGeodesicMean)R_GetCCallable("squat", "_squat_GetGeodesicMean");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_GetGeodesicMean(Shield<SEXP>(Rcpp::wrap(quaternionSample)), Shield<SEXP>(Rcpp::wrap(maxIterations)), Shield<SEXP>(Rcpp::wrap(maxEpsilon)));
+            rcpp_result_gen = p_GetGeodesicMean(Shield<SEXP>(Rcpp::wrap(values)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

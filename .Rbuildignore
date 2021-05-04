@@ -1,3 +1,5 @@
 ^squat\.Rproj$
 ^\.Rproj\.user$
 ^\.github$
+^LICENSE\.md$
+^data-raw$

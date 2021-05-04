@@ -1,22 +1,26 @@
 #ifndef REPRESENTATIONS_H
 #define REPRESENTATIONS_H
 
-#include <RcppArmadillo.h>
+#include <RcppEigen.h>
 
-// [[Rcpp::interfaces(r, cpp)]]
+Eigen::MatrixXd GetRotationsFromQuaternions(
+    const std::vector<Eigen::VectorXd> &quaternionSample
+);
 
-Rcpp::NumericMatrix GetAxisFromQuaternion(const Rcpp::NumericMatrix &quaternionSample);
-Rcpp::NumericMatrix GetAxisFromRotation(const Rcpp::NumericMatrix &rotationSample);
-
-Rcpp::NumericVector GetAngleFromQuaternion(const Rcpp::NumericMatrix &quaternionSample);
-Rcpp::NumericVector GetAngleFromRotation(const Rcpp::NumericMatrix &rotationSample);
-
-Rcpp::NumericMatrix GetRotationFromQuaternion(const Rcpp::NumericMatrix &quaternionSample);
-Rcpp::NumericMatrix GetQuaternionFromRotation(const Rcpp::NumericMatrix &rotationSample);
-
+//' @export
 // [[Rcpp::export]]
-Rcpp::NumericMatrix GetGeodesicMean(const Rcpp::NumericMatrix &quaternionSample,
-                                    unsigned int maxIterations = 2000,
-                                    double maxEpsilon = 1.0e-5);
+Eigen::Vector4d gmean(
+    const std::vector<Eigen::VectorXd> &quaternionSample,
+    unsigned int maxIterations = 2000,
+    double maxEpsilon = 1.0e-5
+);
+
+//' @export
+// [[Rcpp::export]]
+Eigen::Vector4d gmedian(
+    const std::vector<Eigen::VectorXd> &quaternionSample,
+    unsigned int maxIterations = 2000,
+    double maxEpsilon = 1.0e-5
+);
 
 #endif /* REPRESENTATIONS_H */

@@ -1,93 +1,118 @@
-#' K-Means for Quaternion Time Series
+#' QTS K-Mean Alignment Algorithm
 #'
-#' @param q A list of quaternion time series. Each QTS is a 4-row matrix.
-#' @param t An optional list of evaluation grids for the QTS. By default, if you
-#'   do not supply it, the function assumes that all QTS are evaluated on the
-#'   same grid.
-#' @param k The number of clusters (default: 2).
-#' @param iter_max The maximum number of iterations before stopping the k-means
-#'   algorithm if it failed converging (default: 20).
-#' @param nstart The number of random restarts for the initial centers (default:
-#'   1000).
+#' This function massages the input quaternion time series to feed them into the
+#' k-mean alignment algorithm for jointly clustering and aligning the input QTS.
 #'
-#' @return A list with two components: \code{memberships} is an integer vector
-#'   specifying the membership of each data point and \code{Var} is the sum of
-#'   within-sum-of-squares.
+#' @param qts_list A list of QTS stored as \code{\link[tibble]{tibble}}s with
+#'   columns `time`, `w`, `x`, `y` and `z`.
+#' @param k An integer specifying the number of clusters to be formed. Defaults
+#'   to `1L`.
+#' @param centroid A string specifying which type of centroid should be used.
+#'   Choices are `mean` and `medoid`. Defaults to `mean`.
+#' @param diss A string specifying which type of dissimilarity should be used.
+#'   Choices are `l1` and `pearson`. Defaults to `l2`.
+#' @param warping A string specifying which class of warping functions should be
+#'   used. Choices are `none`, `shift`, `dilation` and `affine`. Defaults to
+#'   `affine`.
+#' @param iter_max An integer specifying the maximum number of iterations for
+#'   terminating the k-mean algorithm. Defautls to `20L`.
+#' @param nstart An integer specifying the number of random restart for making
+#'   the k-mean results more robust. Defaults to `1000L`.
+#' @param ncores An integer specifying the number of cores to run the multiple
+#'   restarts of the k-mean algorithm in parallel. Defaults to `1L`.
+#'
+#' @return A \code{\link[fdakmapp]{kma}} object storing the results of the best
+#'   k-mean alignment algorithm run.
 #' @export
 #'
 #' @examples
-kmeans_qts <-function(q, t = NULL, k = 2, iter_max = 20, nstart = 1000) {
-  # Assumes qsr is a list of matrices 4x101
-  # and tsr is a vector of size 101
+#' TO DO
+kmeans_qts <-function(qts_list,
+                      k = 1,
+                      centroid = "mean",
+                      diss = "l2",
+                      warping = "affine",
+                      iter_max = 20,
+                      nstart = 1000,
+                      ncores = 1L) {
+  q <- lapply(qts_list, squat::log_qts)
+  q <- lapply(q, function(.qts) {
+      rbind(.qts$x, .qts$y, .qts$z)
+    })
+  t <- lapply(qts_list, function(.qts) .qts$time)
+
+  # Prep data
   n <- length(q)
+  d <- dim(q[[1]])[1]
+  p <- dim(q[[1]])[2]
+
+  if (is.null(t))
+    x <- 0:(p-1)
+  else
+    x <- matrix(nrow = n, ncol = p)
+
+  y <- array(dim = c(n, d, p))
+  for (i in 1:n) {
+    y[i, , ] <- q[[i]]
+    if (!is.null(t)) {
+      x[i, ] <- t[[i]]
+    }
+  }
+
+  cl <- NULL
+  if (ncores > 1L)
+    cl <- parallel::makeCluster(ncores)
+
   B <- choose(n, k)
 
   if (nstart > B)
-    init <- utils::combn(n, k, simplify = FALSE)
+    init <- combn(n, k, simplify = FALSE)
   else
     init <- replicate(nstart, sample.int(n, k), simplify = FALSE)
 
-  if (requireNamespace("furrr", quietly = TRUE)) {
-    future::plan(future::multiprocess)
-    solutions <- init %>%
-      furrr::future_map(
-        .f = kmeans_qts_single,
-        q = q,
-        t = t,
-        iter_max = iter_max,
-        .progress = TRUE
+  solutions <- pbapply::pblapply(
+    X = init,
+    FUN = function(.init) {
+      fdakmapp::kma(
+        x,
+        y,
+        seeds = .init,
+        n_clust = k,
+        center_method = centroid,
+        warping_method = warping,
+        dissimilarity_method = diss,
+        use_verbose = FALSE,
+        space = 0,
+        warping_options = c(0.1, 0.1),
+        use_fence = FALSE
       )
-  } else {
-    solutions <- init %>%
-      purrr::map(
-        .f = kmeans_qts_single,
-        q = q,
-        t = t,
-        iter_max = iter_max
-      )
-  }
+    },
+    cl = cl
+  )
 
+  if (!is.null(cl))
+    parallel::stopCluster(cl)
 
-  wss_vector <- purrr::map_dbl(solutions, "Var")
-  solutions[[which.min(wss_vector)]]
-}
+  wss_vector <- sapply(solutions, function(.sol) {
+    sum(.sol$final_dissimilarity)
+  })
 
-kmeans_qts_single <- function(init, q, t = NULL, iter_max = 20) {
-  # Step 0: initialization
-  centers <- q[init]
-  iter <- 0
-  old_wss <- 0
-  wss <- .Machine$double.xmax
+  opt <- solutions[[which.min(wss_vector)]]
 
-  while (iter < iter_max & (wss < old_wss | iter == 0)) {
-    old_wss <- wss
+  qts_center <- tibble(
+    time = opt$x_centers_final[1, ],
+    w    = rep(0, length(time)),
+    x    = opt$y_centers_final[1, 1, ],
+    y    = opt$y_centers_final[1, 2, ],
+    z    = opt$y_centers_final[1, 3, ]
+  )
 
-    # Step 1: Calculate distance to centers
-    dist_to_centers <- q %>%
-      purrr::map(function(.x) {
-        centers %>%
-          purrr::map_dbl(function(.y) {
-            DTW(
-              s1 = .x, s2 = .y,
-              t1 = t, t2 = t,
-              distance_only = TRUE
-            )$normalizedDistance^2
-          })
-      })
-
-    # Step 2: Update memberships
-    memberships <- dist_to_centers %>%
-      purrr::map_int(which.min)
-    dist_to_centers <- dist_to_centers %>%
-      purrr::map_dbl(min)
-
-    # Step 3: Update centers
-    centers <- centers %>%
-      purrr::imap(~ mean_qts(q[memberships == .y]))
-
-    wss <- sum(dist_to_centers)
-    iter <- iter + 1
-  }
-
-  list(cluster = memberships, Var = mean(dist_to_centers))
+  list(
+    qts_aligned = lapply(1:length(qts_list), function(.idx) {
+      qts_list[[.idx]]$time <- opt$x_final[.idx, ]
+      qts_list[[.idx]]
+    }),
+    qts_center = exp_qts(qts_center),
+    best_kma_result = opt
+  )
 }

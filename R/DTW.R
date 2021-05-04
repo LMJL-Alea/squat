@@ -6,37 +6,41 @@
 #' If no evaluation grid is provided, the function assumes that the two input
 #' QTS are evaluated on the same grid.
 #'
-#' @param s1 A \code{4 x p1} matrix representing the first QTS.
-#' @param s2 A \code{4 x p2} matrix representing the second QTS.
-#' @param t1 An optional numeric vector of size \code{p1} specifying the
-#'   evaluation grid for the first QTS.
-#' @param t2 An optional numeric vector of size \code{p2} specifying the
-#'   evaluation grid for the second QTS.
+#' @param qts1 A \code{\link[tibble]{tibble}} storing the 1st quaternion time
+#'   series.
+#' @param qts2 A \code{\link[tibble]{tibble}} storing the 2nd quaternion time
+#'   series.
+#' @param resample A boolean specifying whether the QTS should be uniformly
+#'   resampled on their domain before computing distances. Defaults to `TRUE`.
+#' @param disable_normalization A boolean specifying whether quaternion
+#'   normalization should be disabled. Defaults to `FALSE` which ensures that we
+#'   always deal with unit quaternions.
 #' @param distance_only A boolean specifying whether to only compute distance
-#'   (no backtrack, faster). Default is \code{FALSE}.
-#' @param step_pattern The choice for the step pattern of the warping path.
-#'   Defaults to \code{dtw::symmetric2}, which is symmetric,
-#'   normalizable with no local slope constraints.
-#'   See \code{\link[dtw]{stepPattern}} for more information.
+#'   (no backtrack, faster). Defaults to `FALSE`.
+#' @param step_pattern A \code{\link[dtw]{stepPattern}} specifying the local
+#'   constraints on the warping path. Defaults to \code{\link[dtw]{symmetric2}}
+#'   which uses symmetric and normalizable warping paths with no local slope
+#'   constraints. See \code{\link[dtw]{stepPattern}} for more information.
+#'
 #' @return An object of class \code{\link[dtw]{dtw}} storing the dynamic time
 #'   warping results.
 #' @export
 #'
 #' @examples
-#' s1_raw <- onion::rquat(15)
-#' s1 <- s1_raw / Mod(s1_raw)
-#' s2_raw <- onion::rquat(20)
-#' s2 <- s2_raw / Mod(s2_raw)
-#' t1 <- seq(0, 1, length.out = 15)
-#' t2 <- seq(0, 1, length.out = 20)
-#' DTW(s1, s2, t1, t2)
-DTW <- function (s1, s2, t1 = NULL, t2 = NULL, distance_only = FALSE, step_pattern = dtw::symmetric2) {
-  s1 <- as.matrix(s1)
-  s2 <- as.matrix(s2)
-  if (!is.null(t1))
-    s1 <- RegularizeGrid(t1, s1, min(t1), max(t1))
-  if (!is.null(t2))
-    s2 <- RegularizeGrid(t2, s2, min(t2), max(t2))
-  M <- GetCostMatrix(s1, s2)
+#' TO DO
+DTW <- function(qts1, qts2,
+                resample = TRUE,
+                disable_normalization = FALSE,
+                distance_only = FALSE,
+                step_pattern = dtw::symmetric2) {
+  if (!disable_normalization) {
+    qts1 <- normalize_qts(qts1)
+    qts2 <- normalize_qts(qts2)
+  }
+  if (resample) {
+    qts1 <- resample_qts(qts1, disable_normalization = TRUE)
+    qts2 <- resample_qts(qts2, disable_normalization = TRUE)
+  }
+  M <- GetCostMatrix(qts1, qts2, disable_normalization = TRUE)
   dtw::dtw(M, distance.only = distance_only, step.pattern = step_pattern)
 }

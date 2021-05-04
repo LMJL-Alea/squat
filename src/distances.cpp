@@ -1,52 +1,59 @@
 #include "distances.h"
 
-double GeodesicQuaternionDistance(const Rcpp::NumericMatrix &x,
-                                  const Rcpp::NumericMatrix &y,
-                                  const unsigned int xIndex,
-                                  const unsigned int yIndex)
+#include <RcppEigen.h>
+
+Rcpp::NumericMatrix GetCostMatrix(const Rcpp::DataFrame &qts1,
+                                  const Rcpp::DataFrame &qts2,
+                                  const bool disable_normalization)
 {
-  double realPart = 0.0;
+  unsigned int n1 = qts1.nrows();
+  unsigned int n2 = qts2.nrows();
+  Rcpp::NumericMatrix costMatrix(n1, n2);
+  Eigen::Quaterniond q1Value, q2Value;
 
-  for (unsigned int j = 0;j < 4;++j)
-    realPart += x(j, xIndex) * y(j, yIndex);
+  Rcpp::NumericVector w1Values = qts1["w"];
+  Rcpp::NumericVector x1Values = qts1["x"];
+  Rcpp::NumericVector y1Values = qts1["y"];
+  Rcpp::NumericVector z1Values = qts1["z"];
 
-  realPart = std::abs(realPart);
+  Rcpp::NumericVector w2Values = qts2["w"];
+  Rcpp::NumericVector x2Values = qts2["x"];
+  Rcpp::NumericVector y2Values = qts2["y"];
+  Rcpp::NumericVector z2Values = qts2["z"];
 
-  if (realPart >= 1.0)
-    return 0.0;
-
-  return 2.0 * std::acos(realPart);
-}
-
-Rcpp::NumericMatrix GetCostMatrix(const Rcpp::NumericMatrix &x,
-                                  const Rcpp::NumericMatrix &y)
-{
-  unsigned int nx = x.ncol();
-  unsigned int ny = y.ncol();
-  Rcpp::NumericMatrix costMatrix(nx, ny);
-
-  for (unsigned int i = 0;i < nx;++i)
-    for (unsigned int j = 0;j < ny;++j)
-      costMatrix(i, j) = GeodesicQuaternionDistance(x, y, i, j);
-
-  return costMatrix;
-}
-
-double GetL2Distance(const Rcpp::NumericMatrix &x,
-                     const Rcpp::NumericMatrix &y)
-{
-  unsigned int nx = x.ncol();
-  unsigned int ny = y.ncol();
-
-  if (nx != ny)
-    Rcpp::stop("Evaluation of the L2 Distance requires curves to be evaluated on the same grid.");
-
-  double sqDistance = 0.0;
-  for (unsigned int i = 0;i < nx;++i)
+  for (unsigned int i = 0;i < n1;++i)
   {
-    double distValue = GeodesicQuaternionDistance(x, y, i, i);
-    sqDistance += distValue * distValue;
+    q1Value.w() = w1Values(i);
+    q1Value.x() = x1Values(i);
+    q1Value.y() = y1Values(i);
+    q1Value.z() = z1Values(i);
+    if (!disable_normalization)
+    {
+      q1Value.normalize();
+      w1Values(i) = q1Value.w();
+      x1Values(i) = q1Value.x();
+      y1Values(i) = q1Value.y();
+      z1Values(i) = q1Value.z();
+    }
+
+    for (unsigned int j = 0;j < n2;++j)
+    {
+      q2Value.w() = w2Values(j);
+      q2Value.x() = x2Values(j);
+      q2Value.y() = y2Values(j);
+      q2Value.z() = z2Values(j);
+      if (!disable_normalization && i == 0)
+      {
+        q2Value.normalize();
+        w2Values(j) = q2Value.w();
+        x2Values(j) = q2Value.x();
+        y2Values(j) = q2Value.y();
+        z2Values(j) = q2Value.z();
+      }
+
+      costMatrix(i, j) = q1Value.angularDistance(q2Value);
+    }
   }
 
-  return std::sqrt(sqDistance);
+  return costMatrix;
 }
