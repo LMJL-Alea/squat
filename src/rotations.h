@@ -13,6 +13,14 @@ Eigen::Quaternion<T> expq(const Eigen::Quaternion<T>& q);
 template<typename T>
 Eigen::Quaternion<T> logq(const Eigen::Quaternion<T>& q);
 
+//' @export
+// [[Rcpp::export]]
+Eigen::Vector4d geometric_mean(
+    const std::vector<Eigen::VectorXd> &quaternionSample,
+    unsigned int maxIterations = 2000,
+    double maxEpsilon = 1.0e-5
+);
+
 #endif /* ROTATIONS_H */
 
 #include "rotations.hpp"

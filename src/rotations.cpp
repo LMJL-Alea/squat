@@ -62,3 +62,40 @@ Eigen::Matrix3d meanSO3C(const Eigen::MatrixXd &Rs)
 
   return projectSO3C(Rbar);
 }
+
+Eigen::Vector4d geometric_mean(const std::vector<Eigen::VectorXd> &quaternionSample,
+                               unsigned int maxIterations,
+                               double maxEpsilon)
+{
+  unsigned int nSamples = quaternionSample.size();
+  Eigen::Quaterniond meanValue(1.0, 0.0, 0.0, 0.0), invMeanValue, logMeanValue, tmpQValue;
+  double epsilon = 1.0;
+  unsigned int iterations = 0;
+  Eigen::Vector4d resValue;
+
+  while (epsilon > maxEpsilon && iterations < maxIterations)
+  {
+    invMeanValue = meanValue.inverse();
+
+    logMeanValue = Eigen::Quaterniond(0.0, 0.0, 0.0, 0.0);
+    for (unsigned int i = 0;i < nSamples;++i)
+    {
+      resValue = quaternionSample[i];
+      tmpQValue = Eigen::Quaterniond(resValue(0), resValue(1), resValue(2), resValue(3));
+      tmpQValue = invMeanValue * tmpQValue;
+      logMeanValue.coeffs() *= (double)(i) / (i + 1.0);
+      logMeanValue.coeffs() += logq<double>(tmpQValue).coeffs() / (i + 1.0);
+    }
+
+    // logMeanValue.coeffs() /= nSamples;
+    meanValue = meanValue * expq<double>(logMeanValue);
+    epsilon = logMeanValue.norm();
+    ++iterations;
+  }
+
+  resValue(0) = meanValue.w();
+  resValue(1) = meanValue.x();
+  resValue(2) = meanValue.y();
+  resValue(3) = meanValue.z();
+  return resValue;
+}
