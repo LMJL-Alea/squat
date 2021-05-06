@@ -122,4 +122,8 @@ Rcpp::DataFrame log_qts(const Rcpp::DataFrame &qts);
 // [[Rcpp::export]]
 Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts);
 
+//' @export
+// [[Rcpp::export]]
+Rcpp::DataFrame centring_qts(const Rcpp::DataFrame &qts);
+
 #endif /* QTS_H */

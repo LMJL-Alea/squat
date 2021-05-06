@@ -1,5 +1,6 @@
 #include "qts.h"
 #include "rotations.h"
+#include "representations.h"
 #include <RcppEigen.h>
 
 Rcpp::DataFrame qts2angle(const Rcpp::DataFrame &qts,
@@ -184,6 +185,43 @@ Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts)
     xValues(i) = qValue.x();
     yValues(i) = qValue.y();
     zValues(i) = qValue.z();
+  }
+
+  return outValue;
+}
+
+Rcpp::DataFrame centring_qts(const Rcpp::DataFrame &qts)
+{
+  unsigned int nGrid = qts.nrows();
+  Rcpp::DataFrame outValue = Rcpp::clone(qts);
+  Rcpp::NumericVector wValues = outValue["w"];
+  Rcpp::NumericVector xValues = outValue["x"];
+  Rcpp::NumericVector yValues = outValue["y"];
+  Rcpp::NumericVector zValues = outValue["z"];
+
+  std::vector<Eigen::VectorXd> qValues(nGrid);
+  Eigen::Vector4d meanValue;
+  for (unsigned int i = 0;i < nGrid;++i)
+  {
+    meanValue(0) = wValues(i);
+    meanValue(1) = xValues(i);
+    meanValue(2) = yValues(i);
+    meanValue(3) = zValues(i);
+    qValues[i] = meanValue;
+  }
+
+  meanValue = gmean(qValues);
+  Eigen::Quaterniond meanQValue(meanValue(0), meanValue(1), meanValue(2), meanValue(3)), workQValue;
+  meanQValue = meanQValue.inverse();
+
+  for (unsigned int i = 0;i < nGrid;++i)
+  {
+    workQValue = Eigen::Quaterniond(wValues(i), xValues(i), yValues(i), zValues(i));
+    workQValue = meanQValue * workQValue;
+    wValues(i) = workQValue.w();
+    xValues(i) = workQValue.x();
+    yValues(i) = workQValue.y();
+    zValues(i) = workQValue.z();
   }
 
   return outValue;

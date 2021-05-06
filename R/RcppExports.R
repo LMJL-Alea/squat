@@ -175,6 +175,11 @@ exp_qts <- function(qts) {
 }
 
 #' @export
+centring_qts <- function(qts) {
+    .Call(`_squat_centring_qts`, qts)
+}
+
+#' @export
 gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
     .Call(`_squat_gmean`, quaternionSample, maxIterations, maxEpsilon)
 }
@@ -182,6 +187,11 @@ gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) 
 #' @export
 gmedian <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
     .Call(`_squat_gmedian`, quaternionSample, maxIterations, maxEpsilon)
+}
+
+#' @export
+geometric_mean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
+    .Call(`_squat_geometric_mean`, quaternionSample, maxIterations, maxEpsilon)
 }
 
 # Register entry points for exported C++ functions

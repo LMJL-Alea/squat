@@ -272,6 +272,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// centring_qts
+Rcpp::DataFrame centring_qts(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_centring_qts(SEXP qtsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    rcpp_result_gen = Rcpp::wrap(centring_qts(qts));
+    return rcpp_result_gen;
+END_RCPP
+}
 // gmean
 Eigen::Vector4d gmean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
 RcppExport SEXP _squat_gmean(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
@@ -295,6 +306,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< unsigned int >::type maxIterations(maxIterationsSEXP);
     Rcpp::traits::input_parameter< double >::type maxEpsilon(maxEpsilonSEXP);
     rcpp_result_gen = Rcpp::wrap(gmedian(quaternionSample, maxIterations, maxEpsilon));
+    return rcpp_result_gen;
+END_RCPP
+}
+// geometric_mean
+Eigen::Vector4d geometric_mean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
+RcppExport SEXP _squat_geometric_mean(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<Eigen::VectorXd>& >::type quaternionSample(quaternionSampleSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type maxIterations(maxIterationsSEXP);
+    Rcpp::traits::input_parameter< double >::type maxEpsilon(maxEpsilonSEXP);
+    rcpp_result_gen = Rcpp::wrap(geometric_mean(quaternionSample, maxIterations, maxEpsilon));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -336,8 +360,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_derivative_qts", (DL_FUNC) &_squat_derivative_qts, 1},
     {"_squat_log_qts", (DL_FUNC) &_squat_log_qts, 1},
     {"_squat_exp_qts", (DL_FUNC) &_squat_exp_qts, 1},
+    {"_squat_centring_qts", (DL_FUNC) &_squat_centring_qts, 1},
     {"_squat_gmean", (DL_FUNC) &_squat_gmean, 3},
     {"_squat_gmedian", (DL_FUNC) &_squat_gmedian, 3},
+    {"_squat_geometric_mean", (DL_FUNC) &_squat_geometric_mean, 3},
     {"_squat_RcppExport_registerCCallable", (DL_FUNC) &_squat_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };
