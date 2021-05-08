@@ -130,6 +130,48 @@ namespace squat {
         return Rcpp::as<Rcpp::NumericMatrix >(rcpp_result_gen);
     }
 
+    inline Eigen::VectorXd gmean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations = 2000, double maxEpsilon = 1.0e-5) {
+        typedef SEXP(*Ptr_gmean)(SEXP,SEXP,SEXP);
+        static Ptr_gmean p_gmean = NULL;
+        if (p_gmean == NULL) {
+            validateSignature("Eigen::VectorXd(*gmean)(const std::vector<Eigen::VectorXd>&,unsigned int,double)");
+            p_gmean = (Ptr_gmean)R_GetCCallable("squat", "_squat_gmean");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_gmean(Shield<SEXP>(Rcpp::wrap(quaternionSample)), Shield<SEXP>(Rcpp::wrap(maxIterations)), Shield<SEXP>(Rcpp::wrap(maxEpsilon)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Eigen::VectorXd >(rcpp_result_gen);
+    }
+
+    inline Eigen::VectorXd gmedian(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations = 2000, double maxEpsilon = 1.0e-5) {
+        typedef SEXP(*Ptr_gmedian)(SEXP,SEXP,SEXP);
+        static Ptr_gmedian p_gmedian = NULL;
+        if (p_gmedian == NULL) {
+            validateSignature("Eigen::VectorXd(*gmedian)(const std::vector<Eigen::VectorXd>&,unsigned int,double)");
+            p_gmedian = (Ptr_gmedian)R_GetCCallable("squat", "_squat_gmedian");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_gmedian(Shield<SEXP>(Rcpp::wrap(quaternionSample)), Shield<SEXP>(Rcpp::wrap(maxIterations)), Shield<SEXP>(Rcpp::wrap(maxEpsilon)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Eigen::VectorXd >(rcpp_result_gen);
+    }
+
 }
 
 #endif // RCPP_squat_RCPPEXPORTS_H_GEN_

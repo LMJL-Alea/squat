@@ -3,13 +3,15 @@
 
 #include <RcppEigen.h>
 
+// [[Rcpp::interfaces(r, cpp)]]
+
 Eigen::MatrixXd GetRotationsFromQuaternions(
     const std::vector<Eigen::VectorXd> &quaternionSample
 );
 
 //' @export
 // [[Rcpp::export]]
-Eigen::Vector4d gmean(
+Eigen::VectorXd gmean(
     const std::vector<Eigen::VectorXd> &quaternionSample,
     unsigned int maxIterations = 2000,
     double maxEpsilon = 1.0e-5
@@ -17,7 +19,7 @@ Eigen::Vector4d gmean(
 
 //' @export
 // [[Rcpp::export]]
-Eigen::Vector4d gmedian(
+Eigen::VectorXd gmedian(
     const std::vector<Eigen::VectorXd> &quaternionSample,
     unsigned int maxIterations = 2000,
     double maxEpsilon = 1.0e-5

@@ -18,7 +18,7 @@ Eigen::MatrixXd GetRotationsFromQuaternions(const std::vector<Eigen::VectorXd> &
   return rotationSample;
 }
 
-Eigen::Vector4d gmean(const std::vector<Eigen::VectorXd> &quaternionSample,
+Eigen::VectorXd gmean(const std::vector<Eigen::VectorXd> &quaternionSample,
                       unsigned int maxIterations,
                       double maxEpsilon)
 {
@@ -57,7 +57,7 @@ Eigen::Vector4d gmean(const std::vector<Eigen::VectorXd> &quaternionSample,
   return outValue;
 }
 
-Eigen::Vector4d gmedian(const std::vector<Eigen::VectorXd> &quaternionSample,
+Eigen::VectorXd gmedian(const std::vector<Eigen::VectorXd> &quaternionSample,
                         const unsigned int maxIterations,
                         const double maxEpsilon)
 {

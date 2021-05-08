@@ -284,30 +284,76 @@ BEGIN_RCPP
 END_RCPP
 }
 // gmean
-Eigen::Vector4d gmean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
-RcppExport SEXP _squat_gmean(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
+Eigen::VectorXd gmean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
+static SEXP _squat_gmean_try(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::vector<Eigen::VectorXd>& >::type quaternionSample(quaternionSampleSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type maxIterations(maxIterationsSEXP);
     Rcpp::traits::input_parameter< double >::type maxEpsilon(maxEpsilonSEXP);
     rcpp_result_gen = Rcpp::wrap(gmean(quaternionSample, maxIterations, maxEpsilon));
     return rcpp_result_gen;
-END_RCPP
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _squat_gmean(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_squat_gmean_try(quaternionSampleSEXP, maxIterationsSEXP, maxEpsilonSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
 }
 // gmedian
-Eigen::Vector4d gmedian(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
-RcppExport SEXP _squat_gmedian(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
+Eigen::VectorXd gmedian(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
+static SEXP _squat_gmedian_try(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::vector<Eigen::VectorXd>& >::type quaternionSample(quaternionSampleSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type maxIterations(maxIterationsSEXP);
     Rcpp::traits::input_parameter< double >::type maxEpsilon(maxEpsilonSEXP);
     rcpp_result_gen = Rcpp::wrap(gmedian(quaternionSample, maxIterations, maxEpsilon));
     return rcpp_result_gen;
-END_RCPP
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _squat_gmedian(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_squat_gmedian_try(quaternionSampleSEXP, maxIterationsSEXP, maxEpsilonSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
 }
 // geometric_mean
 Eigen::Vector4d geometric_mean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
@@ -332,6 +378,8 @@ static int _squat_RcppExport_validate(const char* sig) {
         signatures.insert("double(*GeodesicQuaternionDistance)(const Rcpp::NumericMatrix&,const Rcpp::NumericMatrix&,const unsigned int,const unsigned int)");
         signatures.insert("Rcpp::NumericMatrix(*RegularizeGrid)(const Rcpp::NumericVector&,const Rcpp::NumericMatrix&,const double,const double,const unsigned int)");
         signatures.insert("Rcpp::NumericMatrix(*GetGeodesicMean)(const Rcpp::NumericMatrix&)");
+        signatures.insert("Eigen::VectorXd(*gmean)(const std::vector<Eigen::VectorXd>&,unsigned int,double)");
+        signatures.insert("Eigen::VectorXd(*gmedian)(const std::vector<Eigen::VectorXd>&,unsigned int,double)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -343,6 +391,8 @@ RcppExport SEXP _squat_RcppExport_registerCCallable() {
     R_RegisterCCallable("squat", "_squat_GeodesicQuaternionDistance", (DL_FUNC)_squat_GeodesicQuaternionDistance_try);
     R_RegisterCCallable("squat", "_squat_RegularizeGrid", (DL_FUNC)_squat_RegularizeGrid_try);
     R_RegisterCCallable("squat", "_squat_GetGeodesicMean", (DL_FUNC)_squat_GetGeodesicMean_try);
+    R_RegisterCCallable("squat", "_squat_gmean", (DL_FUNC)_squat_gmean_try);
+    R_RegisterCCallable("squat", "_squat_gmedian", (DL_FUNC)_squat_gmedian_try);
     R_RegisterCCallable("squat", "_squat_RcppExport_validate", (DL_FUNC)_squat_RcppExport_validate);
     return R_NilValue;
 }
