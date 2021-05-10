@@ -55,6 +55,27 @@ GetGeodesicMean <- function(values) {
     .Call(`_squat_GetGeodesicMean`, values)
 }
 
+#' QTS Transformation To Norm Time Series
+#'
+#' This function computes a univariate time series representing the norm of the
+#' quaternions.
+#'
+#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z`.
+#' @param disable_normalization A boolean specifying whether quaternion
+#'   normalization should be disabled. Defaults to `FALSE`.
+#'
+#' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
+#'   `time` and `norm` in which `norm` measures the angular distance between
+#'   the current quaternion and the identity.
+#'
+#' @export
+#' @examples
+#' TO DO
+qts2norm <- function(qts, disable_normalization) {
+    .Call(`_squat_qts2norm`, qts, disable_normalization)
+}
+
 #' QTS Transformation To Angle Time Series
 #'
 #' This function computes a univariate time series representing the angle
@@ -116,24 +137,8 @@ normalize_qts <- function(qts) {
     .Call(`_squat_normalize_qts`, qts)
 }
 
-#' QTS Derivative
-#'
-#' This function computes the first derivative of a quaternion time series with
-#' respect to time.
-#'
-#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z`.
-#'
-#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions measure
-#'   the rotation to be applied to transform attitude at previous time point to
-#'   attitude at the current time point.
-#'
-#' @export
-#' @examples
-#' TO DO
-derivative_qts <- function(qts) {
-    .Call(`_squat_derivative_qts`, qts)
+derivative_qts_impl <- function(qts) {
+    .Call(`_squat_derivative_qts_impl`, qts)
 }
 
 #' QTS Logarithm

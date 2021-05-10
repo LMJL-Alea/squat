@@ -204,6 +204,18 @@ RcppExport SEXP _squat_GetGeodesicMean(SEXP valuesSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// qts2norm
+Rcpp::DataFrame qts2norm(const Rcpp::DataFrame& qts, const bool disable_normalization);
+RcppExport SEXP _squat_qts2norm(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
+    rcpp_result_gen = Rcpp::wrap(qts2norm(qts, disable_normalization));
+    return rcpp_result_gen;
+END_RCPP
+}
 // qts2angle
 Rcpp::DataFrame qts2angle(const Rcpp::DataFrame& qts, const bool disable_normalization);
 RcppExport SEXP _squat_qts2angle(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
@@ -239,14 +251,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// derivative_qts
-Rcpp::DataFrame derivative_qts(const Rcpp::DataFrame& qts);
-RcppExport SEXP _squat_derivative_qts(SEXP qtsSEXP) {
+// derivative_qts_impl
+Rcpp::DataFrame derivative_qts_impl(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_derivative_qts_impl(SEXP qtsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    rcpp_result_gen = Rcpp::wrap(derivative_qts(qts));
+    rcpp_result_gen = Rcpp::wrap(derivative_qts_impl(qts));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -404,10 +416,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_GeodesicQuaternionDistance", (DL_FUNC) &_squat_GeodesicQuaternionDistance, 4},
     {"_squat_RegularizeGrid", (DL_FUNC) &_squat_RegularizeGrid, 5},
     {"_squat_GetGeodesicMean", (DL_FUNC) &_squat_GetGeodesicMean, 1},
+    {"_squat_qts2norm", (DL_FUNC) &_squat_qts2norm, 2},
     {"_squat_qts2angle", (DL_FUNC) &_squat_qts2angle, 2},
     {"_squat_reorient_qts", (DL_FUNC) &_squat_reorient_qts, 2},
     {"_squat_normalize_qts", (DL_FUNC) &_squat_normalize_qts, 1},
-    {"_squat_derivative_qts", (DL_FUNC) &_squat_derivative_qts, 1},
+    {"_squat_derivative_qts_impl", (DL_FUNC) &_squat_derivative_qts_impl, 1},
     {"_squat_log_qts", (DL_FUNC) &_squat_log_qts, 1},
     {"_squat_exp_qts", (DL_FUNC) &_squat_exp_qts, 1},
     {"_squat_centring_qts", (DL_FUNC) &_squat_centring_qts, 1},

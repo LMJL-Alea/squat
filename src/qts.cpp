@@ -3,6 +3,47 @@
 #include "representations.h"
 #include <RcppEigen.h>
 
+Rcpp::DataFrame qts2norm(const Rcpp::DataFrame &qts,
+                         const bool disable_normalization)
+{
+  unsigned int nSamples = qts.nrows();
+  Eigen::Quaterniond qValue;
+  Eigen::VectorXd resValue(nSamples);
+  Rcpp::NumericVector wValues = qts["w"];
+  Rcpp::NumericVector xValues = qts["x"];
+  Rcpp::NumericVector yValues = qts["y"];
+  Rcpp::NumericVector zValues = qts["z"];
+
+  Eigen::Quaterniond refValue;
+  refValue.w() = 1.0;
+  refValue.x() = 0.0;
+  refValue.y() = 0.0;
+  refValue.z() = 0.0;
+  if (!disable_normalization)
+    refValue.normalize();
+
+  for (unsigned int i = 0;i < nSamples;++i)
+  {
+    qValue.w() = wValues(i);
+    qValue.x() = xValues(i);
+    qValue.y() = yValues(i);
+    qValue.z() = zValues(i);
+    if (!disable_normalization)
+      qValue.normalize();
+
+    resValue(i) = qValue.angularDistance(refValue);
+  }
+
+  Rcpp::DataFrame dfValue = Rcpp::DataFrame::create(
+    Rcpp::Named("time") = qts["time"],
+                             Rcpp::Named("norm") = Rcpp::wrap(resValue)
+  );
+
+  dfValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+
+  return dfValue;
+}
+
 Rcpp::DataFrame qts2angle(const Rcpp::DataFrame &qts,
                           const bool disable_normalization)
 {
@@ -110,7 +151,7 @@ Rcpp::DataFrame normalize_qts(const Rcpp::DataFrame &qts)
   return outValue;
 }
 
-Rcpp::DataFrame derivative_qts(const Rcpp::DataFrame &qts)
+Rcpp::DataFrame derivative_qts_impl(const Rcpp::DataFrame &qts)
 {
   unsigned int nGrid = qts.nrows();
   Rcpp::DataFrame outValue = Rcpp::clone(qts);
