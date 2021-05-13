@@ -3,12 +3,54 @@
 #include "representations.h"
 #include <RcppEigen.h>
 
+Rcpp::DataFrame qts2distance(const Rcpp::DataFrame &first_qts,
+                             const Rcpp::DataFrame &second_qts)
+{
+  unsigned int nGrid = first_qts.nrows();
+  Rcpp::NumericVector firstWValues = first_qts["w"];
+  Rcpp::NumericVector firstXValues = first_qts["x"];
+  Rcpp::NumericVector firstYValues = first_qts["y"];
+  Rcpp::NumericVector firstZValues = first_qts["z"];
+  Rcpp::NumericVector secondWValues = second_qts["w"];
+  Rcpp::NumericVector secondXValues = second_qts["x"];
+  Rcpp::NumericVector secondYValues = second_qts["y"];
+  Rcpp::NumericVector secondZValues = second_qts["z"];
+  Eigen::Quaterniond firstQValue, secondQValue;
+
+  Rcpp::NumericVector distanceValues(nGrid);
+  for (unsigned int i = 0;i < nGrid;++i)
+  {
+    firstQValue = Eigen::Quaterniond(
+      firstWValues(i),
+      firstXValues(i),
+      firstYValues(i),
+      firstZValues(i)
+    );
+    secondQValue = Eigen::Quaterniond(
+      secondWValues(i),
+      secondXValues(i),
+      secondYValues(i),
+      secondZValues(i)
+    );
+    distanceValues(i) = secondQValue.angularDistance(firstQValue);
+  }
+
+  Rcpp::DataFrame outValue = Rcpp::DataFrame::create(
+    Rcpp::Named("time") = first_qts["time"],
+    Rcpp::Named("distance") = distanceValues
+  );
+
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+
+  return outValue;
+}
+
 Rcpp::DataFrame qts2norm(const Rcpp::DataFrame &qts,
                          const bool disable_normalization)
 {
   unsigned int nSamples = qts.nrows();
   Eigen::Quaterniond qValue;
-  Eigen::VectorXd resValue(nSamples);
+  Rcpp::NumericVector normValues(nSamples);
   Rcpp::NumericVector wValues = qts["w"];
   Rcpp::NumericVector xValues = qts["x"];
   Rcpp::NumericVector yValues = qts["y"];
@@ -31,17 +73,17 @@ Rcpp::DataFrame qts2norm(const Rcpp::DataFrame &qts,
     if (!disable_normalization)
       qValue.normalize();
 
-    resValue(i) = qValue.angularDistance(refValue);
+    normValues(i) = qValue.angularDistance(refValue);
   }
 
-  Rcpp::DataFrame dfValue = Rcpp::DataFrame::create(
+  Rcpp::DataFrame outValue = Rcpp::DataFrame::create(
     Rcpp::Named("time") = qts["time"],
-                             Rcpp::Named("norm") = Rcpp::wrap(resValue)
+    Rcpp::Named("norm") = normValues
   );
 
-  dfValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
 
-  return dfValue;
+  return outValue;
 }
 
 Rcpp::DataFrame qts2angle(const Rcpp::DataFrame &qts,
@@ -49,7 +91,7 @@ Rcpp::DataFrame qts2angle(const Rcpp::DataFrame &qts,
 {
   unsigned int nSamples = qts.nrows();
   Eigen::Quaterniond qValue;
-  Eigen::VectorXd resValue(nSamples);
+  Rcpp::NumericVector angleValues(nSamples);
   Rcpp::NumericVector wValues = qts["w"];
   Rcpp::NumericVector xValues = qts["x"];
   Rcpp::NumericVector yValues = qts["y"];
@@ -72,17 +114,17 @@ Rcpp::DataFrame qts2angle(const Rcpp::DataFrame &qts,
     if (!disable_normalization)
       qValue.normalize();
 
-    resValue(i) = qValue.angularDistance(refValue);
+    angleValues(i) = qValue.angularDistance(refValue);
   }
 
-  Rcpp::DataFrame dfValue = Rcpp::DataFrame::create(
+  Rcpp::DataFrame outValue = Rcpp::DataFrame::create(
     Rcpp::Named("time") = qts["time"],
-    Rcpp::Named("angle") = Rcpp::wrap(resValue)
+    Rcpp::Named("angle") = angleValues
   );
 
-  dfValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
 
-  return dfValue;
+  return outValue;
 }
 
 Rcpp::DataFrame reorient_qts(const Rcpp::DataFrame &qts,

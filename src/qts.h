@@ -3,6 +3,32 @@
 
 #include <Rcpp.h>
 
+//' QTS Transformation To Distance Time Series
+//'
+//' This function computes a real-valued time series reporting the pointwise
+//' geodesic distance between the two input QTS at each time point.
+//'
+//' The function currently expects that the two input QTS are evaluated on the
+//' same time grid and does not check this assumption.
+//'
+//' @param first_qts A quaternion time series stored as a
+//'   \code{\link[tibble]{tibble}} with columns `time`, `w`, `x`, `y` and `z`.
+//' @param second_qts A quaternion time series stored as a
+//'   \code{\link[tibble]{tibble}} with columns `time`, `w`, `x`, `y` and `z`.
+//'
+//' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
+//'   `time` and `distance` in which `distance` measures the angular distance
+//'   between the quaternions of both input QTS at a given time point.
+//'
+//' @export
+//' @examples
+//' TO DO
+// [[Rcpp::export]]
+Rcpp::DataFrame qts2distance(
+    const Rcpp::DataFrame &first_qts,
+    const Rcpp::DataFrame &second_qts
+);
+
 //' QTS Transformation To Norm Time Series
 //'
 //' This function computes a univariate time series representing the norm of the
@@ -23,7 +49,7 @@
 // [[Rcpp::export]]
 Rcpp::DataFrame qts2norm(
     const Rcpp::DataFrame &qts,
-    const bool disable_normalization
+    const bool disable_normalization = false
 );
 
 //' QTS Transformation To Angle Time Series
@@ -45,8 +71,8 @@ Rcpp::DataFrame qts2norm(
 //' TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame qts2angle(
-        const Rcpp::DataFrame &qts,
-        const bool disable_normalization = false
+    const Rcpp::DataFrame &qts,
+    const bool disable_normalization = false
 );
 
 //' QTS Reorientation

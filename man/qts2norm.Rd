@@ -4,7 +4,7 @@
 \alias{qts2norm}
 \title{QTS Transformation To Norm Time Series}
 \usage{
-qts2norm(qts, disable_normalization)
+qts2norm(qts, disable_normalization = FALSE)
 }
 \arguments{
 \item{qts}{A quaternion time series stored as a \code{\link[tibble]{tibble}}

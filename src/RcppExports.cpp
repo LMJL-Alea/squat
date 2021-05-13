@@ -204,6 +204,18 @@ RcppExport SEXP _squat_GetGeodesicMean(SEXP valuesSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// qts2distance
+Rcpp::DataFrame qts2distance(const Rcpp::DataFrame& first_qts, const Rcpp::DataFrame& second_qts);
+RcppExport SEXP _squat_qts2distance(SEXP first_qtsSEXP, SEXP second_qtsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type first_qts(first_qtsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type second_qts(second_qtsSEXP);
+    rcpp_result_gen = Rcpp::wrap(qts2distance(first_qts, second_qts));
+    return rcpp_result_gen;
+END_RCPP
+}
 // qts2norm
 Rcpp::DataFrame qts2norm(const Rcpp::DataFrame& qts, const bool disable_normalization);
 RcppExport SEXP _squat_qts2norm(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
@@ -416,6 +428,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_GeodesicQuaternionDistance", (DL_FUNC) &_squat_GeodesicQuaternionDistance, 4},
     {"_squat_RegularizeGrid", (DL_FUNC) &_squat_RegularizeGrid, 5},
     {"_squat_GetGeodesicMean", (DL_FUNC) &_squat_GetGeodesicMean, 1},
+    {"_squat_qts2distance", (DL_FUNC) &_squat_qts2distance, 2},
     {"_squat_qts2norm", (DL_FUNC) &_squat_qts2norm, 2},
     {"_squat_qts2angle", (DL_FUNC) &_squat_qts2angle, 2},
     {"_squat_reorient_qts", (DL_FUNC) &_squat_reorient_qts, 2},
