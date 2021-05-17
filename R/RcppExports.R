@@ -208,6 +208,42 @@ centring_qts <- function(qts) {
     .Call(`_squat_centring_qts`, qts)
 }
 
+#' QTS Geometric Mean
+#'
+#' This function computes the pointwise geometric mean of a list of QTS.
+#'
+#' @param qts_list A list of quaternion time series stored as a
+#'   \code{\link[tibble]{tibble}}s with columns `time`, `w`, `x`, `y` and `z`.
+#'
+#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions are the
+#'   pointwise geometric mean.
+#'
+#' @export
+#' @examples
+#' TO DO
+mean_qts <- function(qts_list) {
+    .Call(`_squat_mean_qts`, qts_list)
+}
+
+#' QTS Geometric Median
+#'
+#' This function computes the pointwise geometric median of a list of QTS.
+#'
+#' @param qts_list A list of quaternion time series stored as a
+#'   \code{\link[tibble]{tibble}}s with columns `time`, `w`, `x`, `y` and `z`.
+#'
+#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions are the
+#'   pointwise geometric median.
+#'
+#' @export
+#' @examples
+#' TO DO
+median_qts <- function(qts_list) {
+    .Call(`_squat_median_qts`, qts_list)
+}
+
 #' @export
 gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
     .Call(`_squat_gmean`, quaternionSample, maxIterations, maxEpsilon)
