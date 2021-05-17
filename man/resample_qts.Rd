@@ -42,5 +42,5 @@ uniformly sampled in the range \verb{[tmin, tmax]}.
 This function performs uniform resampling using SLERP.
 }
 \examples{
-TO DO
+# TO DO
 }

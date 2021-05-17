@@ -50,5 +50,5 @@ This function massages the input quaternion time series to feed them into the
 k-mean alignment algorithm for jointly clustering and aligning the input QTS.
 }
 \examples{
-TO DO
+# TO DO
 }

@@ -33,7 +33,7 @@
 //'
 //' @export
 //' @examples
-//' TO DO
+//' # TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame resample_qts(
     const Rcpp::DataFrame &qts,
@@ -43,7 +43,22 @@ Rcpp::DataFrame resample_qts(
     const bool disable_normalization = false
 );
 
+//' QTS Smoothing via SLERP Interpolation
+//'
+//' This function performs a smoothing of a QTS by SLERP interpolation.
+//'
+//' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+//'   with columns `time`, `w`, `x`, `y` and `z`.
+//' @param alpha A numeric value in `[0,1]` specifying the amount of smoothing.
+//'   The closer to one, the smoother the resulting QTS. Defaults to `0.5`.
+//'
+//' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+//'   with columns `time`, `w`, `x`, `y` and `z` which is a smooth version of
+//'   the input QTS.
+//'
 //' @export
+//' @examples
+//' # TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame smooth_qts(
     const Rcpp::DataFrame &qts,

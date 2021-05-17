@@ -33,12 +33,27 @@ GetCostMatrix <- function(qts1, qts2, disable_normalization = FALSE) {
 #'
 #' @export
 #' @examples
-#' TO DO
+#' # TO DO
 resample_qts <- function(qts, tmin = NA_real_, tmax = NA_real_, nout = 0L, disable_normalization = FALSE) {
     .Call(`_squat_resample_qts`, qts, tmin, tmax, nout, disable_normalization)
 }
 
+#' QTS Smoothing via SLERP Interpolation
+#'
+#' This function performs a smoothing of a QTS by SLERP interpolation.
+#'
+#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z`.
+#' @param alpha A numeric value in `[0,1]` specifying the amount of smoothing.
+#'   The closer to one, the smoother the resulting QTS. Defaults to `0.5`.
+#'
+#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z` which is a smooth version of
+#'   the input QTS.
+#'
 #' @export
+#' @examples
+#' # TO DO
 smooth_qts <- function(qts, alpha = 0.5) {
     .Call(`_squat_smooth_qts`, qts, alpha)
 }
@@ -74,7 +89,7 @@ GetGeodesicMean <- function(values) {
 #'
 #' @export
 #' @examples
-#' TO DO
+#' # TO DO
 qts2distance <- function(first_qts, second_qts) {
     .Call(`_squat_qts2distance`, first_qts, second_qts)
 }
@@ -95,7 +110,7 @@ qts2distance <- function(first_qts, second_qts) {
 #'
 #' @export
 #' @examples
-#' TO DO
+#' # TO DO
 qts2norm <- function(qts, disable_normalization = FALSE) {
     .Call(`_squat_qts2norm`, qts, disable_normalization)
 }
@@ -116,7 +131,7 @@ qts2norm <- function(qts, disable_normalization = FALSE) {
 #'
 #' @export
 #' @examples
-#' TO DO
+#' # TO DO
 qts2angle <- function(qts, disable_normalization = FALSE) {
     .Call(`_squat_qts2angle`, qts, disable_normalization)
 }
@@ -137,7 +152,7 @@ qts2angle <- function(qts, disable_normalization = FALSE) {
 #'
 #' @export
 #' @examples
-#' TO DO
+#' # TO DO
 reorient_qts <- function(qts, disable_normalization = FALSE) {
     .Call(`_squat_reorient_qts`, qts, disable_normalization)
 }
@@ -156,7 +171,7 @@ reorient_qts <- function(qts, disable_normalization = FALSE) {
 #'
 #' @export
 #' @examples
-#' TO DO
+#' # TO DO
 normalize_qts <- function(qts) {
     .Call(`_squat_normalize_qts`, qts)
 }
@@ -179,7 +194,7 @@ derivative_qts_impl <- function(qts) {
 #'
 #' @export
 #' @examples
-#' TO DO
+#' # TO DO
 log_qts <- function(qts) {
     .Call(`_squat_log_qts`, qts)
 }
@@ -198,12 +213,27 @@ log_qts <- function(qts) {
 #'
 #' @export
 #' @examples
-#' TO DO
+#' # TO DO
 exp_qts <- function(qts) {
     .Call(`_squat_exp_qts`, qts)
 }
 
+#' QTS Centring
+#'
+#' This function operates a centring of the QTS around the geometric mean of
+#' its quaternions. This is effectively achieved by premultiplying each
+#' quaternion by the inverse of their geometric mean.
+#'
+#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z`.
+#'
+#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions have been
+#'   centered around their geometric mean.
+#'
 #' @export
+#' @examples
+#' # TO DO
 centring_qts <- function(qts) {
     .Call(`_squat_centring_qts`, qts)
 }
@@ -221,7 +251,7 @@ centring_qts <- function(qts) {
 #'
 #' @export
 #' @examples
-#' TO DO
+#' # TO DO
 mean_qts <- function(qts_list) {
     .Call(`_squat_mean_qts`, qts_list)
 }
@@ -239,22 +269,19 @@ mean_qts <- function(qts_list) {
 #'
 #' @export
 #' @examples
-#' TO DO
+#' # TO DO
 median_qts <- function(qts_list) {
     .Call(`_squat_median_qts`, qts_list)
 }
 
-#' @export
 gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
     .Call(`_squat_gmean`, quaternionSample, maxIterations, maxEpsilon)
 }
 
-#' @export
 gmedian <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
     .Call(`_squat_gmedian`, quaternionSample, maxIterations, maxEpsilon)
 }
 
-#' @export
 geometric_mean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
     .Call(`_squat_geometric_mean`, quaternionSample, maxIterations, maxEpsilon)
 }

@@ -20,5 +20,5 @@ This function ensures that all quaternions in the time series are unit
 quaternions.
 }
 \examples{
-TO DO
+# TO DO
 }

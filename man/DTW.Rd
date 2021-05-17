@@ -48,5 +48,5 @@ If no evaluation grid is provided, the function assumes that the two input
 QTS are evaluated on the same grid.
 }
 \examples{
-TO DO
+# TO DO
 }

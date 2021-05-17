@@ -240,7 +240,7 @@ Rcpp::DataFrame log_qts(const Rcpp::DataFrame &qts)
   for (unsigned int i = 0;i < nGrid;++i)
   {
     qValue = Eigen::Quaterniond(wValues(i), xValues(i), yValues(i), zValues(i));
-    qValue = logq<double>(qValue);
+    qValue = logq(qValue);
     wValues(i) = qValue.w();
     xValues(i) = qValue.x();
     yValues(i) = qValue.y();
@@ -263,7 +263,7 @@ Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts)
   for (unsigned int i = 0;i < nGrid;++i)
   {
     qValue = Eigen::Quaterniond(wValues(i), xValues(i), yValues(i), zValues(i));
-    qValue = expq<double>(qValue);
+    qValue = expq(qValue);
     wValues(i) = qValue.w();
     xValues(i) = qValue.x();
     yValues(i) = qValue.y();

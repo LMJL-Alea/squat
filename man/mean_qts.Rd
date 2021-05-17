@@ -19,5 +19,5 @@ pointwise geometric mean.
 This function computes the pointwise geometric mean of a list of QTS.
 }
 \examples{
-TO DO
+# TO DO
 }

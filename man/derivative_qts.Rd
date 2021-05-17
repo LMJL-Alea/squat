@@ -21,5 +21,5 @@ This function computes the first derivative of a quaternion time series with
 respect to time.
 }
 \examples{
-TO DO
+# TO DO
 }

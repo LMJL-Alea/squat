@@ -9,7 +9,6 @@ Eigen::MatrixXd GetRotationsFromQuaternions(
     const std::vector<Eigen::VectorXd> &quaternionSample
 );
 
-//' @export
 // [[Rcpp::export]]
 Eigen::VectorXd gmean(
     const std::vector<Eigen::VectorXd> &quaternionSample,
@@ -17,7 +16,6 @@ Eigen::VectorXd gmean(
     double maxEpsilon = 1.0e-5
 );
 
-//' @export
 // [[Rcpp::export]]
 Eigen::VectorXd gmedian(
     const std::vector<Eigen::VectorXd> &quaternionSample,

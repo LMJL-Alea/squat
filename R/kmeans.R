@@ -26,7 +26,7 @@
 #' @export
 #'
 #' @examples
-#' TO DO
+#' # TO DO
 kmeans_qts <-function(qts_list,
                       k = 1,
                       centroid = "mean",
@@ -66,7 +66,7 @@ kmeans_qts <-function(qts_list,
   B <- choose(n, k)
 
   if (nstart > B)
-    init <- combn(n, k, simplify = FALSE)
+    init <- utils::combn(n, k, simplify = FALSE)
   else
     init <- replicate(nstart, sample.int(n, k), simplify = FALSE)
 
@@ -101,7 +101,7 @@ kmeans_qts <-function(qts_list,
 
   qts_center <- tibble(
     time = opt$x_centers_final[1, ],
-    w    = rep(0, length(time)),
+    w    = 0,
     x    = opt$y_centers_final[1, 1, ],
     y    = opt$y_centers_final[1, 2, ],
     z    = opt$y_centers_final[1, 3, ]

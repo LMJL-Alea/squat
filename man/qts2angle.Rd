@@ -23,5 +23,5 @@ This function computes a univariate time series representing the angle
 between the first and other attitudes.
 }
 \examples{
-TO DO
+# TO DO
 }

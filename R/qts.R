@@ -13,7 +13,7 @@
 #'
 #' @export
 #' @examples
-#' TO DO
+#' # TO DO
 derivative_qts <- function(qts) {
   qts <- derivative_qts_impl(qts)
   qts[-1, ]

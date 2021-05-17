@@ -22,7 +22,7 @@
 //'
 //' @export
 //' @examples
-//' TO DO
+//' # TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame qts2distance(
     const Rcpp::DataFrame &first_qts,
@@ -45,7 +45,7 @@ Rcpp::DataFrame qts2distance(
 //'
 //' @export
 //' @examples
-//' TO DO
+//' # TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame qts2norm(
     const Rcpp::DataFrame &qts,
@@ -68,7 +68,7 @@ Rcpp::DataFrame qts2norm(
 //'
 //' @export
 //' @examples
-//' TO DO
+//' # TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame qts2angle(
     const Rcpp::DataFrame &qts,
@@ -91,7 +91,7 @@ Rcpp::DataFrame qts2angle(
 //'
 //' @export
 //' @examples
-//' TO DO
+//' # TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame reorient_qts(
         const Rcpp::DataFrame &qts,
@@ -112,7 +112,7 @@ Rcpp::DataFrame reorient_qts(
 //'
 //' @export
 //' @examples
-//' TO DO
+//' # TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame normalize_qts(const Rcpp::DataFrame &qts);
 
@@ -133,7 +133,7 @@ Rcpp::DataFrame derivative_qts_impl(const Rcpp::DataFrame &qts);
 //'
 //' @export
 //' @examples
-//' TO DO
+//' # TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame log_qts(const Rcpp::DataFrame &qts);
 
@@ -151,11 +151,26 @@ Rcpp::DataFrame log_qts(const Rcpp::DataFrame &qts);
 //'
 //' @export
 //' @examples
-//' TO DO
+//' # TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts);
 
+//' QTS Centring
+//'
+//' This function operates a centring of the QTS around the geometric mean of
+//' its quaternions. This is effectively achieved by premultiplying each
+//' quaternion by the inverse of their geometric mean.
+//'
+//' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+//'   with columns `time`, `w`, `x`, `y` and `z`.
+//'
+//' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+//'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions have been
+//'   centered around their geometric mean.
+//'
 //' @export
+//' @examples
+//' # TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame centring_qts(const Rcpp::DataFrame &qts);
 
@@ -172,7 +187,7 @@ Rcpp::DataFrame centring_qts(const Rcpp::DataFrame &qts);
 //'
 //' @export
 //' @examples
-//' TO DO
+//' # TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame mean_qts(const Rcpp::List &qts_list);
 
@@ -189,7 +204,7 @@ Rcpp::DataFrame mean_qts(const Rcpp::List &qts_list);
 //'
 //' @export
 //' @examples
-//' TO DO
+//' # TO DO
 // [[Rcpp::export]]
 Rcpp::DataFrame median_qts(const Rcpp::List &qts_list);
 

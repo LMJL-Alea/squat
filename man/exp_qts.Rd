@@ -20,5 +20,5 @@ This function computes the exponential of a quaternion time series as the
 time series of the quaternion exponentials.
 }
 \examples{
-TO DO
+# TO DO
 }

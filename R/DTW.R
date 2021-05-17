@@ -27,7 +27,7 @@
 #' @export
 #'
 #' @examples
-#' TO DO
+#' # TO DO
 DTW <- function(qts1, qts2,
                 resample = TRUE,
                 disable_normalization = FALSE,

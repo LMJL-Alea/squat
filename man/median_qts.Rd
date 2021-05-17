@@ -19,5 +19,5 @@ pointwise geometric median.
 This function computes the pointwise geometric median of a list of QTS.
 }
 \examples{
-TO DO
+# TO DO
 }

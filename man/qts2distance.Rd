@@ -27,5 +27,5 @@ The function currently expects that the two input QTS are evaluated on the
 same time grid and does not check this assumption.
 }
 \examples{
-TO DO
+# TO DO
 }

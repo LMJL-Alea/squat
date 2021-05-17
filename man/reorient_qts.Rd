@@ -23,5 +23,5 @@ This function reorients the quaternions in a QTS for representing attitude
 with respect to the first time point.
 }
 \examples{
-TO DO
+# TO DO
 }

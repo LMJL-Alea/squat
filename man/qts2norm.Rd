@@ -23,5 +23,5 @@ This function computes a univariate time series representing the norm of the
 quaternions.
 }
 \examples{
-TO DO
+# TO DO
 }
