@@ -31,7 +31,7 @@ See \code{\link[roahd]{exp_cov_function}} for details about the roles of
 \code{alpha} and \code{beta} in the definition of the covariance operator.
 }
 \examples{
-qts <- tibble(
+qts <- tibble::tibble(
   time = seq(0, 1, len = 101),
   w = 0,
   x = cos(2 * pi * time),
