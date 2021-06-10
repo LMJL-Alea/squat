@@ -32,8 +32,9 @@ Imports:
     pbapply,
     dtw,
     Rcpp,
-    tibble
+    tibble,
+    roahd
 Suggests: fdakmapp (>= 2.1)
 Roxygen: list(markdown = TRUE)
-Remotes:  
+Remotes: 
     astamm/fdakmapp
