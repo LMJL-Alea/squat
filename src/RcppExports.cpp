@@ -329,6 +329,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// qts2avts
+Rcpp::DataFrame qts2avts(const Rcpp::DataFrame& qts, const Rcpp::String& fixed_frame);
+RcppExport SEXP _squat_qts2avts(SEXP qtsSEXP, SEXP fixed_frameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::String& >::type fixed_frame(fixed_frameSEXP);
+    rcpp_result_gen = Rcpp::wrap(qts2avts(qts, fixed_frame));
+    return rcpp_result_gen;
+END_RCPP
+}
+// avts2qts
+Rcpp::DataFrame avts2qts(const Rcpp::DataFrame& avts, const double init_t, const Rcpp::NumericVector init_q);
+RcppExport SEXP _squat_avts2qts(SEXP avtsSEXP, SEXP init_tSEXP, SEXP init_qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type avts(avtsSEXP);
+    Rcpp::traits::input_parameter< const double >::type init_t(init_tSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type init_q(init_qSEXP);
+    rcpp_result_gen = Rcpp::wrap(avts2qts(avts, init_t, init_q));
+    return rcpp_result_gen;
+END_RCPP
+}
 // gmean
 Eigen::VectorXd gmean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
 static SEXP _squat_gmean_try(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
@@ -461,6 +486,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_centring_qts", (DL_FUNC) &_squat_centring_qts, 1},
     {"_squat_mean_qts", (DL_FUNC) &_squat_mean_qts, 1},
     {"_squat_median_qts", (DL_FUNC) &_squat_median_qts, 1},
+    {"_squat_qts2avts", (DL_FUNC) &_squat_qts2avts, 2},
+    {"_squat_avts2qts", (DL_FUNC) &_squat_avts2qts, 3},
     {"_squat_gmean", (DL_FUNC) &_squat_gmean, 3},
     {"_squat_gmedian", (DL_FUNC) &_squat_gmedian, 3},
     {"_squat_geometric_mean", (DL_FUNC) &_squat_geometric_mean, 3},

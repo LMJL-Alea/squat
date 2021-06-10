@@ -208,4 +208,52 @@ Rcpp::DataFrame mean_qts(const Rcpp::List &qts_list);
 // [[Rcpp::export]]
 Rcpp::DataFrame median_qts(const Rcpp::List &qts_list);
 
+//' Quaternion to Angular Velocity Transform
+//'
+//' This function projects a quaternion time series into the space of angular
+//' velocities.
+//'
+//' @param qts A QTS stored as a \code{\link[tibble]{tibble}}s with columns
+//'   `time`, `w`, `x`, `y` and `z`.
+//' @param fixed_frame A string specifying the fixed frame with respect to which
+//'   coordinates of the angular velocity should be computed. Choices are
+//'   `"global"` or `"body"`. Defaults to `"global"`.
+//'
+//' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
+//'   `time`, `x`, `y` and `z` containing the angular velocity at each time
+//'   point.
+//'
+//' @export
+//' @examples
+//' # TO DO
+// [[Rcpp::export]]
+Rcpp::DataFrame qts2avts(
+  const Rcpp::DataFrame &qts,
+  const Rcpp::String &fixed_frame = "global"
+);
+
+//' Angular Velocity to Quaternion Transform
+//'
+//' This function projects back an angular velocity time series into the space
+//' of quaternions.
+//'
+//' @param avts An angular velocity time series stored as a
+//'   \code{\link[tibble]{tibble}}s with columns `time`, `x`, `y` and `z`.
+//' @param init_t A positive scalar specifying the initial time point.
+//' @param init_q A length-4 numeric vector speicyfing the quaternion at the
+//'   initial time point.
+//'
+//' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+//'   with columns `time`, `w`, `x`, `y` and `z`.
+//'
+//' @export
+//' @examples
+//' # TO DO
+// [[Rcpp::export]]
+Rcpp::DataFrame avts2qts(
+  const Rcpp::DataFrame &avts,
+  const double init_t,
+  const Rcpp::NumericVector init_q
+);
+
 #endif /* QTS_H */

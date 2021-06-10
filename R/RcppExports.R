@@ -274,6 +274,49 @@ median_qts <- function(qts_list) {
     .Call(`_squat_median_qts`, qts_list)
 }
 
+#' Quaternion to Angular Velocity Transform
+#'
+#' This function projects a quaternion time series into the space of angular
+#' velocities.
+#'
+#' @param qts A QTS stored as a \code{\link[tibble]{tibble}}s with columns
+#'   `time`, `w`, `x`, `y` and `z`.
+#' @param fixed_frame A string specifying the fixed frame with respect to which
+#'   coordinates of the angular velocity should be computed. Choices are
+#'   `"global"` or `"body"`. Defaults to `"global"`.
+#'
+#' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
+#'   `time`, `x`, `y` and `z` containing the angular velocity at each time
+#'   point.
+#'
+#' @export
+#' @examples
+#' # TO DO
+qts2avts <- function(qts, fixed_frame = "global") {
+    .Call(`_squat_qts2avts`, qts, fixed_frame)
+}
+
+#' Angular Velocity to Quaternion Transform
+#'
+#' This function projects back an angular velocity time series into the space
+#' of quaternions.
+#'
+#' @param avts An angular velocity time series stored as a
+#'   \code{\link[tibble]{tibble}}s with columns `time`, `x`, `y` and `z`.
+#' @param init_t A positive scalar specifying the initial time point.
+#' @param init_q A length-4 numeric vector speicyfing the quaternion at the
+#'   initial time point.
+#'
+#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z`.
+#'
+#' @export
+#' @examples
+#' # TO DO
+avts2qts <- function(avts, init_t, init_q) {
+    .Call(`_squat_avts2qts`, avts, init_t, init_q)
+}
+
 gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
     .Call(`_squat_gmean`, quaternionSample, maxIterations, maxEpsilon)
 }
