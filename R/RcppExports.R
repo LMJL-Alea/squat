@@ -226,6 +226,8 @@ exp_qts <- function(qts) {
 #'
 #' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
 #'   with columns `time`, `w`, `x`, `y` and `z`.
+#' @param standardize A boolean specifying whether to standardize the QTS in
+#'   addition to centering it. Defaults to `FALSE`.
 #'
 #' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
 #'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions have been
@@ -234,8 +236,8 @@ exp_qts <- function(qts) {
 #' @export
 #' @examples
 #' # TO DO
-centring_qts <- function(qts) {
-    .Call(`_squat_centring_qts`, qts)
+centring_qts <- function(qts, standardize = FALSE) {
+    .Call(`_squat_centring_qts`, qts, standardize)
 }
 
 #' QTS Geometric Mean

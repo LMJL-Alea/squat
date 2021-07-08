@@ -297,13 +297,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // centring_qts
-Rcpp::DataFrame centring_qts(const Rcpp::DataFrame& qts);
-RcppExport SEXP _squat_centring_qts(SEXP qtsSEXP) {
+Rcpp::DataFrame centring_qts(const Rcpp::DataFrame& qts, const bool standardize);
+RcppExport SEXP _squat_centring_qts(SEXP qtsSEXP, SEXP standardizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    rcpp_result_gen = Rcpp::wrap(centring_qts(qts));
+    Rcpp::traits::input_parameter< const bool >::type standardize(standardizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(centring_qts(qts, standardize));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -483,7 +484,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_derivative_qts_impl", (DL_FUNC) &_squat_derivative_qts_impl, 1},
     {"_squat_log_qts", (DL_FUNC) &_squat_log_qts, 1},
     {"_squat_exp_qts", (DL_FUNC) &_squat_exp_qts, 1},
-    {"_squat_centring_qts", (DL_FUNC) &_squat_centring_qts, 1},
+    {"_squat_centring_qts", (DL_FUNC) &_squat_centring_qts, 2},
     {"_squat_mean_qts", (DL_FUNC) &_squat_mean_qts, 1},
     {"_squat_median_qts", (DL_FUNC) &_squat_median_qts, 1},
     {"_squat_qts2avts", (DL_FUNC) &_squat_qts2avts, 2},

@@ -163,6 +163,8 @@ Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts);
 //'
 //' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
 //'   with columns `time`, `w`, `x`, `y` and `z`.
+//' @param standardize A boolean specifying whether to standardize the QTS in
+//'   addition to centering it. Defaults to `FALSE`.
 //'
 //' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
 //'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions have been
@@ -172,7 +174,7 @@ Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts);
 //' @examples
 //' # TO DO
 // [[Rcpp::export]]
-Rcpp::DataFrame centring_qts(const Rcpp::DataFrame &qts);
+Rcpp::DataFrame centring_qts(const Rcpp::DataFrame &qts, const bool standardize = false);
 
 //' QTS Geometric Mean
 //'

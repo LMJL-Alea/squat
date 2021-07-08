@@ -4,11 +4,14 @@
 \alias{centring_qts}
 \title{QTS Centring}
 \usage{
-centring_qts(qts)
+centring_qts(qts, standardize = FALSE)
 }
 \arguments{
 \item{qts}{A quaternion time series stored as a \code{\link[tibble]{tibble}}
 with columns \code{time}, \code{w}, \code{x}, \code{y} and \code{z}.}
+
+\item{standardize}{A boolean specifying whether to standardize the QTS in
+addition to centering it. Defaults to \code{FALSE}.}
 }
 \value{
 A quaternion time series stored as a \code{\link[tibble]{tibble}}
