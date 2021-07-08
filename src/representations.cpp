@@ -57,6 +57,23 @@ Eigen::VectorXd gmean(const std::vector<Eigen::VectorXd> &quaternionSample,
   return outValue;
 }
 
+double gvariance(const std::vector<Eigen::VectorXd> &quaternionSample,
+                 const Eigen::VectorXd &quaternionMean)
+{
+  unsigned int numPoints = quaternionSample.size();
+  Eigen::Quaterniond workQuaternion, meanQuaternion(quaternionMean(0), quaternionMean(1), quaternionMean(2), quaternionMean(3));
+
+  double varValue = 0.0;
+  for (unsigned int i = 0;i < numPoints;++i)
+  {
+    workQuaternion = Eigen::Quaterniond(quaternionSample[i](0), quaternionSample[i](1), quaternionSample[i](2), quaternionSample[i](3));
+    double distValue = workQuaternion.angularDistance(meanQuaternion);
+    varValue += distValue * distValue;
+  }
+
+  return varValue;
+}
+
 Eigen::VectorXd gmedian(const std::vector<Eigen::VectorXd> &quaternionSample,
                         const unsigned int maxIterations,
                         const double maxEpsilon)
