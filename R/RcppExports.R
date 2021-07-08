@@ -218,7 +218,7 @@ exp_qts <- function(qts) {
     .Call(`_squat_exp_qts`, qts)
 }
 
-#' QTS Centring
+#' QTS Centering and Standardization
 #'
 #' This function operates a centring of the QTS around the geometric mean of
 #' its quaternions. This is effectively achieved by premultiplying each
@@ -276,7 +276,7 @@ median_qts <- function(qts_list) {
     .Call(`_squat_median_qts`, qts_list)
 }
 
-#' Quaternion to Angular Velocity Transform
+#' QTS Transformation to Angular Velocity Time Series
 #'
 #' This function projects a quaternion time series into the space of angular
 #' velocities.
@@ -298,7 +298,7 @@ qts2avts <- function(qts, fixed_frame = "global") {
     .Call(`_squat_qts2avts`, qts, fixed_frame)
 }
 
-#' Angular Velocity to Quaternion Transform
+#' QTS Transformation from Angular Velocity Time Series
 #'
 #' This function projects back an angular velocity time series into the space
 #' of quaternions.

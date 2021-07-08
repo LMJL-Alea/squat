@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{centring_qts}
 \alias{centring_qts}
-\title{QTS Centring}
+\title{QTS Centering and Standardization}
 \usage{
 centring_qts(qts, standardize = FALSE)
 }

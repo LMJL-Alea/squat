@@ -77,3 +77,46 @@ add_noise <- function(qts, n = 1, alpha = 0.1, beta = 0.5) {
   })
   lapply(qts_list, exp_qts)
 }
+
+#' QTS Sample Centering and Standardization
+#'
+#' @param qts_list A list of quaternio time series stored as
+#'   \code{\link[tibble]{tibble}}s with columns `time`, `w`, `x`, `y` and `z`.
+#' @param center A boolean specifying whether to center the sample of QTS or
+#'   not. If set to `FALSE`, the original sample is returned, meaning that no
+#'   standardization is performed regardless of whether argument `standardize`
+#'   was set to `TRUE` or not. Defaults to `TRUE`.
+#' @param standardize A boolean specifying whether to standardize the sample of
+#'   QTS once they have been centered. Defaults to `TRUE`.
+#' @param by_row A boolean specifying whether the QTS scaling should happen for
+#'   each data point (`by_row = TRUE`) or for each time point (`by_row =
+#'   FALSE`). Defaults to `TRUE`.
+#'
+#' @return A list of properly rescaled QTS.
+#' @export
+#'
+#' @examples
+#' // TO DO
+scale_qts <- function(qts_list, center = TRUE, standardize = TRUE, by_row = FALSE) {
+  if (!center) return(qts_list)
+
+  if (!by_row) {
+    qts_list <- qts_list |>
+      purrr::map(purrr::array_tree, margin = 1) |>
+      purrr::transpose() |>
+      purrr::map(purrr::reduce, rbind) |>
+      purrr::map(tibble::as_tibble)
+  }
+
+  qts_list <- purrr::map(qts_list, centring_qts, standardize = standardize)
+
+  if (!by_row) {
+    qts_list <- qts_list |>
+      purrr::map(purrr::array_tree, margin = 1) |>
+      purrr::transpose() |>
+      purrr::map(purrr::reduce, rbind) |>
+      purrr::map(tibble::as_tibble)
+  }
+
+  qts_list
+}

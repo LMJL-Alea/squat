@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{qts2avts}
 \alias{qts2avts}
-\title{Quaternion to Angular Velocity Transform}
+\title{QTS Transformation to Angular Velocity Time Series}
 \usage{
 qts2avts(qts, fixed_frame = "global")
 }

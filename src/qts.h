@@ -155,7 +155,7 @@ Rcpp::DataFrame log_qts(const Rcpp::DataFrame &qts);
 // [[Rcpp::export]]
 Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts);
 
-//' QTS Centring
+//' QTS Centering and Standardization
 //'
 //' This function operates a centring of the QTS around the geometric mean of
 //' its quaternions. This is effectively achieved by premultiplying each
@@ -210,7 +210,7 @@ Rcpp::DataFrame mean_qts(const Rcpp::List &qts_list);
 // [[Rcpp::export]]
 Rcpp::DataFrame median_qts(const Rcpp::List &qts_list);
 
-//' Quaternion to Angular Velocity Transform
+//' QTS Transformation to Angular Velocity Time Series
 //'
 //' This function projects a quaternion time series into the space of angular
 //' velocities.
@@ -234,7 +234,7 @@ Rcpp::DataFrame qts2avts(
   const Rcpp::String &fixed_frame = "global"
 );
 
-//' Angular Velocity to Quaternion Transform
+//' QTS Transformation from Angular Velocity Time Series
 //'
 //' This function projects back an angular velocity time series into the space
 //' of quaternions.
