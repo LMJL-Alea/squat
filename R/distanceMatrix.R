@@ -23,11 +23,11 @@ distDTW <- function(qts_list,
     stop("The provided step pattern is not normalizable.")
 
   if (!disable_normalization) {
-    qts_list <- lapply(qts_list, normalize_qts)
+    qts_list <- purrr::map(qts_list, normalize_qts)
   }
 
   if (resample) {
-    qts_list <- lapply(qts_list, resample_qts, disable_normalization = TRUE)
+    qts_list <- purrr::map(qts_list, resample_qts, disable_normalization = TRUE)
   }
 
   n <- length(qts_list)

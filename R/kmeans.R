@@ -35,11 +35,9 @@ kmeans_qts <-function(qts_list,
                       iter_max = 20,
                       nstart = 1000,
                       ncores = 1L) {
-  q <- lapply(qts_list, squat::log_qts)
-  q <- lapply(q, function(.qts) {
-      rbind(.qts$x, .qts$y, .qts$z)
-    })
-  t <- lapply(qts_list, function(.qts) .qts$time)
+  q <- purrr::map(qts_list, log_qts)
+  q <- purrr::map(q, ~ rbind(.x$x, .x$y, .x$z))
+  t <- purrr::map(qts_list, ~ .x$time)
 
   # Prep data
   n <- length(q)
@@ -93,9 +91,7 @@ kmeans_qts <-function(qts_list,
   if (!is.null(cl))
     parallel::stopCluster(cl)
 
-  wss_vector <- sapply(solutions, function(.sol) {
-    sum(.sol$final_dissimilarity)
-  })
+  wss_vector <- purrr::map_dbl(solutions, ~ sum(.x$final_dissimilarity))
 
   opt <- solutions[[which.min(wss_vector)]]
 
@@ -108,9 +104,9 @@ kmeans_qts <-function(qts_list,
   )
 
   list(
-    qts_aligned = lapply(1:length(qts_list), function(.idx) {
-      qts_list[[.idx]]$time <- opt$x_final[.idx, ]
-      qts_list[[.idx]]
+    qts_aligned = purrr::imap(qts_list, ~ {
+      .x$time <- opt$x_final[.y, ]
+      .x
     }),
     qts_center = exp_qts(qts_center),
     best_kma_result = opt

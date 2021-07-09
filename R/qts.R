@@ -66,7 +66,7 @@ add_noise <- function(qts, n = 1, alpha = 0.1, beta = 0.5) {
     correlations = rep(0, 3),
     listCholCov = list(CholC1, CholC2, CholC3)
   )
-  qts_list <- lapply(1:n, function(.x) {
+  qts_list <- purrr::map(1:n, ~ {
     tibble(
       time = time_grid,
       w = 0,
@@ -75,12 +75,12 @@ add_noise <- function(qts, n = 1, alpha = 0.1, beta = 0.5) {
       z = qts[[3]][.x, ]
     )
   })
-  lapply(qts_list, exp_qts)
+  purrr::map(qts_list, exp_qts)
 }
 
 #' QTS Sample Centering and Standardization
 #'
-#' @param qts_list A list of quaternio time series stored as
+#' @param qts_list A list of quaternion time series stored as
 #'   \code{\link[tibble]{tibble}}s with columns `time`, `w`, `x`, `y` and `z`.
 #' @param center A boolean specifying whether to center the sample of QTS or
 #'   not. If set to `FALSE`, the original sample is returned, meaning that no
@@ -90,13 +90,13 @@ add_noise <- function(qts, n = 1, alpha = 0.1, beta = 0.5) {
 #'   QTS once they have been centered. Defaults to `TRUE`.
 #' @param by_row A boolean specifying whether the QTS scaling should happen for
 #'   each data point (`by_row = TRUE`) or for each time point (`by_row =
-#'   FALSE`). Defaults to `TRUE`.
+#'   FALSE`). Defaults to `FALSE`.
 #'
 #' @return A list of properly rescaled QTS.
 #' @export
 #'
 #' @examples
-#' // TO DO
+#' # TO DO
 scale_qts <- function(qts_list, center = TRUE, standardize = TRUE, by_row = FALSE) {
   if (!center) return(qts_list)
 

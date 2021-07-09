@@ -33,7 +33,8 @@ Imports:
     dtw,
     Rcpp,
     tibble,
-    roahd
+    roahd,
+    purrr
 Suggests: fdakmapp (>= 2.1)
 Roxygen: list(markdown = TRUE)
 Remotes: 

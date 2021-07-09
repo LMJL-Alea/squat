@@ -7,7 +7,7 @@
 scale_qts(qts_list, center = TRUE, standardize = TRUE, by_row = FALSE)
 }
 \arguments{
-\item{qts_list}{A list of quaternio time series stored as
+\item{qts_list}{A list of quaternion time series stored as
 \code{\link[tibble]{tibble}}s with columns \code{time}, \code{w}, \code{x}, \code{y} and \code{z}.}
 
 \item{center}{A boolean specifying whether to center the sample of QTS or
@@ -19,7 +19,7 @@ was set to \code{TRUE} or not. Defaults to \code{TRUE}.}
 QTS once they have been centered. Defaults to \code{TRUE}.}
 
 \item{by_row}{A boolean specifying whether the QTS scaling should happen for
-each data point (\code{by_row = TRUE}) or for each time point (\code{by_row = FALSE}). Defaults to \code{TRUE}.}
+each data point (\code{by_row = TRUE}) or for each time point (\code{by_row = FALSE}). Defaults to \code{FALSE}.}
 }
 \value{
 A list of properly rescaled QTS.
@@ -28,5 +28,5 @@ A list of properly rescaled QTS.
 QTS Sample Centering and Standardization
 }
 \examples{
-// TO DO
+# TO DO
 }
