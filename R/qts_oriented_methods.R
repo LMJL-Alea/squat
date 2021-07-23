@@ -267,10 +267,10 @@ qts_MatcdQtoMatQ<-function(A){
 
 #' Adjoint complex matrix
 #'
-#' @description this function returns the adjoint complex matrix associated to A = A1 + A2.j 
+#' @description this function returns the adjoint complex matrix associated to A = A1 + A2.j
 #' (see Le Bihan and Mars, "Singular value decomposition of quaternion matrices: a new tool for vector-sensor signal processing",
 #' Signal Processing 84 (2004) 1177–1199 for more information)
-#' 
+#'
 #'
 #' @param A a list of qts
 #'
@@ -285,15 +285,15 @@ qts_MatcdQtoMatQ<-function(A){
 #' Mat<-list(q1,q3)
 #' qts_MatHtoC(Mat)
 qts_MatHtoC<-function(A){
-  
+
   cdA<-qts_MatQtoMatcdQ(A)
-  
+
   N<-length(cdA)
   M<-dim(cdA[[1]][[1]])[1]
-  
+
   A1<-t(as.matrix(cdA[[1]][[1]] %>% select(cplx)))
   A2<-t(as.matrix(cdA[[1]][[2]] %>% select(cplx)))
-  
+
   for(i in 2:length(cdA)){
     A1<-rbind(A1,t(as.matrix(cdA[[i]][[1]] %>% select(cplx))))
     A2<-rbind(A2,t(as.matrix(cdA[[i]][[2]] %>% select(cplx))))
@@ -322,15 +322,15 @@ qts_MatHtoC<-function(A){
 #' tMat<-qts_transpose_MatQ(Mat)
 #' qts_Hmatprod(Mat,tMat)
 qts_Hmatprod<-function(A,B){
-  
+
   cdA<-qts_MatQtoMatcdQ(A)
   cdB<-qts_MatQtoMatcdQ(B)
-  
+
   A1<-t(as.matrix(cdA[[1]][[1]] %>% select(cplx)))
   A2<-t(as.matrix(cdA[[1]][[2]] %>% select(cplx)))
   B1<-t(as.matrix(cdB[[1]][[1]] %>% select(cplx)))
   B2<-t(as.matrix(cdB[[1]][[2]] %>% select(cplx)))
-  
+
   if(length(cdA)!=1){
     for(i in 2:length(cdA)){
       A1<-rbind(A1,t(as.matrix(cdA[[i]][[1]] %>% select(cplx))))
@@ -345,7 +345,7 @@ qts_Hmatprod<-function(A,B){
   }
   AB1<-A1%*%B1-A2%*%Conj(B2)
   AB2<-A1%*%B2+A2%*%Conj(B1)
-  
+
   AB<-list()
   for(k in 1:dim(AB1)[1]){
     AB[[k]]<-tibble(time=0:(dim(AB1)[2]-1), w=Re(AB1[k,]), x=Im(AB1[k,]), y=Re(AB2[k,]), z=Im(AB2[k,]))
@@ -358,7 +358,7 @@ qts_Hmatprod<-function(A,B){
 #'
 #' @param A a quaternion matrix as a list of qts
 #'
-#' @description This function computes the complete or restreint SVD of a quaternion matrix A using 
+#' @description This function computes the complete or restreint SVD of a quaternion matrix A using
 #' the complex adjoint matrix method (see Le Bihan and Mars, "Singular value decomposition of quaternion matrices: a new tool for vector-sensor signal processing",
 #' Signal Processing 84 (2004) 1177–1199 for more information)
 #' The user chooses the number of axis to keep for the decomposition
@@ -369,7 +369,7 @@ qts_Hmatprod<-function(A,B){
 #' inertia : the percentage of inertia represented by the nb first nb.axis (nb.axis is chosen by the user)
 #' svdh_A : a list of qts which is the reconstruction of the initial matrix using the SVD on the first nb.axis axis
 #' nb.axis : the number of axis chosen by the user
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -379,15 +379,15 @@ qts_Hmatprod<-function(A,B){
 #' }
 #' qts_SVDH(l)
 qts_SVDH<-function(A){
-  
+
   cdA<-qts_MatQtoMatcdQ(A)
-  
+
   N<-length(A)
   M<-dim(A[[1]])[1]
 
   #Forming the complex representation
   ChiA<-qts_MatHtoC(A)
-  
+
   #Computing the SVD of ChiA
   svd<-svd(ChiA,nu=nrow(ChiA),nv=ncol(ChiA))
   Uc<-svd$u
@@ -396,7 +396,7 @@ qts_SVDH<-function(A){
   #allocating singular values of ChiA to those of A
   sing_values<-Dc[seq(1,length(Dc),2)]
   eigenvalues<-sing_values**2
-  
+
   #allocating singular vectors of ChiA to those of A
   UC<-Uc[,seq(1,dim(Uc)[2],2)]
   VC<-Vc[,seq(1,dim(Vc)[2],2)]
@@ -404,7 +404,7 @@ qts_SVDH<-function(A){
   U2<- -Conj(UC[(N+1):(2*N),])
   V1<-VC[1:M,]
   V2<- -Conj(VC[(M+1):(2*M),])
-  
+
   U<-list()
   V<-list()
   for(i in 1:N){
@@ -419,13 +419,13 @@ qts_SVDH<-function(A){
   for(i in 1:min(N,M)){
     iner[i]<-eigenvalues[i]/sum(eigenvalues)*100
   }
+
   p <- ggplot(as.data.frame(as.numeric(iner)), aes(x=1:min(N,M),y=as.numeric(iner))) + geom_bar(stat = "identity", fill="steelblue") +
     geom_text(aes(label=round(as.numeric(iner),2)),vjust=-0.3, color="black", size=3) + labs(y="Inertia", x="Eigenvalues") +theme_minimal()
   print(p)
   nb.axis<-choix_nb.axis()
-  
   inertia<-sum(eigenvalues[1:nb.axis])/sum(eigenvalues)*100
-  
+
   #Reconstruction of A considering nb.axis
   prod<-qts_Hmatprod(qts_transpose_MatQ(qts_transpose_MatQ(U)[1]), Vt[1])
   s<-list()
@@ -440,3 +440,32 @@ qts_SVDH<-function(A){
   }
   return(list('U'=U,'V'=V, 'singular_values'=sing_values,'eigenvalues'=eigenvalues, 'inertia'=inertia, 'svdh_A'=svdh_A, 'nb.axis'=nb.axis))
 }
+
+qts_QPCA<-function(X, center=TRUE, scale=FALSE){
+
+  if(center && scale){
+    X<-scale_qts(X, center=TRUE, standardize=TRUE, by_row = FALSE)
+  } else if(center){
+    X<-scale_qts(X, center=TRUE, standardize=FALSE, by_row = FALSE)
+  }
+  svdh<-qts_SVDH(X)
+  eigenvalues<-(1/length(X))*svdh$eigenvalues
+  U<-svdh$U
+  nb.axis<-svdh$nb.axis
+  V<-svdh$V
+
+
+  ####F : nouvelles coordonnées par AXE /!\, pas par individu
+  Fcomp<-list()
+  Fcomp[[1]]<-qts_transpose_MatQ(qts_Hmatprod(X,qts_transpose_MatQ(qts_transpose_MatQ(V)[1])))
+  if(nb.axis!=1){
+    for(n in 2:nb.axis){
+      Fcomp[[n]]<-qts_transpose_MatQ(qts_Hmatprod(X,qts_transpose_MatQ(qts_transpose_MatQ(V)[n])))
+    }
+  }
+
+  inertia<-svdh$inertia
+  return(list('F'=Fcomp, 'U'=U, 'V'=V, 'eigenvalues'=eigenvalues, 'inertia'=inertia))
+
+}
+
