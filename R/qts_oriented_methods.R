@@ -1,7 +1,4 @@
 #################### FORMATTING CODE TO BE QTS-ORIENTED #####################
-library(tidyverse)
-library(squat)
-
 choix_nb.axis<-function(){
   cat("Combien d'axes souhaitez-vous conserver ?")
   nb.axis<-readline()
@@ -16,11 +13,12 @@ choix_nb.axis<-function(){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' qts_q2cdq(q1)
 qts_q2cdq<-function(q){
-  A1<- tibble(time=q %>% pull(time), cplx = complex(real = q %>% pull(w),imaginary = q %>% pull(x)))
-  A2<- tibble(time=q %>% pull(time), cplx = complex(real = q %>% pull(y),imaginary = q %>% pull(z)))
+  A1<- tibble(time=q %>% dplyr::pull(.data$time), cplx = complex(real = q %>% dplyr::pull(.data$w),imaginary = q %>% dplyr::pull(.data$x)))
+  A2<- tibble(time=q %>% dplyr::pull(.data$time), cplx = complex(real = q %>% dplyr::pull(.data$y),imaginary = q %>% dplyr::pull(.data$z)))
   return(list(A1,A2))
 }
 
@@ -33,13 +31,14 @@ qts_q2cdq<-function(q){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' cdq<-qts_q2cdq(q1)
 #' qts_cdq2q(cdq)
 qts_cdq2q<-function(cdq){
-  if(!identical(cdq[[1]] %>% pull(time), cdq[[2]] %>% pull(time))) stop('q1 and q2 should be same time')
-  q<-tibble(time=cdq[[1]] %>% pull(time),w=Re(cdq[[1]] %>% pull(cplx)), x=Im(cdq[[1]] %>% pull(cplx)),
-            y=Re(cdq[[2]] %>% pull(cplx)),z=Im(cdq[[2]] %>% pull(cplx)))
+  if(!identical(cdq[[1]] %>% dplyr::pull(.data$time), cdq[[2]] %>% dplyr::pull(.data$time))) stop('q1 and q2 should be same time')
+  q<-tibble(time=cdq[[1]] %>% dplyr::pull(.data$time),w=Re(cdq[[1]] %>% dplyr::pull(.data$cplx)), x=Im(cdq[[1]] %>% dplyr::pull(.data$cplx)),
+            y=Re(cdq[[2]] %>% dplyr::pull(.data$cplx)),z=Im(cdq[[2]] %>% dplyr::pull(.data$cplx)))
   return(q)
 }
 
@@ -51,6 +50,7 @@ qts_cdq2q<-function(cdq){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q<-tibble(time=0,w=1,x=2,y=3,z=4)
 #' qts_conjugate_q(q)
 qts_conjugate_q<-function(q){
@@ -69,12 +69,13 @@ qts_conjugate_q<-function(q){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' q2<-tibble(time=0, w=2,x=2,y=0,z=0)
 #' qts_sum_q(q1,q2)
 qts_sum_q<-function(q1,q2){
-  if(!identical(q1 %>% pull(time), q2 %>% pull(time))) stop('q1 and q2 should be same time')
-  return(as_tibble(mapply('+', q1[-1],q2[-1], SIMPLIFY = FALSE)) %>% add_column(time=q1 %>% pull(time), .before=1))
+  if(!identical(q1 %>% dplyr::pull(.data$time), q2 %>% dplyr::pull(.data$time))) stop('q1 and q2 should be same time')
+  return(tibble::as_tibble(mapply('+', q1[-1],q2[-1], SIMPLIFY = FALSE)) %>% tibble::add_column(time=q1 %>% dplyr::pull(.data$time), .before=1))
 }
 
 #' Size of a matrix of quaternions formatted as a list of qts
@@ -85,6 +86,7 @@ qts_sum_q<-function(q1,q2){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' q1<-q1 %>% add_row(tibble(time=1,w=1,x=2,y=3,z=4))
 #' q3<-tibble(time=0, w=2,x=1,y=3,z=0)
@@ -111,6 +113,7 @@ qts_size_MatQ<-function(M){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' q1<-q1 %>% add_row(tibble(time=1,w=1,x=2,y=3,z=4))
 #' q3<-tibble(time=0, w=2,x=1,y=3,z=0)
@@ -132,6 +135,7 @@ qts_sum_MatQ<-function(A1,A2){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' q1<-q1 %>% add_row(tibble(time=1,w=1,x=2,y=3,z=4))
 #' q3<-tibble(time=0, w=2,x=1,y=3,z=0)
@@ -150,6 +154,7 @@ qts_conjugate_MatQ<-function(X){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' q1<-q1 %>% add_row(tibble(time=1,w=1,x=2,y=3,z=4))
 #' q3<-tibble(time=0, w=2,x=1,y=3,z=0)
@@ -161,9 +166,9 @@ qts_transpose_MatQ<-function(X){
   for(i in 1:dim(X[[1]])[1]){
     t<-tibble(time=integer(),w=double(),x=double(),y=double(),z=double())
     for(j in 1:length(X)){
-      t<-t %>% add_row(X[[j]] %>% slice(i))
+      t<-t %>% tibble::add_row(X[[j]] %>% dplyr::slice(i))
     }
-    t<-t %>% mutate(time=0:(length(X)-1))
+    t<-t %>% dplyr::mutate(time=0:(length(X)-1))
     l[[i]]<-t
   }
   return(l)
@@ -177,6 +182,7 @@ qts_transpose_MatQ<-function(X){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' q1<-q1 %>% add_row(tibble(time=1,w=1,x=2,y=3,z=4))
 #' q3<-tibble(time=0, w=2,x=1,y=3,z=0)
@@ -196,11 +202,17 @@ qts_transconj_MatQ<-function(X){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' q1<-q1 %>% add_row(tibble(time=1,w=1,x=2,y=3,z=4))
 #' qts_mult(3,q1)
 qts_mult<-function(a, qts){
-  qts<-qts %>% mutate(w=a*w,x=a*x,y=a*y,z=a*z)
+  qts <- qts %>% dplyr::mutate(
+    w = a * .data$w,
+    x = a * .data$x,
+    y = a * .data$y,
+    z = a * .data$z
+  )
   return(qts)
 }
 
@@ -213,6 +225,7 @@ qts_mult<-function(a, qts){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' q1<-q1 %>% add_row(tibble(time=1,w=1,x=2,y=3,z=4))
 #' q3<-tibble(time=0, w=2,x=1,y=3,z=0)
@@ -232,6 +245,7 @@ qts_mult_MatQ<-function(a,X){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' q1<-q1 %>% add_row(tibble(time=1,w=1,x=2,y=3,z=4))
 #' q3<-tibble(time=0, w=2,x=1,y=3,z=0)
@@ -251,6 +265,7 @@ qts_MatQtoMatcdQ<-function(A){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' q1<-q1 %>% add_row(tibble(time=1,w=1,x=2,y=3,z=4))
 #' q3<-tibble(time=0, w=2,x=1,y=3,z=0)
@@ -278,6 +293,7 @@ qts_MatcdQtoMatQ<-function(A){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' q1<-q1 %>% add_row(tibble(time=1,w=1,x=2,y=3,z=4))
 #' q3<-tibble(time=0, w=2,x=1,y=3,z=0)
@@ -291,12 +307,12 @@ qts_MatHtoC<-function(A){
   N<-length(cdA)
   M<-dim(cdA[[1]][[1]])[1]
 
-  A1<-t(as.matrix(cdA[[1]][[1]] %>% select(cplx)))
-  A2<-t(as.matrix(cdA[[1]][[2]] %>% select(cplx)))
+  A1<-t(as.matrix(cdA[[1]][[1]] %>% dplyr::select(.data$cplx)))
+  A2<-t(as.matrix(cdA[[1]][[2]] %>% dplyr::select(.data$cplx)))
 
   for(i in 2:length(cdA)){
-    A1<-rbind(A1,t(as.matrix(cdA[[i]][[1]] %>% select(cplx))))
-    A2<-rbind(A2,t(as.matrix(cdA[[i]][[2]] %>% select(cplx))))
+    A1<-rbind(A1,t(as.matrix(cdA[[i]][[1]] %>% dplyr::select(.data$cplx))))
+    A2<-rbind(A2,t(as.matrix(cdA[[i]][[2]] %>% dplyr::select(.data$cplx))))
   }
   ChiA<-cbind(A1,A2)
   temp<-cbind(-Conj(A2), Conj(A1))
@@ -314,6 +330,7 @@ qts_MatHtoC<-function(A){
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' q1<-tibble(time=0,w=1,x=0,y=0,z=0)
 #' q1<-q1 %>% add_row(tibble(time=1:2,w=c(1,1),x=c(2,3),y=c(3,5),z=c(4,9)))
 #' q3<-tibble(time=0, w=2,x=1,y=3,z=0)
@@ -326,21 +343,21 @@ qts_Hmatprod<-function(A,B){
   cdA<-qts_MatQtoMatcdQ(A)
   cdB<-qts_MatQtoMatcdQ(B)
 
-  A1<-t(as.matrix(cdA[[1]][[1]] %>% select(cplx)))
-  A2<-t(as.matrix(cdA[[1]][[2]] %>% select(cplx)))
-  B1<-t(as.matrix(cdB[[1]][[1]] %>% select(cplx)))
-  B2<-t(as.matrix(cdB[[1]][[2]] %>% select(cplx)))
+  A1<-t(as.matrix(cdA[[1]][[1]] %>% dplyr::select(.data$cplx)))
+  A2<-t(as.matrix(cdA[[1]][[2]] %>% dplyr::select(.data$cplx)))
+  B1<-t(as.matrix(cdB[[1]][[1]] %>% dplyr::select(.data$cplx)))
+  B2<-t(as.matrix(cdB[[1]][[2]] %>% dplyr::select(.data$cplx)))
 
   if(length(cdA)!=1){
     for(i in 2:length(cdA)){
-      A1<-rbind(A1,t(as.matrix(cdA[[i]][[1]] %>% select(cplx))))
-      A2<-rbind(A2,t(as.matrix(cdA[[i]][[2]] %>% select(cplx))))
+      A1<-rbind(A1,t(as.matrix(cdA[[i]][[1]] %>% dplyr::select(.data$cplx))))
+      A2<-rbind(A2,t(as.matrix(cdA[[i]][[2]] %>% dplyr::select(.data$cplx))))
     }
   }
   if(length(cdB)!=1){
     for(j in 2:length(cdB)){
-      B1<-rbind(B1,t(as.matrix(cdB[[j]][[1]] %>% select(cplx))))
-      B2<-rbind(B2,t(as.matrix(cdB[[j]][[2]] %>% select(cplx))))
+      B1<-rbind(B1,t(as.matrix(cdB[[j]][[1]] %>% dplyr::select(.data$cplx))))
+      B2<-rbind(B2,t(as.matrix(cdB[[j]][[2]] %>% dplyr::select(.data$cplx))))
     }
   }
   AB1<-A1%*%B1-A2%*%Conj(B2)
@@ -373,6 +390,8 @@ qts_Hmatprod<-function(A,B){
 #' @export
 #'
 #' @examples
+#' library(tibble)
+#' library(stats)
 #' l<-list()
 #' for(i in 1:10){
 #'   l[[i]]<-tibble(time=0:9, w=runif(10), x=runif(10),y=runif(10),z=runif(10))
@@ -441,6 +460,24 @@ qts_SVDH<-function(A){
   return(list('U'=U,'V'=V, 'singular_values'=sing_values,'eigenvalues'=eigenvalues, 'inertia'=inertia, 'svdh_A'=svdh_A, 'nb.axis'=nb.axis))
 }
 
+#' Quaternionic Principal Component Analysis
+#'
+#' @param X a list of qts
+#' @param center a boolean
+#' @param scale a boolean
+#'
+#' @description this function computes a QPCA on an input data matrix, the user decides if data must be
+#' centered and/or scale
+#'
+#' @return a list with :
+#' F : coordinates of the inidividuals on the chosen components
+#' U : the quaternionic matrix containing left eigenvectors
+#' V : the quaternionic matrix containing right eigenvectors
+#' eigenvalues : the list of eigenvalues
+#' inertia : the inertia represented by the chosen components
+#' @export
+#'
+#' @examples
 qts_QPCA<-function(X, center=TRUE, scale=FALSE){
 
   if(center && scale){
@@ -455,8 +492,8 @@ qts_QPCA<-function(X, center=TRUE, scale=FALSE){
   V<-svdh$V
 
 
-  ####F : nouvelles coordonnées par AXE /!\, pas par individu
-  Fcomp<-list()
+
+  Fcomp<-list() #New coordinates of the individuals (or lines) by component
   Fcomp[[1]]<-qts_transpose_MatQ(qts_Hmatprod(X,qts_transpose_MatQ(qts_transpose_MatQ(V)[1])))
   if(nb.axis!=1){
     for(n in 2:nb.axis){

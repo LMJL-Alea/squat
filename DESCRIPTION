@@ -33,7 +33,10 @@ Imports:
     dtw,
     Rcpp,
     tibble,
-    roahd
+    roahd,
+    magrittr,
+    ggplot2,
+    rlang
 Suggests: fdakmapp (>= 2.1)
 Roxygen: list(markdown = TRUE)
 Remotes: 
