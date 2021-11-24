@@ -42,7 +42,7 @@ the k-mean results more robust. Defaults to \code{1000L}.}
 restarts of the k-mean algorithm in parallel. Defaults to \code{1L}.}
 }
 \value{
-A \code{\link[fdakmapp]{kma}} object storing the results of the best
+A \code{\link[fdacluster]{kma}} object storing the results of the best
 k-mean alignment algorithm run.
 }
 \description{

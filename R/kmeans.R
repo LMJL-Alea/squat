@@ -21,7 +21,7 @@
 #' @param ncores An integer specifying the number of cores to run the multiple
 #'   restarts of the k-mean algorithm in parallel. Defaults to `1L`.
 #'
-#' @return A \code{\link[fdakmapp]{kma}} object storing the results of the best
+#' @return A \code{\link[fdacluster]{kma}} object storing the results of the best
 #'   k-mean alignment algorithm run.
 #' @export
 #'
@@ -71,7 +71,7 @@ kmeans_qts <-function(qts_list,
   solutions <- pbapply::pblapply(
     X = init,
     FUN = function(.init) {
-      fdakmapp::kma(
+      fdacluster::kma(
         x,
         y,
         seeds = .init,
