@@ -31,11 +31,12 @@ LinkingTo:
     RcppEigen,
     fdacluster
 Imports:
-    pbapply,
     dtw,
-    Rcpp,
-    tibble,
-    roahd,
+    fdacluster,
+    pbapply,
     purrr,
-    fdacluster
+    Rcpp,
+    RcppEigen,
+    roahd,
+    tibble
 Roxygen: list(markdown = TRUE)
