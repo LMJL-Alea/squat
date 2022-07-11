@@ -91,13 +91,22 @@ add_noise <- function(qts, n = 1, alpha = 0.1, beta = 0.5) {
 #' @param by_row A boolean specifying whether the QTS scaling should happen for
 #'   each data point (`by_row = TRUE`) or for each time point (`by_row =
 #'   FALSE`). Defaults to `FALSE`.
+#' @param keep_summary_stats A boolean specifying whether the mean and standard deviation used for standardizing the data. Defaults to `FALSE` in which case only the list of properly rescaled QTS is returned.
 #'
-#' @return A list of properly rescaled QTS.
+#' @return A list of properly rescaled QTS when `keep_summary_stats = FALSE`. Otherwise a list with three components:
+#' - `qts_list`: a list of properly rescaled QTS;
+#' - `mean`: a numeric vector with the quaternion Fréchet mean;
+#' - `sd`: a numeric vector with the quaternion Fréchet standard deviation.
+#'
 #' @export
 #'
 #' @examples
 #' # TO DO
-scale_qts <- function(qts_list, center = TRUE, standardize = TRUE, by_row = FALSE) {
+scale_qts <- function(qts_list,
+                      center = TRUE,
+                      standardize = TRUE,
+                      by_row = FALSE,
+                      keep_summary_stats = FALSE) {
   if (!center) return(qts_list)
 
   if (!by_row) {
@@ -108,7 +117,8 @@ scale_qts <- function(qts_list, center = TRUE, standardize = TRUE, by_row = FALS
       purrr::map(tibble::as_tibble)
   }
 
-  qts_list <- purrr::map(qts_list, centring_qts, standardize = standardize)
+  std_data <- purrr::map(qts_list, centring_qts, standardize = standardize)
+  qts_list <- purrr::map(std_data, "qts")
 
   if (!by_row) {
     qts_list <- qts_list |>
@@ -118,5 +128,11 @@ scale_qts <- function(qts_list, center = TRUE, standardize = TRUE, by_row = FALS
       purrr::map(tibble::as_tibble)
   }
 
-  qts_list
+  if (!keep_summary_stats) return(qts_list)
+
+  list(
+    qts_list = qts_list,
+    mean_values = purrr::map_dbl(std_data, "mean"),
+    sd_values = purrr::map_dbl(std_data, "sd")
+  )
 }

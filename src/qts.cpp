@@ -273,7 +273,7 @@ Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts)
   return outValue;
 }
 
-Rcpp::DataFrame centring_qts(const Rcpp::DataFrame &qts, const bool standardize)
+Rcpp::List centring_qts(const Rcpp::DataFrame &qts, const bool standardize)
 {
   unsigned int nGrid = qts.nrows();
   Rcpp::DataFrame outValue = Rcpp::clone(qts);
@@ -307,10 +307,11 @@ Rcpp::DataFrame centring_qts(const Rcpp::DataFrame &qts, const bool standardize)
     zValues(i) = workQValue.z();
   }
 
+  double sdValue = 0;
   if (standardize)
   {
     outValue = log_qts(outValue);
-    double sdValue = std::sqrt(gvariance(qValues, meanValue));
+    sdValue = std::sqrt(gvariance(qValues, meanValue));
     wValues = outValue["w"];
     xValues = outValue["x"];
     yValues = outValue["y"];
@@ -322,7 +323,11 @@ Rcpp::DataFrame centring_qts(const Rcpp::DataFrame &qts, const bool standardize)
     outValue = exp_qts(outValue);
   }
 
-  return outValue;
+  return Rcpp::List::create(
+    Rcpp::Named("qts") = outValue,
+    Rcpp::Named("mean") = meanValue,
+    Rcpp::Named("sd") = sdValue
+  );
 }
 
 Rcpp::DataFrame mean_qts(const Rcpp::List &qts_list)

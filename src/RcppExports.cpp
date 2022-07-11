@@ -303,7 +303,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // centring_qts
-Rcpp::DataFrame centring_qts(const Rcpp::DataFrame& qts, const bool standardize);
+Rcpp::List centring_qts(const Rcpp::DataFrame& qts, const bool standardize);
 RcppExport SEXP _squat_centring_qts(SEXP qtsSEXP, SEXP standardizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

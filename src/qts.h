@@ -174,7 +174,7 @@ Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts);
 //' @examples
 //' # TO DO
 // [[Rcpp::export]]
-Rcpp::DataFrame centring_qts(const Rcpp::DataFrame &qts, const bool standardize = false);
+Rcpp::List centring_qts(const Rcpp::DataFrame &qts, const bool standardize = false);
 
 //' QTS Geometric Mean
 //'
