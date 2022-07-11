@@ -44,3 +44,113 @@ DTW <- function(qts1, qts2,
   M <- GetCostMatrix(qts1, qts2, disable_normalization = TRUE)
   dtw::dtw(M, distance.only = distance_only, step.pattern = step_pattern)
 }
+
+DTWi <- function(qts1, qts2,
+                 resample = TRUE,
+                 disable_normalization = FALSE,
+                 distance_only = FALSE,
+                 step_pattern = dtw::symmetric2) {
+  opt <- nloptr::directL(
+    fn = cost,
+    lower = rep(0, 3),
+    upper = c(2 * pi, pi, 2 * pi),
+    qts1 = qts1, qts2 = qts2,
+    resample = resample,
+    disable_normalization = disable_normalization,
+    distance_only = TRUE,
+    step_pattern = step_pattern
+  )
+  if (anyNA(opt$par)) {
+    cli::cli_alert_danger("Optimization failed")
+    return(DTW(qts1, qts2,
+        resample = TRUE,
+        disable_normalization = FALSE,
+        distance_only = FALSE,
+        step_pattern = dtw::symmetric2))
+  }
+  for (i in 1:3) {
+    if (opt$par[1] < 0)
+      opt$par[1] <- .Machine$double.eps^0.5
+  }
+  if (opt$par[1] > 2*pi)
+    opt$par[1] <- 2*pi - .Machine$double.eps^0.5
+  if (opt$par[2] > pi)
+    opt$par[2] <- pi - .Machine$double.eps^0.5
+  if (opt$par[3] > 2*pi)
+    opt$par[3] <- 2*pi - .Machine$double.eps^0.5
+  opt <- nloptr::bobyqa(
+    x0 = opt$par,
+    fn = cost,
+    lower = rep(0, 3),
+    upper = c(2 * pi, pi, 2 * pi),
+    qts1 = qts1, qts2 = qts2,
+    resample = resample,
+    disable_normalization = disable_normalization,
+    distance_only = TRUE,
+    step_pattern = step_pattern
+  )
+  cost_impl(opt$par,
+            qts1, qts2,
+            resample,
+            disable_normalization,
+            distance_only,
+            step_pattern)
+}
+
+cost <- function(q0,
+                 qts1, qts2,
+                 resample,
+                 disable_normalization,
+                 distance_only,
+                 step_pattern) {
+  cost_impl(
+    q0,
+    qts1, qts2,
+    resample,
+    disable_normalization,
+    distance_only,
+    step_pattern
+  )$distance
+}
+
+cost_impl <- function(q0,
+                      qts1, qts2,
+                      resample,
+                      disable_normalization,
+                      distance_only,
+                      step_pattern) {
+  omega <- q0[1]
+  theta <- q0[2]
+  phi <- q0[3]
+  q0 <- c(
+    cos(omega / 2),
+    sin(omega / 2) * c(
+      sin(theta) * cos(phi),
+      sin(theta) * sin(phi),
+      cos(theta)
+    )
+  )
+  q2list <- purrr::pmap(list(qts2$w, qts2$x, qts2$y, qts2$z), c)
+  q2list <- purrr::map(q2list, ~ multiply_quaternions(q0, .x))
+  qts2$w <- purrr::map_dbl(q2list, 1)
+  qts2$x <- purrr::map_dbl(q2list, 2)
+  qts2$y <- purrr::map_dbl(q2list, 3)
+  qts2$z <- purrr::map_dbl(q2list, 4)
+  DTW(
+    qts1 = qts1,
+    qts2 = qts2,
+    resample = resample,
+    disable_normalization = disable_normalization,
+    distance_only = distance_only,
+    step_pattern = step_pattern
+  )
+}
+
+multiply_quaternions <- function(q1, q2) {
+  c(
+    q1[1] * q2[1] - sum(q1[-1] * q2[-1]),
+    q1[1] * q2[2] + q1[2] * q2[1] - q1[3] * q2[4] - q1[4] * q2[3],
+    q1[1] * q2[3] + q1[3] * q2[1] + q1[4] * q2[2] - q1[2] * q2[4],
+    q1[1] * q2[4] + q1[4] * q2[1] + q1[2] * q2[3] - q1[3] * q2[2]
+  )
+}

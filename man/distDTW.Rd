@@ -10,17 +10,20 @@ distDTW(
   labels = NULL,
   resample = TRUE,
   disable_normalization = FALSE,
-  step_pattern = dtw::symmetric2
+  step_pattern = dtw::symmetric2,
+  quotient_space = FALSE
 )
 }
 \arguments{
-\item{qts_list}{A list of \code{\link[tibble]{tibble}}s storing a sample of quaternion time series.}
+\item{qts_list}{A list of \code{\link[tibble]{tibble}}s storing a sample of
+quaternion time series.}
 
 \item{normalize_distance}{A boolean specifying whether to compute normalized
 distance between QTS. Please note that not all step patterns are
 normalizable. Defaults to \code{FALSE}.}
 
-\item{labels}{A character vector specifying labels for each QTS. Defaults to \code{NULL} which uses row numbers as labels.}
+\item{labels}{A character vector specifying labels for each QTS. Defaults to
+\code{NULL} which uses row numbers as labels.}
 
 \item{resample}{A boolean specifying whether the QTS should be uniformly
 resampled on their domain before computing distances. Defaults to \code{TRUE}.}
@@ -33,6 +36,10 @@ always deal with unit quaternions.}
 constraints on the warping path. Defaults to \code{\link[dtw]{symmetric2}}
 which uses symmetric and normalizable warping paths with no local slope
 constraints. See \code{\link[dtw]{stepPattern}} for more information.}
+
+\item{quotient_space}{A boolean specifying whether to make the distance
+invariant to the coordinate system into which rotations are expressed.
+Defaults to \code{FALSE} for backward compatibility and faster computation.}
 }
 \value{
 A \code{\link[stats]{dist}} object storing the distance matrix

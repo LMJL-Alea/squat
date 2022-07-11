@@ -31,8 +31,11 @@ LinkingTo:
     RcppEigen,
     fdacluster
 Imports:
+    cli,
     dtw,
     fdacluster,
+    furrr,
+    nloptr,
     pbapply,
     purrr,
     Rcpp,
