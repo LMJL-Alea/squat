@@ -80,7 +80,6 @@ kmeans_qts <-function(qts_list,
         warping_method = warping,
         dissimilarity_method = diss,
         use_verbose = FALSE,
-        space = 0,
         warping_options = c(0.1, 0.1),
         use_fence = FALSE
       )
