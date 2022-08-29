@@ -4,6 +4,7 @@
 #ifndef RCPP_squat_RCPPEXPORTS_H_GEN_
 #define RCPP_squat_RCPPEXPORTS_H_GEN_
 
+#include "squat_types.h"
 #include <RcppArmadillo.h>
 #include <RcppEigen.h>
 #include <Rcpp.h>
