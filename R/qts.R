@@ -107,7 +107,14 @@ scale_qts <- function(qts_list,
                       standardize = TRUE,
                       by_row = FALSE,
                       keep_summary_stats = FALSE) {
-  if (!center) return(qts_list)
+  if (!center) {
+    if (!keep_summary_stats) return(qts_list)
+    return(list(
+      qts_list = qts_list,
+      mean_values = NA,
+      sd_values = NA
+    ))
+  }
 
   if (!by_row) {
     qts_list <- qts_list |>
@@ -132,7 +139,7 @@ scale_qts <- function(qts_list,
 
   list(
     qts_list = qts_list,
-    mean_values = purrr::map_dbl(std_data, "mean"),
+    mean_values = purrr::map(std_data, "mean"),
     sd_values = purrr::map_dbl(std_data, "sd")
   )
 }
