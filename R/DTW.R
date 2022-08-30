@@ -24,10 +24,14 @@
 #'
 #' @return An object of class \code{\link[dtw]{dtw}} storing the dynamic time
 #'   warping results.
-#' @export
+#' @name dtw
 #'
 #' @examples
 #' # TO DO
+NULL
+
+#' @export
+#' @rdname dtw
 DTW <- function(qts1, qts2,
                 resample = TRUE,
                 disable_normalization = FALSE,
@@ -45,66 +49,96 @@ DTW <- function(qts1, qts2,
   dtw::dtw(M, distance.only = distance_only, step.pattern = step_pattern)
 }
 
+#' @export
+#' @rdname dtw
 DTWi <- function(qts1, qts2,
                  resample = TRUE,
                  disable_normalization = FALSE,
                  distance_only = FALSE,
                  step_pattern = dtw::symmetric2) {
+  if (!disable_normalization) {
+    qts1 <- normalize_qts(qts1)
+    qts2 <- normalize_qts(qts2)
+  }
+
+  if (resample) {
+    qts1 <- resample_qts(qts1, disable_normalization = TRUE)
+    qts2 <- resample_qts(qts2, disable_normalization = TRUE)
+  }
+
+  lb <- rep(0, 6)
+  ub <- rep(c(pi, 2*pi, 2*pi), times = 2)
+
+  # Find suitable initial guess by global optim
   opt <- nloptr::directL(
     fn = cost,
-    lower = rep(0, 3),
-    upper = c(2 * pi, pi, 2 * pi),
+    lower = lb,
+    upper = ub,
     qts1 = qts1, qts2 = qts2,
-    resample = resample,
-    disable_normalization = disable_normalization,
+    resample = FALSE,
+    disable_normalization = TRUE,
     distance_only = TRUE,
     step_pattern = step_pattern
   )
-  if (anyNA(opt$par)) {
-    cli::cli_alert_danger("Optimization failed")
-    return(DTW(qts1, qts2,
-        resample = TRUE,
-        disable_normalization = FALSE,
-        distance_only = FALSE,
-        step_pattern = dtw::symmetric2))
+
+  par <- opt$par
+  for (i in 1:6) {
+    if (par[i] < 0)
+      par[i] <- .Machine$double.eps^0.5
   }
-  for (i in 1:3) {
-    if (opt$par[1] < 0)
-      opt$par[1] <- .Machine$double.eps^0.5
-  }
-  if (opt$par[1] > 2*pi)
-    opt$par[1] <- 2*pi - .Machine$double.eps^0.5
-  if (opt$par[2] > pi)
-    opt$par[2] <- pi - .Machine$double.eps^0.5
-  if (opt$par[3] > 2*pi)
-    opt$par[3] <- 2*pi - .Machine$double.eps^0.5
-  opt <- nloptr::bobyqa(
-    x0 = opt$par,
+
+  if (par[1] > pi)
+    par[1] <- pi - .Machine$double.eps^0.5
+
+  if (par[2] > 2*pi)
+    par[2] <- 2*pi - .Machine$double.eps^0.5
+
+  if (par[3] > 2*pi)
+    par[3] <- 2*pi - .Machine$double.eps^0.5
+
+  if (par[4] > pi)
+    par[4] <- pi - .Machine$double.eps^0.5
+
+  if (par[5] > 2*pi)
+    par[5] <- 2*pi - .Machine$double.eps^0.5
+
+  if (par[6] > 2*pi)
+    par[6] <- 2*pi - .Machine$double.eps^0.5
+
+  # Run local optim
+  opt <- stats::optim(
+    par = par,
     fn = cost,
-    lower = rep(0, 3),
-    upper = c(2 * pi, pi, 2 * pi),
+    lower = lb,
+    upper = ub,
+    method = "L-BFGS-B",
     qts1 = qts1, qts2 = qts2,
-    resample = resample,
-    disable_normalization = disable_normalization,
+    resample = FALSE,
+    disable_normalization = TRUE,
     distance_only = TRUE,
     step_pattern = step_pattern
   )
-  cost_impl(opt$par,
-            qts1, qts2,
-            resample,
-            disable_normalization,
-            distance_only,
-            step_pattern)
+
+  res <- cost_impl(
+    x = opt$par,
+    qts1 = qts1, qts2 = qts2,
+    resample = FALSE,
+    disable_normalization = TRUE,
+    distance_only = distance_only,
+    step_pattern = step_pattern
+  )
+  res$par <- opt$par
+  res
 }
 
-cost <- function(q0,
+cost <- function(x,
                  qts1, qts2,
                  resample,
                  disable_normalization,
                  distance_only,
                  step_pattern) {
   cost_impl(
-    q0,
+    x,
     qts1, qts2,
     resample,
     disable_normalization,
@@ -113,29 +147,15 @@ cost <- function(q0,
   )$distance
 }
 
-cost_impl <- function(q0,
+cost_impl <- function(x,
                       qts1, qts2,
                       resample,
                       disable_normalization,
                       distance_only,
                       step_pattern) {
-  omega <- q0[1]
-  theta <- q0[2]
-  phi <- q0[3]
-  q0 <- c(
-    cos(omega / 2),
-    sin(omega / 2) * c(
-      sin(theta) * cos(phi),
-      sin(theta) * sin(phi),
-      cos(theta)
-    )
-  )
-  q2list <- purrr::pmap(list(qts2$w, qts2$x, qts2$y, qts2$z), c)
-  q2list <- purrr::map(q2list, ~ multiply_quaternions(q0, .x))
-  qts2$w <- purrr::map_dbl(q2list, 1)
-  qts2$x <- purrr::map_dbl(q2list, 2)
-  qts2$y <- purrr::map_dbl(q2list, 3)
-  qts2$z <- purrr::map_dbl(q2list, 4)
+  qts1 <- reorient_from_angles(qts1, x[1], x[2], x[3])
+  qts2 <- reorient_from_angles(qts2, x[4], x[5], x[6])
+
   DTW(
     qts1 = qts1,
     qts2 = qts2,
@@ -149,8 +169,32 @@ cost_impl <- function(q0,
 multiply_quaternions <- function(q1, q2) {
   c(
     q1[1] * q2[1] - sum(q1[-1] * q2[-1]),
-    q1[1] * q2[2] + q1[2] * q2[1] - q1[3] * q2[4] - q1[4] * q2[3],
+    q1[1] * q2[2] + q1[2] * q2[1] + q1[3] * q2[4] - q1[4] * q2[3],
     q1[1] * q2[3] + q1[3] * q2[1] + q1[4] * q2[2] - q1[2] * q2[4],
     q1[1] * q2[4] + q1[4] * q2[1] + q1[2] * q2[3] - q1[3] * q2[2]
   )
+}
+
+reorient_from_angles <- function(qts, theta, phi, omega) {
+  sgn <- (qts$w[1] > 0)
+  q0 <- c(
+    cos(omega / 2),
+    sin(omega / 2) * c(
+      sin(theta) * cos(phi),
+      sin(theta) * sin(phi),
+      cos(theta)
+    )
+  )
+
+  qlist <- purrr::pmap(list(qts$w, qts$x, qts$y, qts$z), c)
+  qlist <- purrr::map(qlist, ~ multiply_quaternions(q0, .x))
+  qts$w <- purrr::map_dbl(qlist, 1)
+  qts$x <- purrr::map_dbl(qlist, 2)
+  qts$y <- purrr::map_dbl(qlist, 3)
+  qts$z <- purrr::map_dbl(qlist, 4)
+
+  if (xor(qts$w[1] > 0, sgn))
+    qts[, 2:5] <- -qts[, 2:5]
+
+  qts
 }
