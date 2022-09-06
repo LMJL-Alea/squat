@@ -31,14 +31,20 @@ LinkingTo:
     RcppEigen,
     fdacluster
 Imports:
+    cli,
     dtw,
     fdacluster,
+    funData,
     furrr,
+    ggplot2,
+    ggrepel,
+    MFPCA,
     nloptr,
     pbapply,
     purrr,
     Rcpp,
     RcppEigen,
     roahd,
-    tibble
+    tibble,
+    tidyr
 Roxygen: list(markdown = TRUE)
