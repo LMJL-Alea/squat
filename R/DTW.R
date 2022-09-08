@@ -66,11 +66,12 @@ DTWi <- function(qts1, qts2,
     qts2 <- resample_qts(qts2, disable_normalization = TRUE)
   }
 
-  lb <- rep(0, 6)
-  ub <- rep(c(pi, 2*pi, 2*pi), times = 2)
+  ub <- c( pi/2,  pi,  pi)
+  lb <- -ub
+  par <- rep(0, 3)
 
-  # Find suitable initial guess by global optim
-  opt <- nloptr::directL(
+  opt <- nloptr::bobyqa(
+    x0 = par,
     fn = cost,
     lower = lb,
     upper = ub,
@@ -78,45 +79,8 @@ DTWi <- function(qts1, qts2,
     resample = FALSE,
     disable_normalization = TRUE,
     distance_only = TRUE,
-    step_pattern = step_pattern
-  )
-
-  par <- opt$par
-  for (i in 1:6) {
-    if (par[i] < 0)
-      par[i] <- .Machine$double.eps^0.5
-  }
-
-  if (par[1] > pi)
-    par[1] <- pi - .Machine$double.eps^0.5
-
-  if (par[2] > 2*pi)
-    par[2] <- 2*pi - .Machine$double.eps^0.5
-
-  if (par[3] > 2*pi)
-    par[3] <- 2*pi - .Machine$double.eps^0.5
-
-  if (par[4] > pi)
-    par[4] <- pi - .Machine$double.eps^0.5
-
-  if (par[5] > 2*pi)
-    par[5] <- 2*pi - .Machine$double.eps^0.5
-
-  if (par[6] > 2*pi)
-    par[6] <- 2*pi - .Machine$double.eps^0.5
-
-  # Run local optim
-  opt <- stats::optim(
-    par = par,
-    fn = cost,
-    lower = lb,
-    upper = ub,
-    method = "L-BFGS-B",
-    qts1 = qts1, qts2 = qts2,
-    resample = FALSE,
-    disable_normalization = TRUE,
-    distance_only = TRUE,
-    step_pattern = step_pattern
+    step_pattern = step_pattern,
+    control = list(xtol_rel = .Machine$double.eps, maxeval = 1e6)
   )
 
   res <- cost_impl(
@@ -154,8 +118,6 @@ cost_impl <- function(x,
                       distance_only,
                       step_pattern) {
   qts1 <- reorient_from_angles(qts1, x[1], x[2], x[3])
-  qts2 <- reorient_from_angles(qts2, x[4], x[5], x[6])
-
   DTW(
     qts1 = qts1,
     qts2 = qts2,
@@ -177,15 +139,7 @@ multiply_quaternions <- function(q1, q2) {
 
 reorient_from_angles <- function(qts, theta, phi, omega) {
   sgn <- (qts$w[1] > 0)
-  q0 <- c(
-    cos(omega / 2),
-    sin(omega / 2) * c(
-      sin(theta) * cos(phi),
-      sin(theta) * sin(phi),
-      cos(theta)
-    )
-  )
-
+  q0 <- quaternion_from_angles(theta, phi, omega)
   qlist <- purrr::pmap(list(qts$w, qts$x, qts$y, qts$z), c)
   qlist <- purrr::map(qlist, ~ multiply_quaternions(q0, .x))
   qts$w <- purrr::map_dbl(qlist, 1)
@@ -197,4 +151,15 @@ reorient_from_angles <- function(qts, theta, phi, omega) {
     qts[, 2:5] <- -qts[, 2:5]
 
   qts
+}
+
+quaternion_from_angles <- function(theta, phi, omega) {
+  c(
+    cos(omega / 2),
+    sin(omega / 2) * c(
+      sin(theta) * cos(phi),
+      sin(theta) * sin(phi),
+      cos(theta)
+    )
+  )
 }
