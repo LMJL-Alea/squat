@@ -66,9 +66,9 @@ DTWi <- function(qts1, qts2,
     qts2 <- resample_qts(qts2, disable_normalization = TRUE)
   }
 
-  ub <- c( pi/2,  pi,  pi)
-  lb <- -ub
-  par <- rep(0, 3)
+  par <- compute_initial_guess(qts1, qts2, step_pattern = step_pattern)
+  lb <- par - c(pi/2, pi, pi)
+  ub <- par + c(pi/2, pi, pi)
 
   opt <- nloptr::bobyqa(
     x0 = par,
@@ -76,9 +76,6 @@ DTWi <- function(qts1, qts2,
     lower = lb,
     upper = ub,
     qts1 = qts1, qts2 = qts2,
-    resample = FALSE,
-    disable_normalization = TRUE,
-    distance_only = TRUE,
     step_pattern = step_pattern,
     control = list(xtol_rel = .Machine$double.eps, maxeval = 1e6)
   )
@@ -86,43 +83,36 @@ DTWi <- function(qts1, qts2,
   res <- cost_impl(
     x = opt$par,
     qts1 = qts1, qts2 = qts2,
-    resample = FALSE,
-    disable_normalization = TRUE,
     distance_only = distance_only,
     step_pattern = step_pattern
   )
-  res$par <- opt$par
+  res$q1 <- quaternion_from_angles(opt$par[1], opt$par[2], opt$par[3])
+  res$qts1 <- reorient_from_angles(qts1, opt$par[1], opt$par[2], opt$par[3])
+  res$qts2 <- qts2
   res
 }
 
 cost <- function(x,
                  qts1, qts2,
-                 resample,
-                 disable_normalization,
-                 distance_only,
                  step_pattern) {
   cost_impl(
-    x,
-    qts1, qts2,
-    resample,
-    disable_normalization,
-    distance_only,
-    step_pattern
+    x = x,
+    qts1 = qts1, qts2 = qts2,
+    distance_only = TRUE,
+    step_pattern = step_pattern
   )$distance
 }
 
 cost_impl <- function(x,
                       qts1, qts2,
-                      resample,
-                      disable_normalization,
                       distance_only,
                       step_pattern) {
   qts1 <- reorient_from_angles(qts1, x[1], x[2], x[3])
   DTW(
     qts1 = qts1,
     qts2 = qts2,
-    resample = resample,
-    disable_normalization = disable_normalization,
+    resample = FALSE,
+    disable_normalization = TRUE,
     distance_only = distance_only,
     step_pattern = step_pattern
   )
@@ -162,4 +152,36 @@ quaternion_from_angles <- function(theta, phi, omega) {
       cos(theta)
     )
   )
+}
+
+angles_from_quaternion <- function(q) {
+  omega <- 2 * acos(q[1])
+  denom <- sin(omega / 2)
+  if (denom < .Machine$double.eps^0.5) {
+    theta <- 0
+    phi <- 0
+  } else {
+    u <- q[2:4] / denom
+    theta <- acos(u[3])
+    phi <- atan2(u[2], u[1])
+  }
+  c(theta, phi, omega)
+}
+
+compute_initial_guess <- function(qts1, qts2, step_pattern) {
+  q1list <- purrr::pmap(list(qts1$w, qts1$x, qts1$y, qts1$z), c)
+  q1list <- purrr::map(q1list, ~ c(.x[1], -.x[2:4]))
+  q2list <- purrr::pmap(list(qts2$w, qts2$x, qts2$y, qts2$z), c)
+  q2list <- purrr::map2(q2list, q1list, multiply_quaternions)
+  candidates <- list(gmean(q2list), gmedian(q2list))
+  candidates <- c(candidates, q2list)
+  candidates <- purrr::map(candidates, angles_from_quaternion)
+  candidates[[length(candidates) + 1]] <- rep(0, 3)
+  fn_values <- purrr::map_dbl(
+    .x = candidates,
+    .f = cost,
+    qts1 = qts1, qts2 = qts2,
+    step_pattern = step_pattern
+  )
+  candidates[[which.min(fn_values)]]
 }
