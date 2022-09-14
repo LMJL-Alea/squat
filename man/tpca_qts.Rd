@@ -31,5 +31,5 @@ components.
 Tangent PCA for QTS Data
 }
 \examples{
-# TO DO
+pca_res <- tpca_qts(vespa$igp[1:8])
 }

@@ -26,5 +26,6 @@ providing a length-2 integer vector argument \code{plane} which defaults to
 Visualization of Tangent PCA for QTS
 }
 \examples{
-# TO DO
+pca_res <- tpca_qts(vespa$igp[1:8])
+plot(pca_res)
 }

@@ -18,7 +18,7 @@
 #' @export
 #'
 #' @examples
-#' # TO DO
+#' pca_res <- tpca_qts(vespa$igp[1:8])
 tpca_qts <- function(qts_list, M = 5, fit = FALSE) {
   check_common_grid <- qts_list |>
     purrr::map("time") |>
@@ -119,7 +119,8 @@ autoplot.qtsTPCA <- function(x, what = "PC1", ...) {
 #' @importFrom graphics plot
 #'
 #' @examples
-#' # TO DO
+#' pca_res <- tpca_qts(vespa$igp[1:8])
+#' plot(pca_res)
 plot.qtsTPCA <- function(x, what = "PC1", ...) {
   print(autoplot(x, what = what, ...))
 }
