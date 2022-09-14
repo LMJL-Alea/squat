@@ -9,17 +9,17 @@
 #' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
 #'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions measure
 #'   the rotation to be applied to transform attitude at previous time point to
-#'   attitude at the current time point.
+#'   attitude at current time point.
 #'
 #' @export
 #' @examples
-#' # TO DO
+#' derivative_qts(vespa$igp[[1]])
 derivative_qts <- function(qts) {
   qts <- derivative_qts_impl(qts)
   qts[-1, ]
 }
 
-#' QTS Noise Generator
+#' QTS Random Sampling
 #'
 #' This function adds uncorrelated Gaussian noise to the logarithm QTS using an
 #' exponential covariance function.
@@ -27,39 +27,30 @@ derivative_qts <- function(qts) {
 #' See \code{\link[roahd]{exp_cov_function}} for details about the roles of
 #' `alpha` and `beta` in the definition of the covariance operator.
 #'
-#' @param qts A \code{\link[tibble]{tibble}} specifying the input QTS.
-#' @param n An integer specifying how many noisy QTS should be generated.
-#'   Defaults to `1L`.
+#' @param n An integer specifying how many QTS should be generated.
+#' @param mean A \code{\link[tibble]{tibble}} specifying the mean QTS.
 #' @param alpha A positive scalar specifying the variance of each component of
-#'   the log-QTS. Defaults to `0.2`.
+#'   the log-QTS. Defaults to `0.01`.
 #' @param beta A positive scalar specifying the exponential weight. Defaults to
-#'   `0.5`.
+#'   `0.001`.
 #'
 #' @return A list of `n` QTS with added noise as specified by parameters `alpha`
 #'   and `beta`.
 #' @export
 #'
 #' @examples
-#' qts <- tibble::tibble(
-#'   time = seq(0, 1, len = 101),
-#'   w = 0,
-#'   x = cos(2 * pi * time),
-#'   y = time^2,
-#'   z = sin(time)
-#' )
-#' qts <- exp_qts(qts)
-#' qts_n <- add_noise(qts, n = 10)
-add_noise <- function(qts, n = 1, alpha = 0.1, beta = 0.5) {
-  qts <- log_qts(qts)
-  time_grid <- qts$time
+#' rnorm_qts(1, vespa$igp[[1]])
+rnorm_qts <- function(n, mean, alpha = 0.01, beta = 0.001) {
+  mean <- log_qts(mean)
+  time_grid <- mean$time
   C1 <- roahd::exp_cov_function(time_grid, alpha = alpha, beta = beta)
   C2 <- roahd::exp_cov_function(time_grid, alpha = alpha, beta = beta)
   C3 <- roahd::exp_cov_function(time_grid, alpha = alpha, beta = beta)
-  centerline <- rbind(qts$x, qts$y, qts$z)
+  centerline <- rbind(mean$x, mean$y, mean$z)
   CholC1 <- chol(C1)
   CholC2 <- chol(C2)
   CholC3 <- chol(C3)
-  qts <- roahd::generate_gauss_mfdata(
+  mean <- roahd::generate_gauss_mfdata(
     N = n,
     L = 3,
     centerline = centerline,
@@ -70,9 +61,9 @@ add_noise <- function(qts, n = 1, alpha = 0.1, beta = 0.5) {
     tibble(
       time = time_grid,
       w = 0,
-      x = qts[[1]][.x, ],
-      y = qts[[2]][.x, ],
-      z = qts[[3]][.x, ]
+      x = mean[[1]][.x, ],
+      y = mean[[2]][.x, ],
+      z = mean[[3]][.x, ]
     )
   })
   purrr::map(qts_list, exp_qts)
@@ -91,9 +82,12 @@ add_noise <- function(qts, n = 1, alpha = 0.1, beta = 0.5) {
 #' @param by_row A boolean specifying whether the QTS scaling should happen for
 #'   each data point (`by_row = TRUE`) or for each time point (`by_row =
 #'   FALSE`). Defaults to `FALSE`.
-#' @param keep_summary_stats A boolean specifying whether the mean and standard deviation used for standardizing the data. Defaults to `FALSE` in which case only the list of properly rescaled QTS is returned.
+#' @param keep_summary_stats A boolean specifying whether the mean and standard
+#'   deviation used for standardizing the data. Defaults to `FALSE` in which
+#'   case only the list of properly rescaled QTS is returned.
 #'
-#' @return A list of properly rescaled QTS when `keep_summary_stats = FALSE`. Otherwise a list with three components:
+#' @return A list of properly rescaled QTS when `keep_summary_stats = FALSE`.
+#'   Otherwise a list with three components:
 #' - `qts_list`: a list of properly rescaled QTS;
 #' - `mean`: a numeric vector with the quaternion Fréchet mean;
 #' - `sd`: a numeric vector with the quaternion Fréchet standard deviation.
@@ -101,7 +95,8 @@ add_noise <- function(qts, n = 1, alpha = 0.1, beta = 0.5) {
 #' @export
 #'
 #' @examples
-#' # TO DO
+#' qts_list <- scale_qts(vespa$igp)
+#' qts_list[[1]]
 scale_qts <- function(qts_list,
                       center = TRUE,
                       standardize = TRUE,
@@ -142,4 +137,32 @@ scale_qts <- function(qts_list,
     mean_values = purrr::map(std_data, "mean"),
     sd_values = purrr::map_dbl(std_data, "sd")
   )
+}
+
+#' QTS Straightening
+#'
+#' This function straightens a QTS so that the last point equals the first
+#' point.
+#'
+#' @param qts A \code{\link[tibble]{tibble}} specifying a QTS.
+#'
+#' @return A \code{\link[tibble]{tibble}} storing the straightened QTS.
+#' @export
+#'
+#' @examples
+#' straighten_qts(vespa$igp[[1]])
+straighten_qts <- function(qts) {
+  P <- nrow(qts)
+  time_values <- qts$time
+  t1 <- time_values[1]
+  tP <- time_values[P]
+  qts <- log_qts(qts)
+  for (i in 3:5) {
+    y1 <- qts[[i]][1]
+    yP <- qts[[i]][P]
+    a <- (yP - y1) / (tP - t1)
+    qts[[i]] <- qts[[i]] - a * (time_values - t1)
+  }
+  qts$w <- rep(0, P)
+  exp_qts(qts)
 }

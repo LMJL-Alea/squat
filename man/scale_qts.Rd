@@ -27,10 +27,13 @@ QTS once they have been centered. Defaults to \code{TRUE}.}
 \item{by_row}{A boolean specifying whether the QTS scaling should happen for
 each data point (\code{by_row = TRUE}) or for each time point (\code{by_row = FALSE}). Defaults to \code{FALSE}.}
 
-\item{keep_summary_stats}{A boolean specifying whether the mean and standard deviation used for standardizing the data. Defaults to \code{FALSE} in which case only the list of properly rescaled QTS is returned.}
+\item{keep_summary_stats}{A boolean specifying whether the mean and standard
+deviation used for standardizing the data. Defaults to \code{FALSE} in which
+case only the list of properly rescaled QTS is returned.}
 }
 \value{
-A list of properly rescaled QTS when \code{keep_summary_stats = FALSE}. Otherwise a list with three components:
+A list of properly rescaled QTS when \code{keep_summary_stats = FALSE}.
+Otherwise a list with three components:
 \itemize{
 \item \code{qts_list}: a list of properly rescaled QTS;
 \item \code{mean}: a numeric vector with the quaternion Fréchet mean;
@@ -41,5 +44,6 @@ A list of properly rescaled QTS when \code{keep_summary_stats = FALSE}. Otherwis
 QTS Sample Centering and Standardization
 }
 \examples{
-# TO DO
+qts_list <- scale_qts(vespa$igp)
+qts_list[[1]]
 }
