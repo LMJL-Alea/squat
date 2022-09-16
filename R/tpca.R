@@ -18,7 +18,7 @@
 #' @export
 #'
 #' @examples
-#' pca_res <- tpca_qts(vespa$igp[1:8])
+#' res_pca <- tpca_qts(vespa64$igp)
 tpca_qts <- function(qts_list, M = 5, fit = FALSE) {
   check_common_grid <- qts_list |>
     purrr::map("time") |>
@@ -76,7 +76,52 @@ tpca_qts <- function(qts_list, M = 5, fit = FALSE) {
   res
 }
 
+#' Visualization of Tangent PCA for QTS
+#'
+#' @param x An object of class `qtsTPCA` as produced by \code{\link{tpca_qts}}.
+#' @param what A string specifying what kind of visualization the user wants to
+#'   perform. Choices are words starting with `PC` and ending with a PC number
+#'   (in which case the mean QTS is displayed along with its perturbations due
+#'   to the required PC) or `scores` (in which case individuals are projected on
+#'   the required plance). Defaults to `PC1`.
+#' @param ... If `what = "PC?"`, the user can specify whether to plot the QTS in
+#'   the tangent space or in the original space by providing a boolean argument
+#'   `original_space` which defaults to `TRUE`. If `what = "scores"`, the user
+#'   can specify the plane onto which the individuals will be projected by
+#'   providing a length-2 integer vector argument `plane` which defaults to
+#'   `1:2`.
+#'
+#' @return The \code{\link{plot.qtsTPCA}} method does not return anything while
+#'   the \code{\link{autoplot.qtsTPCA}} method returns a
+#'   \code{\link[ggplot2]{ggplot}} object.
+#' @name tpca-visualization
+#'
+#' @examples
+#' res_pca <- tpca_qts(vespa64$igp)
+#'
+#' # You can plot the effect of a PC on the mean
+#' plot(res_pca, what = "PC1")
+#'
+#' # You can plot the data points in a PC plane
+#' plot(res_pca, what = "scores")
+#'
+#' # You can color points according to a categorical variable
+#' if (requireNamespace("ggplot2", quietly = TRUE)) {
+#'   p <- ggplot2::autoplot(res_pca, what = "scores")
+#'   p + ggplot2::geom_point(ggplot2::aes(color = vespa64$V))
+#' }
+NULL
+
+#' @importFrom graphics plot
+#' @export
+#' @rdname tpca-visualization
+plot.qtsTPCA <- function(x, what = "PC1", ...) {
+  print(autoplot(x, what = what, ...))
+}
+
 #' @importFrom ggplot2 autoplot .data
+#' @export
+#' @rdname tpca-visualization
 autoplot.qtsTPCA <- function(x, what = "PC1", ...) {
   dots <- list(...)
   if (substr(what, 1, 2) == "PC") {
@@ -96,33 +141,6 @@ autoplot.qtsTPCA <- function(x, what = "PC1", ...) {
     }
   } else
     cli::cli_abort("The {.code what} argument should be either {.field scores} or a principal component specified starting with {.field PC}.")
-}
-
-#' Visualization of Tangent PCA for QTS
-#'
-#' @param x An object of class `qtsTPCA` as produced by \code{\link{tpca_qts}}.
-#' @param what A string specifying what kind of visualization the user wants to
-#'   perform. Choices are words starting with `PC` and ending with a PC number
-#'   (in which case the mean QTS is displayed along with its perturbations due
-#'   to the required PC) or `scores` (in which case individuals are projected on
-#'   the required plance). Defaults to `PC1`.
-#' @param ... If `what = "PC?"`, the user can specify whether to plot the QTS in
-#'   the tangent space or in the original space by providing a boolean argument
-#'   `original_space` which defaults to `TRUE`. If `what = "scores"`, the user
-#'   can specify the plane onto which the individuals will be projected by
-#'   providing a length-2 integer vector argument `plane` which defaults to
-#'   `1:2`.
-#'
-#' @return NULL
-#' @export
-#'
-#' @importFrom graphics plot
-#'
-#' @examples
-#' pca_res <- tpca_qts(vespa$igp[1:8])
-#' plot(pca_res)
-plot.qtsTPCA <- function(x, what = "PC1", ...) {
-  print(autoplot(x, what = what, ...))
 }
 
 plot_tpca_component <- function(tpca, component = 1, original_space = TRUE) {
@@ -168,7 +186,7 @@ plot_tpca_scores <- function(tpca, plane = 1:2) {
   tibble::tibble(x = scores[, 1], y = scores[, 2]) |>
     ggplot2::ggplot(ggplot2::aes(.data$x, .data$y, label = 1:n)) +
     ggplot2::geom_point() +
-    ggrepel::geom_label_repel() +
+    ggrepel::geom_label_repel(seed = 1234) +
     ggplot2::theme_linedraw() +
     ggplot2::labs(
       title = cli::pluralize("Individuals projected on the PC{plane[1]}-{plane[2]} plane"),

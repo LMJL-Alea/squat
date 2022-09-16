@@ -46,7 +46,14 @@ Imports:
     RcppEigen,
     roahd,
     tibble,
-    tidyr
+    tidyr,
+    vdiffr,
+    withr
 Roxygen: list(markdown = TRUE)
 Depends: 
     R (>= 4.1.0)
+Suggests: 
+    covr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+URL: https://lmjl-alea.github.io/squat/

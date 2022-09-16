@@ -2,7 +2,7 @@
 % Please edit documentation in R/kmeans.R
 \name{kmeans_qts}
 \alias{kmeans_qts}
-\title{QTS K-Mean Alignment Algorithm}
+\title{QTS K-Means Alignment Algorithm}
 \usage{
 kmeans_qts(
   qts_list,
@@ -26,7 +26,7 @@ to \code{1L}.}
 Choices are \code{mean} and \code{medoid}. Defaults to \code{mean}.}
 
 \item{diss}{A string specifying which type of dissimilarity should be used.
-Choices are \code{l1} and \code{pearson}. Defaults to \code{l2}.}
+Choices are \code{l2} and \code{pearson}. Defaults to \code{l2}.}
 
 \item{warping}{A string specifying which class of warping functions should be
 used. Choices are \code{none}, \code{shift}, \code{dilation} and \code{affine}. Defaults to
@@ -47,8 +47,9 @@ k-mean alignment algorithm run.
 }
 \description{
 This function massages the input quaternion time series to feed them into the
-k-mean alignment algorithm for jointly clustering and aligning the input QTS.
+k-means alignment algorithm for jointly clustering and aligning the input
+QTS.
 }
 \examples{
-# TO DO
+res_kma <- kmeans_qts(vespa64$igp, k = 2, nstart = 1)
 }

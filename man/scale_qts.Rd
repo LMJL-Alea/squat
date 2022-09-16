@@ -13,11 +13,11 @@ scale_qts(
 )
 }
 \arguments{
-\item{qts_list}{A list of quaternion time series stored as
-\code{\link[tibble]{tibble}}s with columns \code{time}, \code{w}, \code{x}, \code{y} and \code{z}.}
+\item{qts_list}{A list of objects of class \code{\link{qts}} representing a
+sample of QTS observations.}
 
-\item{center}{A boolean specifying whether to center the sample of QTS or
-not. If set to \code{FALSE}, the original sample is returned, meaning that no
+\item{center}{A boolean specifying whether to center the sample of QTS. If
+set to \code{FALSE}, the original sample is returned, meaning that no
 standardization is performed regardless of whether argument \code{standardize}
 was set to \code{TRUE} or not. Defaults to \code{TRUE}.}
 
@@ -32,10 +32,12 @@ deviation used for standardizing the data. Defaults to \code{FALSE} in which
 case only the list of properly rescaled QTS is returned.}
 }
 \value{
-A list of properly rescaled QTS when \code{keep_summary_stats = FALSE}.
+A list of properly rescaled QTS stored as objects of class
+\code{\link{qts}} when \code{keep_summary_stats = FALSE}.
 Otherwise a list with three components:
 \itemize{
-\item \code{qts_list}: a list of properly rescaled QTS;
+\item \code{qts_list}: a list of properly rescaled QTS stored as objects of class
+\code{\link{qts}};
 \item \code{mean}: a numeric vector with the quaternion Fréchet mean;
 \item \code{sd}: a numeric vector with the quaternion Fréchet standard deviation.
 }

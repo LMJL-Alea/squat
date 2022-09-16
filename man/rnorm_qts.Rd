@@ -4,12 +4,12 @@
 \alias{rnorm_qts}
 \title{QTS Random Sampling}
 \usage{
-rnorm_qts(n, mean, alpha = 0.01, beta = 0.001)
+rnorm_qts(n, mean_qts, alpha = 0.01, beta = 0.001)
 }
 \arguments{
 \item{n}{An integer specifying how many QTS should be generated.}
 
-\item{mean}{A \code{\link[tibble]{tibble}} specifying the mean QTS.}
+\item{mean_qts}{An object of class \code{\link{qts}} specifying the mean QTS.}
 
 \item{alpha}{A positive scalar specifying the variance of each component of
 the log-QTS. Defaults to \code{0.01}.}
@@ -18,8 +18,8 @@ the log-QTS. Defaults to \code{0.01}.}
 \code{0.001}.}
 }
 \value{
-A list of \code{n} QTS with added noise as specified by parameters \code{alpha}
-and \code{beta}.
+A list of \code{n} objects of class \code{\link{qts}} with added noise as
+specified by parameters \code{alpha} and \code{beta}.
 }
 \description{
 This function adds uncorrelated Gaussian noise to the logarithm QTS using an

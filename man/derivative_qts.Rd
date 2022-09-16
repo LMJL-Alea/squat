@@ -7,12 +7,10 @@
 derivative_qts(qts)
 }
 \arguments{
-\item{qts}{A quaternion time series stored as a \code{\link[tibble]{tibble}}
-with columns \code{time}, \code{w}, \code{x}, \code{y} and \code{z}.}
+\item{qts}{An object of class \code{\link{qts}}.}
 }
 \value{
-A quaternion time series stored as a \code{\link[tibble]{tibble}}
-with columns \code{time}, \code{w}, \code{x}, \code{y} and \code{z} in which quaternions measure
+An object of class \code{\link{qts}} in which quaternions measure
 the rotation to be applied to transform attitude at previous time point to
 attitude at current time point.
 }

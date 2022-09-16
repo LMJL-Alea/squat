@@ -1,7 +1,8 @@
-#' QTS K-Mean Alignment Algorithm
+#' QTS K-Means Alignment Algorithm
 #'
 #' This function massages the input quaternion time series to feed them into the
-#' k-mean alignment algorithm for jointly clustering and aligning the input QTS.
+#' k-means alignment algorithm for jointly clustering and aligning the input
+#' QTS.
 #'
 #' @param qts_list A list of QTS stored as \code{\link[tibble]{tibble}}s with
 #'   columns `time`, `w`, `x`, `y` and `z`.
@@ -10,7 +11,7 @@
 #' @param centroid A string specifying which type of centroid should be used.
 #'   Choices are `mean` and `medoid`. Defaults to `mean`.
 #' @param diss A string specifying which type of dissimilarity should be used.
-#'   Choices are `l1` and `pearson`. Defaults to `l2`.
+#'   Choices are `l2` and `pearson`. Defaults to `l2`.
 #' @param warping A string specifying which class of warping functions should be
 #'   used. Choices are `none`, `shift`, `dilation` and `affine`. Defaults to
 #'   `affine`.
@@ -26,7 +27,7 @@
 #' @export
 #'
 #' @examples
-#' # TO DO
+#' res_kma <- kmeans_qts(vespa64$igp, k = 2, nstart = 1)
 kmeans_qts <-function(qts_list,
                       k = 1,
                       centroid = "mean",

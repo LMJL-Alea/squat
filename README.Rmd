@@ -1,25 +1,33 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
 
 # squat
 
 <!-- badges: start -->
-
 [![check-standard](https://github.com/LMJL-Alea/squat/workflows/R-CMD-check/badge.svg)](https://github.com/LMJL-Alea/squat/actions)
 [![test-coverage](https://github.com/LMJL-Alea/squat/workflows/test-coverage/badge.svg)](https://github.com/LMJL-Alea/squat/actions)
-[![Codecov test
-coverage](https://codecov.io/gh/LMJL-Alea/squat/branch/master/graph/badge.svg)](https://app.codecov.io/gh/LMJL-Alea/squat?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/LMJL-Alea/squat/branch/master/graph/badge.svg)](https://app.codecov.io/gh/LMJL-Alea/squat?branch=master)
 [![pkgdown](https://github.com/LMJL-Alea/squat/workflows/pkgdown/badge.svg)](https://github.com/LMJL-Alea/squat/actions)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/squat)](https://CRAN.R-project.org/package=squat)
+[![CRAN status](https://www.r-pkg.org/badges/version/squat)](https://CRAN.R-project.org/package=squat)
 <!-- badges: end -->
 
-The goal of squat is to …
+The goal of squat is to ...
 
 ## Installation
 
-You can install the development version of squat from
-[GitHub](https://github.com/) with:
+You can install the development version of squat from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -30,7 +38,7 @@ devtools::install_github("LMJL-Alea/squat")
 
 This is a basic example which shows you how to solve a common problem:
 
-``` r
+```{r example}
 library(squat)
 ## basic example code
 ```

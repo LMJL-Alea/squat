@@ -7,10 +7,10 @@
 straighten_qts(qts)
 }
 \arguments{
-\item{qts}{A \code{\link[tibble]{tibble}} specifying a QTS.}
+\item{qts}{An object of class \code{\link{qts}}.}
 }
 \value{
-A \code{\link[tibble]{tibble}} storing the straightened QTS.
+An object of class \code{\link{qts}} storing the straightened QTS.
 }
 \description{
 This function straightens a QTS so that the last point equals the first
