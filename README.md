@@ -14,7 +14,8 @@ coverage](https://codecov.io/gh/LMJL-Alea/squat/branch/master/graph/badge.svg)](
 status](https://www.r-pkg.org/badges/version/squat)](https://CRAN.R-project.org/package=squat)
 <!-- badges: end -->
 
-The goal of squat is to …
+The goal of squat is to provide extensions of common statistical methods
+for the analysis of unit quaternion time series.
 
 ## Installation
 
