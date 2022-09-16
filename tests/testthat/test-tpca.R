@@ -5,6 +5,8 @@ test_that("The function tpca_qts() works", {
 
 test_that("Visualization functions for PCA work", {
   skip_if_not_installed("vdiffr")
+  skip_on_covr()
+  skip_on_ci()
   res_pca <- tpca_qts(vespa64$igp)
   vdiffr::expect_doppelganger(
     title = "PC plot",
