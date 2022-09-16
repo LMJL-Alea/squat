@@ -4,6 +4,14 @@ test_that("The function tpca_qts() works", {
 })
 
 test_that("Visualization functions for PCA work", {
+  res_pca <- tpca_qts(vespa64$igp)
+  p <- ggplot2::autoplot(res_pca, what = "PC1")
+  expect_equal(dim(p$data), c(1212, 4))
+  p <- ggplot2::autoplot(res_pca, what = "scores")
+  expect_equal(dim(p$data), c(64, 2))
+})
+
+test_that("Visualization functions for PCA work", {
   skip_if_not_installed("vdiffr")
   skip_on_covr()
   skip_on_ci()
