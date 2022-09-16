@@ -48,7 +48,7 @@ tpca_qts <- function(qts_list, M = 5, fit = FALSE) {
       purrr::reduce(rbind)
   )
   mfd <- funData::multiFunData(fd_x, fd_y, fd_z)
-  uniExpansions <- purrr::map(1:3, ~ list(type = "uFPCA"))
+  uniExpansions <- purrr::map(1:3, ~ list(type = "splines1D"))
   tpca <- MFPCA::MFPCA(mfd, M = M, uniExpansions = uniExpansions, fit = fit)
   mean_qts <- tpca$meanFunction |>
     purrr::map(~ as.numeric(.x@X)) |>
