@@ -3,7 +3,7 @@ test_that("The function tpca_qts() works", {
   expect_snapshot(res_pca)
 })
 
-test_that("Visualization functions for PCA work", {
+test_that("Visualization code for PCA work", {
   res_pca <- tpca_qts(vespa64$igp)
   p <- ggplot2::autoplot(res_pca, what = "PC1")
   expect_equal(dim(p$data), c(1212, 4))
@@ -13,8 +13,8 @@ test_that("Visualization functions for PCA work", {
 
 test_that("Visualization functions for PCA work", {
   skip_if_not_installed("vdiffr")
-  # skip_on_covr()
-  # skip_on_ci()
+  skip_on_covr()
+  skip_on_ci()
   res_pca <- tpca_qts(vespa64$igp)
   vdiffr::expect_doppelganger(
     title = "PC plot",
