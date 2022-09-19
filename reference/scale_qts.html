@@ -43,7 +43,7 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scale_qts</span><span class="op">(</span></span>
-<span>  <span class="va">qts_list</span>,</span>
+<span>  <span class="va">x</span>,</span>
 <span>  center <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  by_row <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -53,9 +53,9 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>qts_list</dt>
-<dd><p>A list of objects of class <code><a href="qts.html">qts</a></code> representing a
-sample of QTS observations.</p></dd>
+    <dl><dt>x</dt>
+<dd><p>An object of class <code><a href="qts_sample.html">qts_sample</a></code> representing a sample of
+observed QTS.</p></dd>
 
 
 <dt>center</dt>
@@ -85,31 +85,31 @@ case only the list of properly rescaled QTS is returned.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A list of properly rescaled QTS stored as objects of class
-<code><a href="qts.html">qts</a></code> when <code>keep_summary_stats = FALSE</code>.
-Otherwise a list with three components:</p><ul><li><p><code>qts_list</code>: a list of properly rescaled QTS stored as objects of class
-<code><a href="qts.html">qts</a></code>;</p></li>
+<p>A list of properly rescaled QTS stored as an object of class
+<code><a href="qts_sample.html">qts_sample</a></code> when <code>keep_summary_stats = FALSE</code>.
+Otherwise a list with three components:</p><ul><li><p><code>rescaled_sample</code>: a list of properly rescaled QTS stored as an object of
+class <code><a href="qts_sample.html">qts_sample</a></code>;</p></li>
 <li><p><code>mean</code>: a numeric vector with the quaternion Fréchet mean;</p></li>
 <li><p><code>sd</code>: a numeric vector with the quaternion Fréchet standard deviation.</p></li>
 </ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">qts_list</span> <span class="op">&lt;-</span> <span class="fu">scale_qts</span><span class="op">(</span><span class="va">vespa</span><span class="op">$</span><span class="va">igp</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">qts_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">scale_qts</span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 101 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     time     w        x         y        z</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     0  1.00 -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">14</span>  0.011<span style="text-decoration: underline;">0</span>   -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">98</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1  1.00 -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">34</span>  0.009<span style="text-decoration: underline;">78</span>  -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">92</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     2  1.00 -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">81</span>  0.008<span style="text-decoration: underline;">25</span>  -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">95</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     3  1.00 -<span style="color: #BB0000;">0.008</span><span style="color: #BB0000; text-decoration: underline;">60</span>  0.006<span style="text-decoration: underline;">33</span>  -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">11</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     4  1.00 -<span style="color: #BB0000;">0.008</span><span style="color: #BB0000; text-decoration: underline;">83</span>  0.004<span style="text-decoration: underline;">99</span>  -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">26</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     5  1.00 -<span style="color: #BB0000;">0.009</span><span style="color: #BB0000; text-decoration: underline;">33</span>  0.003<span style="text-decoration: underline;">70</span>  -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">34</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     6  1.00 -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">1</span>   0.002<span style="text-decoration: underline;">50</span>  -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">37</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     7  1.00 -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">6</span>   0.001<span style="text-decoration: underline;">35</span>  -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">35</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     8  1.00 -<span style="color: #BB0000;">0.011</span><span style="color: #BB0000; text-decoration: underline;">3</span>   0.000<span style="text-decoration: underline;">223</span> -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">28</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     9  1.00 -<span style="color: #BB0000;">0.012</span><span style="color: #BB0000; text-decoration: underline;">0</span>  -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">895</span> -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">19</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     time     w       x         y        z</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     0 1.00  -<span style="color: #BB0000;">0.018</span><span style="color: #BB0000; text-decoration: underline;">5</span>  0.022<span style="text-decoration: underline;">6</span>   -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">97</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1 1.00  -<span style="color: #BB0000;">0.020</span><span style="color: #BB0000; text-decoration: underline;">0</span>  0.019<span style="text-decoration: underline;">5</span>   -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">91</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     2 1.00  -<span style="color: #BB0000;">0.021</span><span style="color: #BB0000; text-decoration: underline;">7</span>  0.015<span style="text-decoration: underline;">9</span>   -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">14</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     3 1.00  -<span style="color: #BB0000;">0.024</span><span style="color: #BB0000; text-decoration: underline;">1</span>  0.012<span style="text-decoration: underline;">1</span>   -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">73</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     4 1.00  -<span style="color: #BB0000;">0.026</span><span style="color: #BB0000; text-decoration: underline;">1</span>  0.008<span style="text-decoration: underline;">92</span>  -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">43</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     5 1.00  -<span style="color: #BB0000;">0.028</span><span style="color: #BB0000; text-decoration: underline;">0</span>  0.006<span style="text-decoration: underline;">19</span>  -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">07</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     6 1.00  -<span style="color: #BB0000;">0.029</span><span style="color: #BB0000; text-decoration: underline;">5</span>  0.004<span style="text-decoration: underline;">07</span>  -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">58</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     7 1.00  -<span style="color: #BB0000;">0.030</span><span style="color: #BB0000; text-decoration: underline;">3</span>  0.002<span style="text-decoration: underline;">42</span>  -<span style="color: #BB0000;">0.008</span><span style="color: #BB0000; text-decoration: underline;">07</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     8 0.999 -<span style="color: #BB0000;">0.030</span><span style="color: #BB0000; text-decoration: underline;">7</span>  0.001<span style="text-decoration: underline;">00</span>  -<span style="color: #BB0000;">0.008</span><span style="color: #BB0000; text-decoration: underline;">65</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     9 0.999 -<span style="color: #BB0000;">0.030</span><span style="color: #BB0000; text-decoration: underline;">8</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">556</span> -<span style="color: #BB0000;">0.009</span><span style="color: #BB0000; text-decoration: underline;">36</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 91 more rows</span></span>
 </code></pre></div>
     </div>
