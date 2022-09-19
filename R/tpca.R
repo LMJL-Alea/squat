@@ -183,17 +183,15 @@ plot_tpca_scores <- function(tpca, plane = 1:2) {
     cli::cli_abort("The {.code plane} argument should be of length two.")
   scores <- tpca$tpca$scores[, plane]
   n <- nrow(scores)
-  withr::with_seed(1234, {
-    tibble::tibble(x = scores[, 1], y = scores[, 2]) |>
-      ggplot2::ggplot(ggplot2::aes(.data$x, .data$y, label = 1:n)) +
-      ggplot2::geom_point() +
-      ggrepel::geom_label_repel(seed = 1234) +
-      ggplot2::theme_linedraw() +
-      ggplot2::labs(
-        title = cli::pluralize("Individuals projected on the PC{plane[1]}-{plane[2]} plane"),
-        subtitle = cli::pluralize("Combined percentage of variance explained: {round(sum(tpca$tpca$values[plane]) * 100, digits = 1)}%"),
-        x = cli::pluralize("PC{plane[1]} ({round(sum(tpca$tpca$values[plane[1]]) * 100, digits = 1)}%)"),
-        y = cli::pluralize("PC{plane[2]} ({round(sum(tpca$tpca$values[plane[2]]) * 100, digits = 1)}%)")
-      )
-  })
+  tibble::tibble(x = scores[, 1], y = scores[, 2]) |>
+    ggplot2::ggplot(ggplot2::aes(.data$x, .data$y, label = 1:n)) +
+    ggplot2::geom_point() +
+    ggrepel::geom_label_repel(seed = 1234) +
+    ggplot2::theme_linedraw() +
+    ggplot2::labs(
+      title = cli::pluralize("Individuals projected on the PC{plane[1]}-{plane[2]} plane"),
+      subtitle = cli::pluralize("Combined percentage of variance explained: {round(sum(tpca$tpca$values[plane]) * 100, digits = 1)}%"),
+      x = cli::pluralize("PC{plane[1]} ({round(sum(tpca$tpca$values[plane[1]]) * 100, digits = 1)}%)"),
+      y = cli::pluralize("PC{plane[2]} ({round(sum(tpca$tpca$values[plane[2]]) * 100, digits = 1)}%)")
+    )
 }
