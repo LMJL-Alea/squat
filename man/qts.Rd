@@ -20,7 +20,7 @@ An object of class \code{\link{qts}}.
 \description{
 A collection of functions that implements the QTS class. It currently
 provides the \code{as_qts()} function for QTS coercion of tibbles and the
-\code{is_qts()} function for checking is an object is a QTS.
+\code{is_qts()} function for checking if an object is a QTS.
 }
 \details{
 A quaternion time series (QTS) is stored as a \code{\link[tibble]{tibble}}
@@ -39,7 +39,7 @@ quaternions.
 }
 }
 \examples{
-qts1 <- vespa$igp[[1]]
+qts1 <- vespa64$igp[[1]]
 qts2 <- as_qts(qts1)
 is_qts(qts1)
 is_qts(qts2)

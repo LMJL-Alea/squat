@@ -108,5 +108,5 @@
       
       
       attr(,"class")
-      [1] "qtsTPCA"
+      [1] "qts_tpca"
 

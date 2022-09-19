@@ -95,13 +95,13 @@ kmeans_qts <-function(qts_list,
 
   opt <- solutions[[which.min(wss_vector)]]
 
-  qts_center <- tibble(
+  qts_center <- as_qts(tibble(
     time = opt$x_centers_final[1, ],
     w    = 0,
     x    = opt$y_centers_final[1, 1, ],
     y    = opt$y_centers_final[1, 2, ],
     z    = opt$y_centers_final[1, 3, ]
-  )
+  ))
 
   list(
     qts_aligned = purrr::imap(qts_list, ~ {

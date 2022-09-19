@@ -1,0 +1,6 @@
+#ifndef SQUATQTSSAMPLE_H
+#define SQUATQTSSAMPLE_H
+
+
+
+#endif /* SQUATQTSSAMPLE_H */

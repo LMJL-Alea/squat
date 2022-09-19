@@ -70,6 +70,18 @@ GetGeodesicMean <- function(values) {
     .Call(`_squat_GetGeodesicMean`, values)
 }
 
+gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
+    .Call(`_squat_gmean`, quaternionSample, maxIterations, maxEpsilon)
+}
+
+gmedian <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
+    .Call(`_squat_gmedian`, quaternionSample, maxIterations, maxEpsilon)
+}
+
+geometric_mean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
+    .Call(`_squat_geometric_mean`, quaternionSample, maxIterations, maxEpsilon)
+}
+
 #' QTS Transformation To Distance Time Series
 #'
 #' This function computes a real-valued time series reporting the pointwise
@@ -180,42 +192,12 @@ derivative_qts_impl <- function(qts) {
     .Call(`_squat_derivative_qts_impl`, qts)
 }
 
-#' QTS Logarithm
-#'
-#' This function computes the logarithm of a quaternion time series as the time
-#' series of the quaternion logarithms.
-#'
-#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z`.
-#'
-#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions have been
-#'   replaced by their logarithm.
-#'
-#' @export
-#' @examples
-#' # TO DO
-log_qts <- function(qts) {
-    .Call(`_squat_log_qts`, qts)
+log_qts_impl <- function(qts) {
+    .Call(`_squat_log_qts_impl`, qts)
 }
 
-#' QTS Exponential
-#'
-#' This function computes the exponential of a quaternion time series as the
-#' time series of the quaternion exponentials.
-#'
-#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z`.
-#'
-#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions have been
-#'   replaced by their exponential.
-#'
-#' @export
-#' @examples
-#' # TO DO
-exp_qts <- function(qts) {
-    .Call(`_squat_exp_qts`, qts)
+exp_qts_impl <- function(qts) {
+    .Call(`_squat_exp_qts_impl`, qts)
 }
 
 #' QTS Centering and Standardization
@@ -317,18 +299,6 @@ qts2avts <- function(qts, fixed_frame = "global") {
 #' # TO DO
 avts2qts <- function(avts, init_t, init_q) {
     .Call(`_squat_avts2qts`, avts, init_t, init_q)
-}
-
-gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
-    .Call(`_squat_gmean`, quaternionSample, maxIterations, maxEpsilon)
-}
-
-gmedian <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
-    .Call(`_squat_gmedian`, quaternionSample, maxIterations, maxEpsilon)
-}
-
-geometric_mean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
-    .Call(`_squat_geometric_mean`, quaternionSample, maxIterations, maxEpsilon)
 }
 
 # Register entry points for exported C++ functions

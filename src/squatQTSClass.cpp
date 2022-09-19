@@ -1,4 +1,4 @@
-#include "qts.h"
+#include "squatQTSClass.h"
 #include "rotations.h"
 #include "representations.h"
 #include <RcppEigen.h>
@@ -227,7 +227,7 @@ Rcpp::DataFrame derivative_qts_impl(const Rcpp::DataFrame &qts)
   return outValue;
 }
 
-Rcpp::DataFrame log_qts(const Rcpp::DataFrame &qts)
+Rcpp::DataFrame log_qts_impl(const Rcpp::DataFrame &qts)
 {
   unsigned int nGrid = qts.nrows();
   Rcpp::DataFrame outValue = Rcpp::clone(qts);
@@ -247,10 +247,11 @@ Rcpp::DataFrame log_qts(const Rcpp::DataFrame &qts)
     zValues(i) = qValue.z();
   }
 
+  outValue.attr("class") = Rcpp::CharacterVector::create("qts", "tbl_df", "tbl", "data.frame");
   return outValue;
 }
 
-Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts)
+Rcpp::DataFrame exp_qts_impl(const Rcpp::DataFrame &qts)
 {
   unsigned int nGrid = qts.nrows();
   Rcpp::DataFrame outValue = Rcpp::clone(qts);
@@ -270,6 +271,7 @@ Rcpp::DataFrame exp_qts(const Rcpp::DataFrame &qts)
     zValues(i) = qValue.z();
   }
 
+  outValue.attr("class") = Rcpp::CharacterVector::create("qts", "tbl_df", "tbl", "data.frame");
   return outValue;
 }
 
@@ -310,7 +312,7 @@ Rcpp::List centring_qts(const Rcpp::DataFrame &qts, const bool standardize)
   double sdValue = 0;
   if (standardize)
   {
-    outValue = log_qts(outValue);
+    outValue = log_qts_impl(outValue);
     sdValue = std::sqrt(gvariance(qValues, meanValue));
     wValues = outValue["w"];
     xValues = outValue["x"];
@@ -320,7 +322,7 @@ Rcpp::List centring_qts(const Rcpp::DataFrame &qts, const bool standardize)
     xValues = xValues / sdValue;
     yValues = yValues / sdValue;
     zValues = zValues / sdValue;
-    outValue = exp_qts(outValue);
+    outValue = exp_qts_impl(outValue);
   }
 
   return Rcpp::List::create(

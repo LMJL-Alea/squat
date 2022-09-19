@@ -1,34 +1,35 @@
 #' Tangent PCA for QTS Data
 #'
-#' @param qts_list A list specifying the sample of QTS.
+#' @param x An object of class \code{\link{qts_sample}}.
 #' @param M An integer value specifying the number of principal component to
 #'   compute. Defaults to `5L`.
-#' @param fit A boolean specifying whether the resulting `qtsTPCA` object should
-#'   store a reconstruction of the sample from the retained PCs. Defaults to
-#'   `FALSE`.
+#' @param fit A boolean specifying whether the resulting `qts_tpca` object
+#'   should store a reconstruction of the sample from the retained PCs. Defaults
+#'   to `FALSE`.
 #'
-#' @return An object of class `qtsTPCA` which is a list with the following
+#' @return An object of class `qts_tpca` which is a list with the following
 #'   components:
 #' - An object of class `MFPCAfit` as produced by the function
 #' \code{\link[MFPCA]{MFPCA}},
-#' - A \code{\link[tibble]{tibble}} containing the mean QTS,
-#' - A list of \code{\link[tibble]{tibble}}s containing the required principal
-#' components.
+#' - An object of class \code{\link{qts}} containing the mean QTS,
+#' - A list of \code{\link{qts}}s containing the required principal components.
 #'
 #' @export
 #'
 #' @examples
 #' res_pca <- tpca_qts(vespa64$igp)
-tpca_qts <- function(qts_list, M = 5, fit = FALSE) {
-  check_common_grid <- qts_list |>
+tpca_qts <- function(x, M = 5, fit = FALSE) {
+  if (!is_qts_sample(x))
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts_sample}.")
+  check_common_grid <- x |>
     purrr::map("time") |>
     purrr::reduce(rbind) |>
     apply(MARGIN = 2, FUN = stats::var) |>
     sum()
   if (check_common_grid > 0)
     cli::cli_abort("All input QTS should be evaluated on the same grid.")
-  grid <- qts_list[[1]]$time
-  qts_log <- purrr::map(qts_list, log_qts)
+  grid <- x[[1]]$time
+  qts_log <- purrr::map(x, log_qts)
   fd_x <- funData::funData(
     argvals = grid,
     X = qts_log |>
@@ -56,29 +57,29 @@ tpca_qts <- function(qts_list, M = 5, fit = FALSE) {
     tibble::as_tibble()
   mean_qts$time <- grid
   mean_qts$w <- 0
-  mean_qts <- exp_qts(mean_qts[c(4, 5, 1:3)])
+  mean_qts <- exp_qts(as_qts(mean_qts[c(4, 5, 1:3)]))
   res <- list(
     tpca = tpca,
     mean_qts = mean_qts,
     principal_qts = tpca$functions |>
       purrr::map(~ purrr::array_tree(.x@X, margin = 1)) |>
       purrr::transpose() |>
-      purrr::map(~ tibble::tibble(
+      purrr::map(~ as_qts(tibble::tibble(
         time = grid,
         w = 0,
         x = .x[[1]],
         y = .x[[2]],
         z = .x[[3]]
-      )) |>
+      ))) |>
       purrr::map(exp_qts)
   )
-  class(res) <- "qtsTPCA"
+  class(res) <- "qts_tpca"
   res
 }
 
 #' Visualization of Tangent PCA for QTS
 #'
-#' @param x An object of class `qtsTPCA` as produced by \code{\link{tpca_qts}}.
+#' @param x An object of class `qts_tpca` as produced by \code{\link{tpca_qts}}.
 #' @param what A string specifying what kind of visualization the user wants to
 #'   perform. Choices are words starting with `PC` and ending with a PC number
 #'   (in which case the mean QTS is displayed along with its perturbations due
@@ -91,8 +92,8 @@ tpca_qts <- function(qts_list, M = 5, fit = FALSE) {
 #'   providing a length-2 integer vector argument `plane` which defaults to
 #'   `1:2`.
 #'
-#' @return The \code{\link{plot.qtsTPCA}} method does not return anything while
-#'   the \code{\link{autoplot.qtsTPCA}} method returns a
+#' @return The \code{\link{plot.qts_tpca}} method does not return anything while
+#'   the \code{\link{autoplot.qts_tpca}} method returns a
 #'   \code{\link[ggplot2]{ggplot}} object.
 #' @name tpca-visualization
 #'
@@ -115,14 +116,14 @@ NULL
 #' @importFrom graphics plot
 #' @export
 #' @rdname tpca-visualization
-plot.qtsTPCA <- function(x, what = "PC1", ...) {
+plot.qts_tpca <- function(x, what = "PC1", ...) {
   print(autoplot(x, what = what, ...))
 }
 
 #' @importFrom ggplot2 autoplot .data
 #' @export
 #' @rdname tpca-visualization
-autoplot.qtsTPCA <- function(x, what = "PC1", ...) {
+autoplot.qts_tpca <- function(x, what = "PC1", ...) {
   dots <- list(...)
   if (substr(what, 1, 2) == "PC") {
     component <- as.numeric(substr(what, 3, nchar(what)))
@@ -183,17 +184,15 @@ plot_tpca_scores <- function(tpca, plane = 1:2) {
     cli::cli_abort("The {.code plane} argument should be of length two.")
   scores <- tpca$tpca$scores[, plane]
   n <- nrow(scores)
-  withr::with_seed(1234, {
-    tibble::tibble(x = scores[, 1], y = scores[, 2]) |>
-      ggplot2::ggplot(ggplot2::aes(.data$x, .data$y, label = 1:n)) +
-      ggplot2::geom_point() +
-      ggrepel::geom_label_repel(seed = 1234) +
-      ggplot2::theme_linedraw() +
-      ggplot2::labs(
-        title = cli::pluralize("Individuals projected on the PC{plane[1]}-{plane[2]} plane"),
-        subtitle = cli::pluralize("Combined percentage of variance explained: {round(sum(tpca$tpca$values[plane]) * 100, digits = 1)}%"),
-        x = cli::pluralize("PC{plane[1]} ({round(sum(tpca$tpca$values[plane[1]]) * 100, digits = 1)}%)"),
-        y = cli::pluralize("PC{plane[2]} ({round(sum(tpca$tpca$values[plane[2]]) * 100, digits = 1)}%)")
-      )
-  })
+  tibble::tibble(x = scores[, 1], y = scores[, 2]) |>
+    ggplot2::ggplot(ggplot2::aes(.data$x, .data$y, label = 1:n)) +
+    ggplot2::geom_point() +
+    ggrepel::geom_label_repel(seed = 1234) +
+    ggplot2::theme_linedraw() +
+    ggplot2::labs(
+      title = cli::pluralize("Individuals projected on the PC{plane[1]}-{plane[2]} plane"),
+      subtitle = cli::pluralize("Combined percentage of variance explained: {round(sum(tpca$tpca$values[plane]) * 100, digits = 1)}%"),
+      x = cli::pluralize("PC{plane[1]} ({round(sum(tpca$tpca$values[plane[1]]) * 100, digits = 1)}%)"),
+      y = cli::pluralize("PC{plane[2]} ({round(sum(tpca$tpca$values[plane[2]]) * 100, digits = 1)}%)")
+    )
 }

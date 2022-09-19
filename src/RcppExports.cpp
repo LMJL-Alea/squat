@@ -211,157 +211,6 @@ RcppExport SEXP _squat_GetGeodesicMean(SEXP valuesSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// qts2distance
-Rcpp::DataFrame qts2distance(const Rcpp::DataFrame& first_qts, const Rcpp::DataFrame& second_qts);
-RcppExport SEXP _squat_qts2distance(SEXP first_qtsSEXP, SEXP second_qtsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type first_qts(first_qtsSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type second_qts(second_qtsSEXP);
-    rcpp_result_gen = Rcpp::wrap(qts2distance(first_qts, second_qts));
-    return rcpp_result_gen;
-END_RCPP
-}
-// qts2norm
-Rcpp::DataFrame qts2norm(const Rcpp::DataFrame& qts, const bool disable_normalization);
-RcppExport SEXP _squat_qts2norm(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
-    rcpp_result_gen = Rcpp::wrap(qts2norm(qts, disable_normalization));
-    return rcpp_result_gen;
-END_RCPP
-}
-// qts2angle
-Rcpp::DataFrame qts2angle(const Rcpp::DataFrame& qts, const bool disable_normalization);
-RcppExport SEXP _squat_qts2angle(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
-    rcpp_result_gen = Rcpp::wrap(qts2angle(qts, disable_normalization));
-    return rcpp_result_gen;
-END_RCPP
-}
-// reorient_qts
-Rcpp::DataFrame reorient_qts(const Rcpp::DataFrame& qts, const bool disable_normalization);
-RcppExport SEXP _squat_reorient_qts(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
-    rcpp_result_gen = Rcpp::wrap(reorient_qts(qts, disable_normalization));
-    return rcpp_result_gen;
-END_RCPP
-}
-// normalize_qts
-Rcpp::DataFrame normalize_qts(const Rcpp::DataFrame& qts);
-RcppExport SEXP _squat_normalize_qts(SEXP qtsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    rcpp_result_gen = Rcpp::wrap(normalize_qts(qts));
-    return rcpp_result_gen;
-END_RCPP
-}
-// derivative_qts_impl
-Rcpp::DataFrame derivative_qts_impl(const Rcpp::DataFrame& qts);
-RcppExport SEXP _squat_derivative_qts_impl(SEXP qtsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    rcpp_result_gen = Rcpp::wrap(derivative_qts_impl(qts));
-    return rcpp_result_gen;
-END_RCPP
-}
-// log_qts
-Rcpp::DataFrame log_qts(const Rcpp::DataFrame& qts);
-RcppExport SEXP _squat_log_qts(SEXP qtsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    rcpp_result_gen = Rcpp::wrap(log_qts(qts));
-    return rcpp_result_gen;
-END_RCPP
-}
-// exp_qts
-Rcpp::DataFrame exp_qts(const Rcpp::DataFrame& qts);
-RcppExport SEXP _squat_exp_qts(SEXP qtsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    rcpp_result_gen = Rcpp::wrap(exp_qts(qts));
-    return rcpp_result_gen;
-END_RCPP
-}
-// centring_qts
-Rcpp::List centring_qts(const Rcpp::DataFrame& qts, const bool standardize);
-RcppExport SEXP _squat_centring_qts(SEXP qtsSEXP, SEXP standardizeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    Rcpp::traits::input_parameter< const bool >::type standardize(standardizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(centring_qts(qts, standardize));
-    return rcpp_result_gen;
-END_RCPP
-}
-// mean_qts
-Rcpp::DataFrame mean_qts(const Rcpp::List& qts_list);
-RcppExport SEXP _squat_mean_qts(SEXP qts_listSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type qts_list(qts_listSEXP);
-    rcpp_result_gen = Rcpp::wrap(mean_qts(qts_list));
-    return rcpp_result_gen;
-END_RCPP
-}
-// median_qts
-Rcpp::DataFrame median_qts(const Rcpp::List& qts_list);
-RcppExport SEXP _squat_median_qts(SEXP qts_listSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type qts_list(qts_listSEXP);
-    rcpp_result_gen = Rcpp::wrap(median_qts(qts_list));
-    return rcpp_result_gen;
-END_RCPP
-}
-// qts2avts
-Rcpp::DataFrame qts2avts(const Rcpp::DataFrame& qts, const Rcpp::String& fixed_frame);
-RcppExport SEXP _squat_qts2avts(SEXP qtsSEXP, SEXP fixed_frameSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::String& >::type fixed_frame(fixed_frameSEXP);
-    rcpp_result_gen = Rcpp::wrap(qts2avts(qts, fixed_frame));
-    return rcpp_result_gen;
-END_RCPP
-}
-// avts2qts
-Rcpp::DataFrame avts2qts(const Rcpp::DataFrame& avts, const double init_t, const Rcpp::NumericVector init_q);
-RcppExport SEXP _squat_avts2qts(SEXP avtsSEXP, SEXP init_tSEXP, SEXP init_qSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type avts(avtsSEXP);
-    Rcpp::traits::input_parameter< const double >::type init_t(init_tSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type init_q(init_qSEXP);
-    rcpp_result_gen = Rcpp::wrap(avts2qts(avts, init_t, init_q));
-    return rcpp_result_gen;
-END_RCPP
-}
 // gmean
 Eigen::VectorXd gmean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
 static SEXP _squat_gmean_try(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
@@ -447,6 +296,157 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// qts2distance
+Rcpp::DataFrame qts2distance(const Rcpp::DataFrame& first_qts, const Rcpp::DataFrame& second_qts);
+RcppExport SEXP _squat_qts2distance(SEXP first_qtsSEXP, SEXP second_qtsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type first_qts(first_qtsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type second_qts(second_qtsSEXP);
+    rcpp_result_gen = Rcpp::wrap(qts2distance(first_qts, second_qts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// qts2norm
+Rcpp::DataFrame qts2norm(const Rcpp::DataFrame& qts, const bool disable_normalization);
+RcppExport SEXP _squat_qts2norm(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
+    rcpp_result_gen = Rcpp::wrap(qts2norm(qts, disable_normalization));
+    return rcpp_result_gen;
+END_RCPP
+}
+// qts2angle
+Rcpp::DataFrame qts2angle(const Rcpp::DataFrame& qts, const bool disable_normalization);
+RcppExport SEXP _squat_qts2angle(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
+    rcpp_result_gen = Rcpp::wrap(qts2angle(qts, disable_normalization));
+    return rcpp_result_gen;
+END_RCPP
+}
+// reorient_qts
+Rcpp::DataFrame reorient_qts(const Rcpp::DataFrame& qts, const bool disable_normalization);
+RcppExport SEXP _squat_reorient_qts(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
+    rcpp_result_gen = Rcpp::wrap(reorient_qts(qts, disable_normalization));
+    return rcpp_result_gen;
+END_RCPP
+}
+// normalize_qts
+Rcpp::DataFrame normalize_qts(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_normalize_qts(SEXP qtsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    rcpp_result_gen = Rcpp::wrap(normalize_qts(qts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// derivative_qts_impl
+Rcpp::DataFrame derivative_qts_impl(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_derivative_qts_impl(SEXP qtsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    rcpp_result_gen = Rcpp::wrap(derivative_qts_impl(qts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// log_qts_impl
+Rcpp::DataFrame log_qts_impl(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_log_qts_impl(SEXP qtsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_qts_impl(qts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// exp_qts_impl
+Rcpp::DataFrame exp_qts_impl(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_exp_qts_impl(SEXP qtsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    rcpp_result_gen = Rcpp::wrap(exp_qts_impl(qts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// centring_qts
+Rcpp::List centring_qts(const Rcpp::DataFrame& qts, const bool standardize);
+RcppExport SEXP _squat_centring_qts(SEXP qtsSEXP, SEXP standardizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type standardize(standardizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(centring_qts(qts, standardize));
+    return rcpp_result_gen;
+END_RCPP
+}
+// mean_qts
+Rcpp::DataFrame mean_qts(const Rcpp::List& qts_list);
+RcppExport SEXP _squat_mean_qts(SEXP qts_listSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type qts_list(qts_listSEXP);
+    rcpp_result_gen = Rcpp::wrap(mean_qts(qts_list));
+    return rcpp_result_gen;
+END_RCPP
+}
+// median_qts
+Rcpp::DataFrame median_qts(const Rcpp::List& qts_list);
+RcppExport SEXP _squat_median_qts(SEXP qts_listSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type qts_list(qts_listSEXP);
+    rcpp_result_gen = Rcpp::wrap(median_qts(qts_list));
+    return rcpp_result_gen;
+END_RCPP
+}
+// qts2avts
+Rcpp::DataFrame qts2avts(const Rcpp::DataFrame& qts, const Rcpp::String& fixed_frame);
+RcppExport SEXP _squat_qts2avts(SEXP qtsSEXP, SEXP fixed_frameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::String& >::type fixed_frame(fixed_frameSEXP);
+    rcpp_result_gen = Rcpp::wrap(qts2avts(qts, fixed_frame));
+    return rcpp_result_gen;
+END_RCPP
+}
+// avts2qts
+Rcpp::DataFrame avts2qts(const Rcpp::DataFrame& avts, const double init_t, const Rcpp::NumericVector init_q);
+RcppExport SEXP _squat_avts2qts(SEXP avtsSEXP, SEXP init_tSEXP, SEXP init_qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type avts(avtsSEXP);
+    Rcpp::traits::input_parameter< const double >::type init_t(init_tSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type init_q(init_qSEXP);
+    rcpp_result_gen = Rcpp::wrap(avts2qts(avts, init_t, init_q));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _squat_RcppExport_validate(const char* sig) { 
@@ -483,22 +483,22 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_GeodesicQuaternionDistance", (DL_FUNC) &_squat_GeodesicQuaternionDistance, 4},
     {"_squat_RegularizeGrid", (DL_FUNC) &_squat_RegularizeGrid, 5},
     {"_squat_GetGeodesicMean", (DL_FUNC) &_squat_GetGeodesicMean, 1},
+    {"_squat_gmean", (DL_FUNC) &_squat_gmean, 3},
+    {"_squat_gmedian", (DL_FUNC) &_squat_gmedian, 3},
+    {"_squat_geometric_mean", (DL_FUNC) &_squat_geometric_mean, 3},
     {"_squat_qts2distance", (DL_FUNC) &_squat_qts2distance, 2},
     {"_squat_qts2norm", (DL_FUNC) &_squat_qts2norm, 2},
     {"_squat_qts2angle", (DL_FUNC) &_squat_qts2angle, 2},
     {"_squat_reorient_qts", (DL_FUNC) &_squat_reorient_qts, 2},
     {"_squat_normalize_qts", (DL_FUNC) &_squat_normalize_qts, 1},
     {"_squat_derivative_qts_impl", (DL_FUNC) &_squat_derivative_qts_impl, 1},
-    {"_squat_log_qts", (DL_FUNC) &_squat_log_qts, 1},
-    {"_squat_exp_qts", (DL_FUNC) &_squat_exp_qts, 1},
+    {"_squat_log_qts_impl", (DL_FUNC) &_squat_log_qts_impl, 1},
+    {"_squat_exp_qts_impl", (DL_FUNC) &_squat_exp_qts_impl, 1},
     {"_squat_centring_qts", (DL_FUNC) &_squat_centring_qts, 2},
     {"_squat_mean_qts", (DL_FUNC) &_squat_mean_qts, 1},
     {"_squat_median_qts", (DL_FUNC) &_squat_median_qts, 1},
     {"_squat_qts2avts", (DL_FUNC) &_squat_qts2avts, 2},
     {"_squat_avts2qts", (DL_FUNC) &_squat_avts2qts, 3},
-    {"_squat_gmean", (DL_FUNC) &_squat_gmean, 3},
-    {"_squat_gmedian", (DL_FUNC) &_squat_gmedian, 3},
-    {"_squat_geometric_mean", (DL_FUNC) &_squat_geometric_mean, 3},
     {"_squat_RcppExport_registerCCallable", (DL_FUNC) &_squat_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

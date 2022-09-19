@@ -4,27 +4,26 @@
 \alias{tpca_qts}
 \title{Tangent PCA for QTS Data}
 \usage{
-tpca_qts(qts_list, M = 5, fit = FALSE)
+tpca_qts(x, M = 5, fit = FALSE)
 }
 \arguments{
-\item{qts_list}{A list specifying the sample of QTS.}
+\item{x}{An object of class \code{\link{qts_sample}}.}
 
 \item{M}{An integer value specifying the number of principal component to
 compute. Defaults to \code{5L}.}
 
-\item{fit}{A boolean specifying whether the resulting \code{qtsTPCA} object should
-store a reconstruction of the sample from the retained PCs. Defaults to
-\code{FALSE}.}
+\item{fit}{A boolean specifying whether the resulting \code{qts_tpca} object
+should store a reconstruction of the sample from the retained PCs. Defaults
+to \code{FALSE}.}
 }
 \value{
-An object of class \code{qtsTPCA} which is a list with the following
+An object of class \code{qts_tpca} which is a list with the following
 components:
 \itemize{
 \item An object of class \code{MFPCAfit} as produced by the function
 \code{\link[MFPCA]{MFPCA}},
-\item A \code{\link[tibble]{tibble}} containing the mean QTS,
-\item A list of \code{\link[tibble]{tibble}}s containing the required principal
-components.
+\item An object of class \code{\link{qts}} containing the mean QTS,
+\item A list of \code{\link{qts}}s containing the required principal components.
 }
 }
 \description{

@@ -39,6 +39,8 @@
       10     9 0.996 -0.0839 -0.0139  0.0359
       # ... with 91 more rows
       
+      attr(,"class")
+      [1] "qts_sample" "list"      
 
 # The function scale_qts() works (center = TRUE, by_row = FALSE, keep_summary_stats = FALSE)
 
@@ -78,5 +80,25 @@
        8     7 0.999 0.0431 0.0255 0.00448
        9     8 0.999 0.0419 0.0233 0.00300
       10     9 0.999 0.0409 0.0209 0.00135
+      # ... with 91 more rows
+
+# Logarithm and exponential for QTS work
+
+    Code
+      x
+    Output
+      # A tibble: 101 x 5
+          time         w      x      y       z
+         <int>     <dbl>  <dbl>  <dbl>   <dbl>
+       1     0 -1.11e-16 0.0799 0.0700 0.0134 
+       2     1  0        0.0747 0.0677 0.0132 
+       3     2  2.22e-16 0.0694 0.0647 0.0127 
+       4     3  0        0.0641 0.0610 0.0119 
+       5     4  0        0.0596 0.0575 0.0107 
+       6     5  0        0.0558 0.0541 0.00933
+       7     6  0        0.0528 0.0508 0.00772
+       8     7 -1.11e-16 0.0506 0.0476 0.00584
+       9     8 -1.11e-16 0.0489 0.0443 0.00366
+      10     9  0        0.0473 0.0407 0.00126
       # ... with 91 more rows
 

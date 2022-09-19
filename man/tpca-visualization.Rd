@@ -2,16 +2,16 @@
 % Please edit documentation in R/tpca.R
 \name{tpca-visualization}
 \alias{tpca-visualization}
-\alias{plot.qtsTPCA}
-\alias{autoplot.qtsTPCA}
+\alias{plot.qts_tpca}
+\alias{autoplot.qts_tpca}
 \title{Visualization of Tangent PCA for QTS}
 \usage{
-\method{plot}{qtsTPCA}(x, what = "PC1", ...)
+\method{plot}{qts_tpca}(x, what = "PC1", ...)
 
-\method{autoplot}{qtsTPCA}(x, what = "PC1", ...)
+\method{autoplot}{qts_tpca}(x, what = "PC1", ...)
 }
 \arguments{
-\item{x}{An object of class \code{qtsTPCA} as produced by \code{\link{tpca_qts}}.}
+\item{x}{An object of class \code{qts_tpca} as produced by \code{\link{tpca_qts}}.}
 
 \item{what}{A string specifying what kind of visualization the user wants to
 perform. Choices are words starting with \code{PC} and ending with a PC number
@@ -27,8 +27,8 @@ providing a length-2 integer vector argument \code{plane} which defaults to
 \code{1:2}.}
 }
 \value{
-The \code{\link{plot.qtsTPCA}} method does not return anything while
-the \code{\link{autoplot.qtsTPCA}} method returns a
+The \code{\link{plot.qts_tpca}} method does not return anything while
+the \code{\link{autoplot.qts_tpca}} method returns a
 \code{\link[ggplot2]{ggplot}} object.
 }
 \description{

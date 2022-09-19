@@ -23,6 +23,7 @@ qts_mean <- readRDS("data-raw/qts_mean.rds") |>
   purrr::map(squat::straighten_qts)
 vespa <- purrr::map_df(names(qts_mean), parse_name)
 vespa$igp <- `names<-`(qts_mean, NULL)
+vespa$igp <- as_qts_sample(vespa$igp)
 
 usethis::use_data(vespa, overwrite = TRUE, compress = "xz", version = 3)
 
@@ -43,6 +44,6 @@ vespa64 <- vespa |>
     z = map_dbl(q, 4)
   ))) |>
   ungroup() |>
-  mutate(igp = map(igp, as_qts))
+  mutate(igp = map(igp, as_qts) |> as_qts_sample())
 
 usethis::use_data(vespa64, overwrite = TRUE, compress = "xz", version = 3)

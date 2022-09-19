@@ -25,7 +25,7 @@ test_that("The function rnorm_qts() works", {
 
 test_that("The function scale_qts() works (center = TRUE, by_row = FALSE, keep_summary_stats = FALSE)", {
   qts_list <- scale_qts(
-    qts_list = vespa64$igp,
+    x = vespa64$igp,
     center = TRUE,
     standardize = TRUE,
     by_row = FALSE,
@@ -36,7 +36,7 @@ test_that("The function scale_qts() works (center = TRUE, by_row = FALSE, keep_s
 
 test_that("The function scale_qts() works (center = FALSE, by_row = FALSE, keep_summary_stats = FALSE)", {
   qts_list <- scale_qts(
-    qts_list = vespa64$igp,
+    x = vespa64$igp,
     center = FALSE,
     standardize = TRUE,
     by_row = FALSE,
@@ -47,14 +47,14 @@ test_that("The function scale_qts() works (center = FALSE, by_row = FALSE, keep_
 
 test_that("The function scale_qts() works (center = FALSE, by_row = FALSE, keep_summary_stats = TRUE)", {
   qts_list <- scale_qts(
-    qts_list = vespa64$igp,
+    x = vespa64$igp,
     center = FALSE,
     standardize = TRUE,
     by_row = FALSE,
     keep_summary_stats = TRUE
   )
   expect_equal(qts_list, list(
-    qts_list = vespa64$igp,
+    rescaled_sample = vespa64$igp,
     mean_values = NA,
     sd_values = NA
   ))
@@ -62,11 +62,18 @@ test_that("The function scale_qts() works (center = FALSE, by_row = FALSE, keep_
 
 test_that("The function scale_qts() works (center = TRUE, by_row = TRUE, keep_summary_stats = FALSE)", {
   qts_list <- scale_qts(
-    qts_list = vespa64$igp,
+    x = vespa64$igp,
     center = TRUE,
     standardize = TRUE,
     by_row = TRUE,
     keep_summary_stats = FALSE
   )
   expect_snapshot(qts_list[[1]])
+})
+
+test_that("Logarithm and exponential for QTS work", {
+  x <- log_qts(vespa64$igp[[1]])
+  expect_snapshot(x)
+  y <- exp_qts(x)
+  expect_equal(y, vespa64$igp[[1]])
 })
