@@ -70,82 +70,8 @@ GetGeodesicMean <- function(values) {
     .Call(`_squat_GetGeodesicMean`, values)
 }
 
-gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
-    .Call(`_squat_gmean`, quaternionSample, maxIterations, maxEpsilon)
-}
-
-gmedian <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
-    .Call(`_squat_gmedian`, quaternionSample, maxIterations, maxEpsilon)
-}
-
 geometric_mean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
     .Call(`_squat_geometric_mean`, quaternionSample, maxIterations, maxEpsilon)
-}
-
-#' QTS Transformation To Distance Time Series
-#'
-#' This function computes a real-valued time series reporting the pointwise
-#' geodesic distance between the two input QTS at each time point.
-#'
-#' The function currently expects that the two input QTS are evaluated on the
-#' same time grid and does not check this assumption.
-#'
-#' @param first_qts A quaternion time series stored as a
-#'   \code{\link[tibble]{tibble}} with columns `time`, `w`, `x`, `y` and `z`.
-#' @param second_qts A quaternion time series stored as a
-#'   \code{\link[tibble]{tibble}} with columns `time`, `w`, `x`, `y` and `z`.
-#'
-#' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
-#'   `time` and `distance` in which `distance` measures the angular distance
-#'   between the quaternions of both input QTS at a given time point.
-#'
-#' @export
-#' @examples
-#' # TO DO
-qts2distance <- function(first_qts, second_qts) {
-    .Call(`_squat_qts2distance`, first_qts, second_qts)
-}
-
-#' QTS Transformation To Norm Time Series
-#'
-#' This function computes a univariate time series representing the norm of the
-#' quaternions.
-#'
-#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z`.
-#' @param disable_normalization A boolean specifying whether quaternion
-#'   normalization should be disabled. Defaults to `FALSE`.
-#'
-#' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
-#'   `time` and `norm` in which `norm` measures the angular distance between
-#'   the current quaternion and the identity.
-#'
-#' @export
-#' @examples
-#' # TO DO
-qts2norm <- function(qts, disable_normalization = FALSE) {
-    .Call(`_squat_qts2norm`, qts, disable_normalization)
-}
-
-#' QTS Transformation To Angle Time Series
-#'
-#' This function computes a univariate time series representing the angle
-#' between the first and other attitudes.
-#'
-#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z`.
-#' @param disable_normalization A boolean specifying whether quaternion
-#'   normalization should be disabled. Defaults to `FALSE`.
-#'
-#' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
-#'   `time` and `angle` in which `angle` measures the angle between the current
-#'   rotation and the first one.
-#'
-#' @export
-#' @examples
-#' # TO DO
-qts2angle <- function(qts, disable_normalization = FALSE) {
-    .Call(`_squat_qts2angle`, qts, disable_normalization)
 }
 
 #' QTS Reorientation
@@ -256,6 +182,80 @@ mean_qts <- function(qts_list) {
 #' # TO DO
 median_qts <- function(qts_list) {
     .Call(`_squat_median_qts`, qts_list)
+}
+
+gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
+    .Call(`_squat_gmean`, quaternionSample, maxIterations, maxEpsilon)
+}
+
+gmedian <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
+    .Call(`_squat_gmedian`, quaternionSample, maxIterations, maxEpsilon)
+}
+
+#' QTS Transformation To Distance Time Series
+#'
+#' This function computes a real-valued time series reporting the pointwise
+#' geodesic distance between the two input QTS at each time point.
+#'
+#' The function currently expects that the two input QTS are evaluated on the
+#' same time grid and does not check this assumption.
+#'
+#' @param first_qts A quaternion time series stored as a
+#'   \code{\link[tibble]{tibble}} with columns `time`, `w`, `x`, `y` and `z`.
+#' @param second_qts A quaternion time series stored as a
+#'   \code{\link[tibble]{tibble}} with columns `time`, `w`, `x`, `y` and `z`.
+#'
+#' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
+#'   `time` and `distance` in which `distance` measures the angular distance
+#'   between the quaternions of both input QTS at a given time point.
+#'
+#' @export
+#' @examples
+#' # TO DO
+qts2distance <- function(first_qts, second_qts) {
+    .Call(`_squat_qts2distance`, first_qts, second_qts)
+}
+
+#' QTS Transformation To Norm Time Series
+#'
+#' This function computes a univariate time series representing the norm of the
+#' quaternions.
+#'
+#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z`.
+#' @param disable_normalization A boolean specifying whether quaternion
+#'   normalization should be disabled. Defaults to `FALSE`.
+#'
+#' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
+#'   `time` and `norm` in which `norm` measures the angular distance between
+#'   the current quaternion and the identity.
+#'
+#' @export
+#' @examples
+#' # TO DO
+qts2norm <- function(qts, disable_normalization = FALSE) {
+    .Call(`_squat_qts2norm`, qts, disable_normalization)
+}
+
+#' QTS Transformation To Angle Time Series
+#'
+#' This function computes a univariate time series representing the angle
+#' between the first and other attitudes.
+#'
+#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
+#'   with columns `time`, `w`, `x`, `y` and `z`.
+#' @param disable_normalization A boolean specifying whether quaternion
+#'   normalization should be disabled. Defaults to `FALSE`.
+#'
+#' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
+#'   `time` and `angle` in which `angle` measures the angle between the current
+#'   rotation and the first one.
+#'
+#' @export
+#' @examples
+#' # TO DO
+qts2angle <- function(qts, disable_normalization = FALSE) {
+    .Call(`_squat_qts2angle`, qts, disable_normalization)
 }
 
 #' QTS Transformation to Angular Velocity Time Series

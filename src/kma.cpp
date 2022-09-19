@@ -1,6 +1,6 @@
 #include "kma.h"
 #include "interpolation.h"
-#include "representations.h"
+#include "squatQTSSummaryStatistics.h"
 #include <RcppEigen.h>
 
 double GeodesicQuaternionDistance(const Rcpp::NumericMatrix &M1,

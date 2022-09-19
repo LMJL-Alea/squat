@@ -1,4 +1,4 @@
-#include "representations.h"
+#include "squatQTSSummaryStatistics.h"
 #include "rotations.h"
 
 Eigen::MatrixXd GetRotationsFromQuaternions(const std::vector<Eigen::VectorXd> &quaternionSample)

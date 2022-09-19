@@ -1,5 +1,5 @@
-#ifndef REPRESENTATIONS_H
-#define REPRESENTATIONS_H
+#ifndef SQUATQTSSUMMARYSTATISTICS_H
+#define SQUATQTSSUMMARYSTATISTICS_H
 
 #include <RcppEigen.h>
 
@@ -28,4 +28,4 @@ Eigen::VectorXd gmedian(
     double maxEpsilon = 1.0e-5
 );
 
-#endif /* REPRESENTATIONS_H */
+#endif /* SQUATQTSSUMMARYSTATISTICS_H */
