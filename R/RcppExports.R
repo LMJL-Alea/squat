@@ -102,28 +102,8 @@ median_qts_impl <- function(qts_list) {
     .Call(`_squat_median_qts_impl`, qts_list)
 }
 
-#' QTS Transformation To Distance Time Series
-#'
-#' This function computes a real-valued time series reporting the pointwise
-#' geodesic distance between the two input QTS at each time point.
-#'
-#' The function currently expects that the two input QTS are evaluated on the
-#' same time grid and does not check this assumption.
-#'
-#' @param first_qts A quaternion time series stored as a
-#'   \code{\link[tibble]{tibble}} with columns `time`, `w`, `x`, `y` and `z`.
-#' @param second_qts A quaternion time series stored as a
-#'   \code{\link[tibble]{tibble}} with columns `time`, `w`, `x`, `y` and `z`.
-#'
-#' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
-#'   `time` and `distance` in which `distance` measures the angular distance
-#'   between the quaternions of both input QTS at a given time point.
-#'
-#' @export
-#' @examples
-#' # TO DO
-qts2distance <- function(first_qts, second_qts) {
-    .Call(`_squat_qts2distance`, first_qts, second_qts)
+qts2dts_impl <- function(first_qts, second_qts) {
+    .Call(`_squat_qts2dts_impl`, first_qts, second_qts)
 }
 
 #' QTS Transformation To Norm Time Series

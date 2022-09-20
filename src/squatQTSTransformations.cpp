@@ -1,8 +1,8 @@
 #include "squatQTSTransformations.h"
 #include <RcppEigen.h>
 
-Rcpp::DataFrame qts2distance(const Rcpp::DataFrame &first_qts,
-                             const Rcpp::DataFrame &second_qts)
+Rcpp::DataFrame qts2dts_impl(const Rcpp::DataFrame &first_qts,
+                                  const Rcpp::DataFrame &second_qts)
 {
   unsigned int nGrid = first_qts.nrows();
   Rcpp::NumericVector firstWValues = first_qts["w"];
@@ -35,11 +35,10 @@ Rcpp::DataFrame qts2distance(const Rcpp::DataFrame &first_qts,
 
   Rcpp::DataFrame outValue = Rcpp::DataFrame::create(
     Rcpp::Named("time") = first_qts["time"],
-                                   Rcpp::Named("distance") = distanceValues
+    Rcpp::Named("distance") = distanceValues
   );
 
   outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
-
   return outValue;
 }
 

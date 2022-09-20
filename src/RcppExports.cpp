@@ -301,15 +301,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// qts2distance
-Rcpp::DataFrame qts2distance(const Rcpp::DataFrame& first_qts, const Rcpp::DataFrame& second_qts);
-RcppExport SEXP _squat_qts2distance(SEXP first_qtsSEXP, SEXP second_qtsSEXP) {
+// qts2dts_impl
+Rcpp::DataFrame qts2dts_impl(const Rcpp::DataFrame& first_qts, const Rcpp::DataFrame& second_qts);
+RcppExport SEXP _squat_qts2dts_impl(SEXP first_qtsSEXP, SEXP second_qtsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type first_qts(first_qtsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type second_qts(second_qtsSEXP);
-    rcpp_result_gen = Rcpp::wrap(qts2distance(first_qts, second_qts));
+    rcpp_result_gen = Rcpp::wrap(qts2dts_impl(first_qts, second_qts));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -478,7 +478,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_centring_qts_impl", (DL_FUNC) &_squat_centring_qts_impl, 2},
     {"_squat_mean_qts_impl", (DL_FUNC) &_squat_mean_qts_impl, 1},
     {"_squat_median_qts_impl", (DL_FUNC) &_squat_median_qts_impl, 1},
-    {"_squat_qts2distance", (DL_FUNC) &_squat_qts2distance, 2},
+    {"_squat_qts2dts_impl", (DL_FUNC) &_squat_qts2dts_impl, 2},
     {"_squat_qts2norm", (DL_FUNC) &_squat_qts2norm, 2},
     {"_squat_qts2angle", (DL_FUNC) &_squat_qts2angle, 2},
     {"_squat_qts2avts", (DL_FUNC) &_squat_qts2avts, 2},
