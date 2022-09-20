@@ -70,10 +70,6 @@ GetGeodesicMean <- function(values) {
     .Call(`_squat_GetGeodesicMean`, values)
 }
 
-geometric_mean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
-    .Call(`_squat_geometric_mean`, quaternionSample, maxIterations, maxEpsilon)
-}
-
 #' QTS Reorientation
 #'
 #' This function reorients the quaternions in a QTS for representing attitude
@@ -184,14 +180,6 @@ median_qts <- function(qts_list) {
     .Call(`_squat_median_qts`, qts_list)
 }
 
-gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
-    .Call(`_squat_gmean`, quaternionSample, maxIterations, maxEpsilon)
-}
-
-gmedian <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
-    .Call(`_squat_gmedian`, quaternionSample, maxIterations, maxEpsilon)
-}
-
 #' QTS Transformation To Distance Time Series
 #'
 #' This function computes a real-valued time series reporting the pointwise
@@ -299,6 +287,14 @@ qts2avts <- function(qts, fixed_frame = "global") {
 #' # TO DO
 avts2qts <- function(avts, init_t, init_q) {
     .Call(`_squat_avts2qts`, avts, init_t, init_q)
+}
+
+gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
+    .Call(`_squat_gmean`, quaternionSample, maxIterations, maxEpsilon)
+}
+
+gmedian <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
+    .Call(`_squat_gmedian`, quaternionSample, maxIterations, maxEpsilon)
 }
 
 # Register entry points for exported C++ functions

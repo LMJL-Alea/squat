@@ -1,5 +1,5 @@
 #include "squatQTSSampleClass.h"
-#include "squatQTSSummaryStatistics.h"
+#include "squatSO3Utils.h"
 #include <RcppEigen.h>
 
 Rcpp::DataFrame mean_qts(const Rcpp::List &qts_list)

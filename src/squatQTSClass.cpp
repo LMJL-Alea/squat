@@ -1,6 +1,5 @@
 #include "squatQTSClass.h"
-#include "squatQTSSummaryStatistics.h"
-#include "rotations.h"
+#include "squatSO3Utils.h"
 #include <RcppEigen.h>
 
 Rcpp::DataFrame reorient_qts(const Rcpp::DataFrame &qts,
