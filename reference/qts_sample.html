@@ -59,7 +59,7 @@ an object is a QTS sample.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>A list of <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></code>s, each of which with columns
+<dd><p>A list of <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble</a></code>s, each of which with columns
 <code>time</code>, <code>w</code>, <code>x</code>, <code>y</code> and <code>z</code>.</p></dd>
 
 </dl></div>
@@ -86,7 +86,7 @@ quaternions.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">vespa</span><span class="op">$</span><span class="va">igp</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span></span></span>
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">as_qts_sample</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">is_qts_sample</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
