@@ -17,5 +17,5 @@ This function straightens a QTS so that the last point equals the first
 point.
 }
 \examples{
-straighten_qts(vespa$igp[[1]])
+straighten_qts(vespa64$igp[[1]])
 }

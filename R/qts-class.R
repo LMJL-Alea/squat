@@ -61,7 +61,7 @@ is_qts <- function(x) {
 #'
 #' @export
 #' @examples
-#' derivative_qts(vespa$igp[[1]])
+#' derivative_qts(vespa64$igp[[1]])
 derivative_qts <- function(qts) {
   if (!is_qts(qts))
     cli::cli_abort("The input object should be of class {.cls qts}.")
@@ -80,7 +80,7 @@ derivative_qts <- function(qts) {
 #' @export
 #'
 #' @examples
-#' straighten_qts(vespa$igp[[1]])
+#' straighten_qts(vespa64$igp[[1]])
 straighten_qts <- function(qts) {
   if (!is_qts(qts))
     cli::cli_abort("The input object should be of class {.cls qts}.")

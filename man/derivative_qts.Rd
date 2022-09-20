@@ -19,5 +19,5 @@ This function computes the first derivative of a quaternion time series with
 respect to time.
 }
 \examples{
-derivative_qts(vespa$igp[[1]])
+derivative_qts(vespa64$igp[[1]])
 }

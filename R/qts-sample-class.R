@@ -18,14 +18,14 @@
 #' - `z`: A fifth column specifying the fourth coordinate of the collected
 #' quaternions.
 #'
-#' @param x A list of \code{\link[tibble]{tibble}}s, each of which with columns
+#' @param x A list of [`tibble::tibble`]s, each of which with columns
 #'   `time`, `w`, `x`, `y` and `z`.
 #'
-#' @return An object of class \code{\link{qts_sample}}.
+#' @return An object of class [`qts_sample`].
 #' @name qts_sample
 #'
 #' @examples
-#' x <- vespa$igp
+#' x <- vespa64$igp
 #' y <- as_qts_sample(x)
 #' is_qts_sample(x)
 #' is_qts_sample(y)

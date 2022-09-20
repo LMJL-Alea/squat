@@ -11,7 +11,7 @@ as_qts_sample(x)
 is_qts_sample(x)
 }
 \arguments{
-\item{x}{A list of \code{\link[tibble]{tibble}}s, each of which with columns
+\item{x}{A list of \code{\link[tibble:tibble]{tibble::tibble}}s, each of which with columns
 \code{time}, \code{w}, \code{x}, \code{y} and \code{z}.}
 }
 \value{
@@ -40,7 +40,7 @@ quaternions.
 }
 }
 \examples{
-x <- vespa$igp
+x <- vespa64$igp
 y <- as_qts_sample(x)
 is_qts_sample(x)
 is_qts_sample(y)
