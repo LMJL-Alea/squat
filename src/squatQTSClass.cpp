@@ -2,8 +2,8 @@
 #include "squatSO3Utils.h"
 #include <RcppEigen.h>
 
-Rcpp::DataFrame reorient_qts(const Rcpp::DataFrame &qts,
-                             const bool disable_normalization)
+Rcpp::DataFrame reorient_qts_impl(const Rcpp::DataFrame &qts,
+                                  const bool disable_normalization)
 {
   unsigned int nSamples = qts.nrows();
   Eigen::Quaterniond qValue;
@@ -39,10 +39,11 @@ Rcpp::DataFrame reorient_qts(const Rcpp::DataFrame &qts,
     zValues(i) = qValue.z();
   }
 
+  resValue.attr("class") = Rcpp::CharacterVector::create("qts", "tbl_df", "tbl", "data.frame");
   return resValue;
 }
 
-Rcpp::DataFrame normalize_qts(const Rcpp::DataFrame &qts)
+Rcpp::DataFrame normalize_qts_impl(const Rcpp::DataFrame &qts)
 {
   unsigned int nGrid = qts.nrows();
   Rcpp::DataFrame outValue = Rcpp::clone(qts);
@@ -65,6 +66,7 @@ Rcpp::DataFrame normalize_qts(const Rcpp::DataFrame &qts)
     zValues(i) = qValue.z();
   }
 
+  outValue.attr("class") = Rcpp::CharacterVector::create("qts", "tbl_df", "tbl", "data.frame");
   return outValue;
 }
 
@@ -150,7 +152,7 @@ Rcpp::DataFrame exp_qts_impl(const Rcpp::DataFrame &qts)
   return outValue;
 }
 
-Rcpp::List centring_qts(const Rcpp::DataFrame &qts, const bool standardize)
+Rcpp::List centring_qts_impl(const Rcpp::DataFrame &qts, const bool standardize)
 {
   unsigned int nGrid = qts.nrows();
   Rcpp::DataFrame outValue = Rcpp::clone(qts);
@@ -199,6 +201,8 @@ Rcpp::List centring_qts(const Rcpp::DataFrame &qts, const bool standardize)
     zValues = zValues / sdValue;
     outValue = exp_qts_impl(outValue);
   }
+
+  outValue.attr("class") = Rcpp::CharacterVector::create("qts", "tbl_df", "tbl", "data.frame");
 
   return Rcpp::List::create(
     Rcpp::Named("qts") = outValue,

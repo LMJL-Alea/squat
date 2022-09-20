@@ -1,22 +1,3 @@
-test_that("Functions related to the QTS class work", {
-  qts1 <- vespa64$igp[[1]]
-  expect_true(is_qts(qts1))
-  qts2 <- as_qts(qts1)
-  expect_true(is_qts(qts2))
-  expect_equal(qts1, qts2)
-  qts3 <- qts1
-  class(qts3) <- class(qts3)[-1]
-  expect_false(is_qts(qts3))
-  qts3 <- as_qts(qts1)
-  expect_equal(qts1, qts3)
-})
-
-test_that("The function derivative_qts() works", {
-  withr::with_seed(1234, {
-    expect_snapshot(derivative_qts(vespa64$igp[[1]]))
-  })
-})
-
 test_that("The function rnorm_qts() works", {
   withr::with_seed(1234, {
     expect_snapshot(rnorm_qts(1, vespa64$igp[[1]]))
@@ -69,11 +50,4 @@ test_that("The function scale_qts() works (center = TRUE, by_row = TRUE, keep_su
     keep_summary_stats = FALSE
   )
   expect_snapshot(qts_list[[1]])
-})
-
-test_that("Logarithm and exponential for QTS work", {
-  x <- log_qts(vespa64$igp[[1]])
-  expect_snapshot(x)
-  y <- exp_qts(x)
-  expect_equal(y, vespa64$igp[[1]])
 })

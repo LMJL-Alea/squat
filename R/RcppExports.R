@@ -70,44 +70,12 @@ GetGeodesicMean <- function(values) {
     .Call(`_squat_GetGeodesicMean`, values)
 }
 
-#' QTS Reorientation
-#'
-#' This function reorients the quaternions in a QTS for representing attitude
-#' with respect to the first time point.
-#'
-#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z`.
-#' @param disable_normalization A boolean specifying whether quaternion
-#'   normalization should be disabled. Defaults to `FALSE`.
-#'
-#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions measure
-#'   attitude with respect to the first time point.
-#'
-#' @export
-#' @examples
-#' # TO DO
-reorient_qts <- function(qts, disable_normalization = FALSE) {
-    .Call(`_squat_reorient_qts`, qts, disable_normalization)
+reorient_qts_impl <- function(qts, disable_normalization = FALSE) {
+    .Call(`_squat_reorient_qts_impl`, qts, disable_normalization)
 }
 
-#' QTS Normalization
-#'
-#' This function ensures that all quaternions in the time series are unit
-#' quaternions.
-#'
-#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z`.
-#'
-#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions are unit
-#'   quaternions.
-#'
-#' @export
-#' @examples
-#' # TO DO
-normalize_qts <- function(qts) {
-    .Call(`_squat_normalize_qts`, qts)
+normalize_qts_impl <- function(qts) {
+    .Call(`_squat_normalize_qts_impl`, qts)
 }
 
 derivative_qts_impl <- function(qts) {
@@ -122,26 +90,8 @@ exp_qts_impl <- function(qts) {
     .Call(`_squat_exp_qts_impl`, qts)
 }
 
-#' QTS Centering and Standardization
-#'
-#' This function operates a centring of the QTS around the geometric mean of
-#' its quaternions. This is effectively achieved by premultiplying each
-#' quaternion by the inverse of their geometric mean.
-#'
-#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z`.
-#' @param standardize A boolean specifying whether to standardize the QTS in
-#'   addition to centering it. Defaults to `FALSE`.
-#'
-#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions have been
-#'   centered around their geometric mean.
-#'
-#' @export
-#' @examples
-#' # TO DO
-centring_qts <- function(qts, standardize = FALSE) {
-    .Call(`_squat_centring_qts`, qts, standardize)
+centring_qts_impl <- function(qts, standardize = FALSE) {
+    .Call(`_squat_centring_qts_impl`, qts, standardize)
 }
 
 #' QTS Geometric Mean

@@ -28,8 +28,9 @@ QTS once they have been centered. Defaults to \code{TRUE}.}
 each data point (\code{by_row = TRUE}) or for each time point (\code{by_row = FALSE}). Defaults to \code{FALSE}.}
 
 \item{keep_summary_stats}{A boolean specifying whether the mean and standard
-deviation used for standardizing the data. Defaults to \code{FALSE} in which
-case only the list of properly rescaled QTS is returned.}
+deviation used for standardizing the data should be stored in the output
+object. Defaults to \code{FALSE} in which case only the list of properly
+rescaled QTS is returned.}
 }
 \value{
 A list of properly rescaled QTS stored as an object of class

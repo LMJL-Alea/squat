@@ -137,3 +137,81 @@ exp_qts <- function(x) {
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
   exp_qts_impl(x)
 }
+
+#' QTS Reorientation
+#'
+#' This function reorients the quaternions in a QTS for representing attitude
+#' with respect to the orientation of the sensor at the first time point.
+#'
+#' @param x An object of class \code{\link{qts}}.
+#' @param disable_normalization A boolean specifying whether quaternion
+#'   normalization should be disabled. Defaults to `FALSE`.
+#'
+#' @return An object of class \code{\link{qts}} in which quaternions measure
+#'   attitude with respect to the orientation of the sensor at the first time
+#'   point.
+#'
+#' @export
+#' @examples
+#' reorient_qts(vespa64$igp[[1]])
+reorient_qts <- function(x, disable_normalization = FALSE) {
+  if (!is_qts(x))
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  reorient_qts_impl(
+    qts = x,
+    disable_normalization = disable_normalization
+  )
+}
+
+#' QTS Normalization
+#'
+#' This function ensures that all quaternions in the time series are unit
+#' quaternions.
+#'
+#' @param x An object of class \code{\link{qts}}.
+#'
+#' @return An object of class \code{\link{qts}} in which quaternions are unit
+#'   quaternions.
+#'
+#' @export
+#' @examples
+#' normalize_qts(vespa64$igp[[1]])
+normalize_qts <- function(x) {
+  if (!is_qts(x))
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  normalize_qts_impl(x)
+}
+
+#' QTS Centering and Standardization
+#'
+#' This function operates a centring of the QTS around the geometric mean of
+#' its quaternions. This is effectively achieved by left-multiplying each
+#' quaternion by the inverse of their geometric mean.
+#'
+#' @param x An object of class \code{\link{qts}}.
+#' @param standardize A boolean specifying whether to standardize the QTS in
+#'   addition to centering it. Defaults to `FALSE`.
+#' @param keep_summary_stats A boolean specifying whether the mean and standard
+#'   deviation used for standardizing the data should be stored in the output
+#'   object. Defaults to `FALSE` in which case only the centered
+#'   \code{\link{qts}} is returned.
+#'
+#' @return If `keep_summary_stats = FALSE`, an object of class \code{\link{qts}}
+#'   in which quaternions have been centered (and possibly standardized) around
+#'   their geometric mean. If `keep_summary_stats = TRUE`, a list with three
+#'   components:
+#'   - `qts`: an object of class \code{\link{qts}} in which quaternions have
+#'   been centered (and possibly standardized) around their geometric mean;
+#' - `mean`: a numeric vector with the quaternion Fréchet mean;
+#' - `sd`: a numeric value with the quaternion Fréchet standard deviation.
+#'
+#' @export
+#' @examples
+#' centring_qts(vespa64$igp[[1]])
+centring_qts <- function(x, standardize = FALSE, keep_summary_stats = FALSE) {
+  if (!is_qts(x))
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  out <- centring_qts_impl(x, standardize = standardize)
+  if (keep_summary_stats) return(out)
+  out$qts
+}

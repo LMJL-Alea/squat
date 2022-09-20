@@ -117,8 +117,9 @@ rnorm_qts <- function(n, mean_qts, alpha = 0.01, beta = 0.001) {
 #'   each data point (`by_row = TRUE`) or for each time point (`by_row =
 #'   FALSE`). Defaults to `FALSE`.
 #' @param keep_summary_stats A boolean specifying whether the mean and standard
-#'   deviation used for standardizing the data. Defaults to `FALSE` in which
-#'   case only the list of properly rescaled QTS is returned.
+#'   deviation used for standardizing the data should be stored in the output
+#'   object. Defaults to `FALSE` in which case only the list of properly
+#'   rescaled QTS is returned.
 #'
 #' @return A list of properly rescaled QTS stored as an object of class
 #'   \code{\link{qts_sample}} when `keep_summary_stats = FALSE`.
@@ -155,10 +156,13 @@ scale_qts <- function(x,
       purrr::map(purrr::array_tree, margin = 1) |>
       purrr::transpose() |>
       purrr::map(purrr::reduce, rbind) |>
-      purrr::map(tibble::as_tibble)
+      purrr::map(tibble::as_tibble) |>
+      purrr::map(as_qts)
   }
 
-  std_data <- purrr::map(x, centring_qts, standardize = standardize)
+  std_data <- purrr::map(x, centring_qts,
+                         standardize = standardize,
+                         keep_summary_stats = TRUE)
   x <- purrr::map(std_data, "qts")
 
   if (!by_row) {
@@ -173,7 +177,7 @@ scale_qts <- function(x,
   if (!keep_summary_stats) return(as_qts_sample(x))
 
   list(
-    rescaled_sample = as_qts_sample(purrr::map(x, as_qts)),
+    rescaled_sample = as_qts_sample(x),
     mean_values = purrr::map(std_data, "mean"),
     sd_values = purrr::map_dbl(std_data, "sd")
   )
