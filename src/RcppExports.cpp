@@ -279,25 +279,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// mean_qts
-Rcpp::DataFrame mean_qts(const Rcpp::List& qts_list);
-RcppExport SEXP _squat_mean_qts(SEXP qts_listSEXP) {
+// mean_qts_impl
+Rcpp::DataFrame mean_qts_impl(const Rcpp::List& qts_list);
+RcppExport SEXP _squat_mean_qts_impl(SEXP qts_listSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type qts_list(qts_listSEXP);
-    rcpp_result_gen = Rcpp::wrap(mean_qts(qts_list));
+    rcpp_result_gen = Rcpp::wrap(mean_qts_impl(qts_list));
     return rcpp_result_gen;
 END_RCPP
 }
-// median_qts
-Rcpp::DataFrame median_qts(const Rcpp::List& qts_list);
-RcppExport SEXP _squat_median_qts(SEXP qts_listSEXP) {
+// median_qts_impl
+Rcpp::DataFrame median_qts_impl(const Rcpp::List& qts_list);
+RcppExport SEXP _squat_median_qts_impl(SEXP qts_listSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type qts_list(qts_listSEXP);
-    rcpp_result_gen = Rcpp::wrap(median_qts(qts_list));
+    rcpp_result_gen = Rcpp::wrap(median_qts_impl(qts_list));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -476,8 +476,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_log_qts_impl", (DL_FUNC) &_squat_log_qts_impl, 1},
     {"_squat_exp_qts_impl", (DL_FUNC) &_squat_exp_qts_impl, 1},
     {"_squat_centring_qts_impl", (DL_FUNC) &_squat_centring_qts_impl, 2},
-    {"_squat_mean_qts", (DL_FUNC) &_squat_mean_qts, 1},
-    {"_squat_median_qts", (DL_FUNC) &_squat_median_qts, 1},
+    {"_squat_mean_qts_impl", (DL_FUNC) &_squat_mean_qts_impl, 1},
+    {"_squat_median_qts_impl", (DL_FUNC) &_squat_median_qts_impl, 1},
     {"_squat_qts2distance", (DL_FUNC) &_squat_qts2distance, 2},
     {"_squat_qts2norm", (DL_FUNC) &_squat_qts2norm, 2},
     {"_squat_qts2angle", (DL_FUNC) &_squat_qts2angle, 2},

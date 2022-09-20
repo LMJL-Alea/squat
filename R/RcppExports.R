@@ -94,40 +94,12 @@ centring_qts_impl <- function(qts, standardize = FALSE) {
     .Call(`_squat_centring_qts_impl`, qts, standardize)
 }
 
-#' QTS Geometric Mean
-#'
-#' This function computes the pointwise geometric mean of a list of QTS.
-#'
-#' @param qts_list A list of quaternion time series stored as a
-#'   \code{\link[tibble]{tibble}}s with columns `time`, `w`, `x`, `y` and `z`.
-#'
-#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions are the
-#'   pointwise geometric mean.
-#'
-#' @export
-#' @examples
-#' # TO DO
-mean_qts <- function(qts_list) {
-    .Call(`_squat_mean_qts`, qts_list)
+mean_qts_impl <- function(qts_list) {
+    .Call(`_squat_mean_qts_impl`, qts_list)
 }
 
-#' QTS Geometric Median
-#'
-#' This function computes the pointwise geometric median of a list of QTS.
-#'
-#' @param qts_list A list of quaternion time series stored as a
-#'   \code{\link[tibble]{tibble}}s with columns `time`, `w`, `x`, `y` and `z`.
-#'
-#' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z` in which quaternions are the
-#'   pointwise geometric median.
-#'
-#' @export
-#' @examples
-#' # TO DO
-median_qts <- function(qts_list) {
-    .Call(`_squat_median_qts`, qts_list)
+median_qts_impl <- function(qts_list) {
+    .Call(`_squat_median_qts_impl`, qts_list)
 }
 
 #' QTS Transformation To Distance Time Series

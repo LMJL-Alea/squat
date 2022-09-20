@@ -2,7 +2,7 @@
 #include "squatSO3Utils.h"
 #include <RcppEigen.h>
 
-Rcpp::DataFrame mean_qts(const Rcpp::List &qts_list)
+Rcpp::DataFrame mean_qts_impl(const Rcpp::List &qts_list)
 {
   unsigned int nSamples = qts_list.size();
   Rcpp::DataFrame outValue, tmpValue;
@@ -37,10 +37,11 @@ Rcpp::DataFrame mean_qts(const Rcpp::List &qts_list)
     zValues(i) = avgQValue(3);
   }
 
+  outValue.attr("class") = Rcpp::CharacterVector::create("qts", "tbl_df", "tbl", "data.frame");
   return outValue;
 }
 
-Rcpp::DataFrame median_qts(const Rcpp::List &qts_list)
+Rcpp::DataFrame median_qts_impl(const Rcpp::List &qts_list)
 {
   unsigned int nSamples = qts_list.size();
   Rcpp::DataFrame outValue, tmpValue;
@@ -75,5 +76,6 @@ Rcpp::DataFrame median_qts(const Rcpp::List &qts_list)
     zValues(i) = avgQValue(3);
   }
 
+  outValue.attr("class") = Rcpp::CharacterVector::create("qts", "tbl_df", "tbl", "data.frame");
   return outValue;
 }

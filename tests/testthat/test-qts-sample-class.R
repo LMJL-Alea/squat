@@ -51,3 +51,11 @@ test_that("The function scale_qts() works (center = TRUE, by_row = TRUE, keep_su
   )
   expect_snapshot(qts_list[[1]])
 })
+
+test_that("The mean() method works for qts_sample objects", {
+  expect_snapshot(mean(vespa64$igp))
+})
+
+test_that("The median() method works for qts_sample objects", {
+  expect_snapshot(median(vespa64$igp))
+})

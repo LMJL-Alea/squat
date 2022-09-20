@@ -182,3 +182,42 @@ scale_qts <- function(x,
     sd_values = purrr::map_dbl(std_data, "sd")
   )
 }
+
+#' QTS Geometric Mean
+#'
+#' This function computes the pointwise geometric mean of a QTS sample.
+#'
+#' @param x An object of class \code{\link{qts_sample}}.
+#' @param ... Further arguments passed to or from other methods.
+#'
+#' @return An object of class \code{\link{qts}} in which quaternions are the
+#'   pointwise geometric mean of the input QTS sample.
+#'
+#' @export
+#' @examples
+#' mean(vespa64$igp)
+mean.qts_sample <- function(x, ...) {
+  if (!is_qts_sample(x)) x <- as_qts_sample(x)
+  mean_qts_impl(x)
+}
+
+#' QTS Geometric Median
+#'
+#' This function computes the pointwise geometric median of a QTS sample.
+#'
+#' @param x An object of class \code{\link{qts_sample}}.
+#' @param na.rm A logical value indicating whether NA values should be stripped
+#'   before the computation proceeds.
+#' @param ... Further arguments passed to or from other methods.
+#'
+#' @return An object of class \code{\link{qts}} in which quaternions are the
+#'   pointwise geometric median of the input QTS sample.
+#'
+#' @importFrom stats median
+#' @export
+#' @examples
+#' median(vespa64$igp)
+median.qts_sample <- function(x, na.rm = FALSE, ...) {
+  if (!is_qts_sample(x)) x <- as_qts_sample(x)
+  median_qts_impl(x)
+}
