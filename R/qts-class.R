@@ -17,10 +17,12 @@
 #' - `z`: A fifth column specifying the fourth coordinate of the collected
 #' quaternions.
 #'
-#' @param x A \code{\link[tibble]{tibble}} with columns `time`, `w`, `x`, `y`
-#'   and `z`.
+#' @param x A [tibble::tibble] with columns `time`, `w`, `x`, `y` and `z`.
+#' @param digits An integer value specifying the number of digits to keep for
+#'   printing. Defaults to `5L`.
+#' @param ... Further arguments passed to or from other methods.
 #'
-#' @return An object of class \code{\link{qts}}.
+#' @return An object of class [qts].
 #' @name qts
 #'
 #' @examples
@@ -38,10 +40,6 @@ as_qts <- function(x) {
     cli::cli_abort("The input object should be of class {.cls tbl}.")
   if (!all(names(x) == c("time", "w", "x", "y", "z")))
     cli::cli_abort("The input tibble should have exactly the 5 following columns in that order: {.code time}, {.code w}, {.code x}, {.code y} and {.code z}.")
-  x$w <- tibble::num(x$w, digits = 5, notation = "dec")
-  x$x <- tibble::num(x$x, digits = 5, notation = "dec")
-  x$y <- tibble::num(x$y, digits = 5, notation = "dec")
-  x$z <- tibble::num(x$z, digits = 5, notation = "dec")
   class(x) <- c("qts", class(x))
   x
 }
@@ -50,6 +48,24 @@ as_qts <- function(x) {
 #' @rdname qts
 is_qts <- function(x) {
   "qts" %in% class(x)
+}
+
+#' @export
+#' @rdname qts
+format.qts <- function(x, digits = 5, ...) {
+  x$w <- format_quaternion_component(x$w, digits = digits)
+  x$x <- format_quaternion_component(x$x, digits = digits)
+  x$y <- format_quaternion_component(x$y, digits = digits)
+  x$z <- format_quaternion_component(x$z, digits = digits)
+  NextMethod()
+}
+
+format_quaternion_component <- function(x, digits = 5) {
+  tibble::num(
+    x = round(x, digits = digits),
+    digits = digits,
+    notation = "dec"
+  )
 }
 
 #' QTS Derivative

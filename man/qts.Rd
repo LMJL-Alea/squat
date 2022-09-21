@@ -4,18 +4,25 @@
 \alias{qts}
 \alias{as_qts}
 \alias{is_qts}
+\alias{format.qts}
 \title{QTS Class}
 \usage{
 as_qts(x)
 
 is_qts(x)
+
+\method{format}{qts}(x, digits = 5, ...)
 }
 \arguments{
-\item{x}{A \code{\link[tibble]{tibble}} with columns \code{time}, \code{w}, \code{x}, \code{y}
-and \code{z}.}
+\item{x}{A \link[tibble:tibble]{tibble::tibble} with columns \code{time}, \code{w}, \code{x}, \code{y} and \code{z}.}
+
+\item{digits}{An integer value specifying the number of digits to keep for
+printing. Defaults to \code{5L}.}
+
+\item{...}{Further arguments passed to or from other methods.}
 }
 \value{
-An object of class \code{\link{qts}}.
+An object of class \link{qts}.
 }
 \description{
 A collection of functions that implements the QTS class. It currently
