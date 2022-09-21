@@ -25,3 +25,25 @@ qts2dts <- function(x, y) {
     cli::cli_abort("The two input QTS should be evaluated on the same time grid.")
   qts2dts_impl(x, y)
 }
+
+#' QTS Transformation To Norm Time Series
+#'
+#' This function computes a univariate time series representing the norm of the
+#' quaternions.
+#'
+#' @param x An object of class [qts].
+#' @param disable_normalization A boolean specifying whether quaternion
+#'   normalization should be disabled. Defaults to `FALSE`.
+#'
+#' @return A time series stored as a [tibble::tibble] with columns
+#'   `time` and `norm` in which `norm` measures the angular distance between
+#'   the current quaternion and the identity.
+#'
+#' @export
+#' @examples
+#' qts2nts(vespa64$igp[[1]])
+qts2nts <- function(x, disable_normalization = FALSE) {
+  if (!is_qts(x))
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  qts2nts_impl(x, disable_normalization = disable_normalization)
+}

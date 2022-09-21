@@ -2,7 +2,7 @@
 #include <RcppEigen.h>
 
 Rcpp::DataFrame qts2dts_impl(const Rcpp::DataFrame &first_qts,
-                                  const Rcpp::DataFrame &second_qts)
+                             const Rcpp::DataFrame &second_qts)
 {
   unsigned int nGrid = first_qts.nrows();
   Rcpp::NumericVector firstWValues = first_qts["w"];
@@ -42,8 +42,8 @@ Rcpp::DataFrame qts2dts_impl(const Rcpp::DataFrame &first_qts,
   return outValue;
 }
 
-Rcpp::DataFrame qts2norm(const Rcpp::DataFrame &qts,
-                         const bool disable_normalization)
+Rcpp::DataFrame qts2nts_impl(const Rcpp::DataFrame &qts,
+                             const bool disable_normalization)
 {
   unsigned int nSamples = qts.nrows();
   Eigen::Quaterniond qValue;
@@ -75,11 +75,10 @@ Rcpp::DataFrame qts2norm(const Rcpp::DataFrame &qts,
 
   Rcpp::DataFrame outValue = Rcpp::DataFrame::create(
     Rcpp::Named("time") = qts["time"],
-                             Rcpp::Named("norm") = normValues
+    Rcpp::Named("norm") = normValues
   );
 
   outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
-
   return outValue;
 }
 

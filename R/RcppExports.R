@@ -106,25 +106,8 @@ qts2dts_impl <- function(first_qts, second_qts) {
     .Call(`_squat_qts2dts_impl`, first_qts, second_qts)
 }
 
-#' QTS Transformation To Norm Time Series
-#'
-#' This function computes a univariate time series representing the norm of the
-#' quaternions.
-#'
-#' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
-#'   with columns `time`, `w`, `x`, `y` and `z`.
-#' @param disable_normalization A boolean specifying whether quaternion
-#'   normalization should be disabled. Defaults to `FALSE`.
-#'
-#' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
-#'   `time` and `norm` in which `norm` measures the angular distance between
-#'   the current quaternion and the identity.
-#'
-#' @export
-#' @examples
-#' # TO DO
-qts2norm <- function(qts, disable_normalization = FALSE) {
-    .Call(`_squat_qts2norm`, qts, disable_normalization)
+qts2nts_impl <- function(qts, disable_normalization = FALSE) {
+    .Call(`_squat_qts2nts_impl`, qts, disable_normalization)
 }
 
 #' QTS Transformation To Angle Time Series

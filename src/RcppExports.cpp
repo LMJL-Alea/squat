@@ -313,15 +313,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// qts2norm
-Rcpp::DataFrame qts2norm(const Rcpp::DataFrame& qts, const bool disable_normalization);
-RcppExport SEXP _squat_qts2norm(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
+// qts2nts_impl
+Rcpp::DataFrame qts2nts_impl(const Rcpp::DataFrame& qts, const bool disable_normalization);
+RcppExport SEXP _squat_qts2nts_impl(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
     Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
-    rcpp_result_gen = Rcpp::wrap(qts2norm(qts, disable_normalization));
+    rcpp_result_gen = Rcpp::wrap(qts2nts_impl(qts, disable_normalization));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -479,7 +479,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_mean_qts_impl", (DL_FUNC) &_squat_mean_qts_impl, 1},
     {"_squat_median_qts_impl", (DL_FUNC) &_squat_median_qts_impl, 1},
     {"_squat_qts2dts_impl", (DL_FUNC) &_squat_qts2dts_impl, 2},
-    {"_squat_qts2norm", (DL_FUNC) &_squat_qts2norm, 2},
+    {"_squat_qts2nts_impl", (DL_FUNC) &_squat_qts2nts_impl, 2},
     {"_squat_qts2angle", (DL_FUNC) &_squat_qts2angle, 2},
     {"_squat_qts2avts", (DL_FUNC) &_squat_qts2avts, 2},
     {"_squat_avts2qts", (DL_FUNC) &_squat_avts2qts, 3},

@@ -9,25 +9,8 @@ Rcpp::DataFrame qts2dts_impl(
     const Rcpp::DataFrame &second_qts
 );
 
-//' QTS Transformation To Norm Time Series
-//'
-//' This function computes a univariate time series representing the norm of the
-//' quaternions.
-//'
-//' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
-//'   with columns `time`, `w`, `x`, `y` and `z`.
-//' @param disable_normalization A boolean specifying whether quaternion
-//'   normalization should be disabled. Defaults to `FALSE`.
-//'
-//' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
-//'   `time` and `norm` in which `norm` measures the angular distance between
-//'   the current quaternion and the identity.
-//'
-//' @export
-//' @examples
-//' # TO DO
 // [[Rcpp::export]]
-Rcpp::DataFrame qts2norm(
+Rcpp::DataFrame qts2nts_impl(
     const Rcpp::DataFrame &qts,
     const bool disable_normalization = false
 );
