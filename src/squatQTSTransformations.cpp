@@ -82,8 +82,8 @@ Rcpp::DataFrame qts2nts_impl(const Rcpp::DataFrame &qts,
   return outValue;
 }
 
-Rcpp::DataFrame qts2angle(const Rcpp::DataFrame &qts,
-                          const bool disable_normalization)
+Rcpp::DataFrame qts2ats_impl(const Rcpp::DataFrame &qts,
+                             const bool disable_normalization)
 {
   unsigned int nSamples = qts.nrows();
   Eigen::Quaterniond qValue;
@@ -115,15 +115,14 @@ Rcpp::DataFrame qts2angle(const Rcpp::DataFrame &qts,
 
   Rcpp::DataFrame outValue = Rcpp::DataFrame::create(
     Rcpp::Named("time") = qts["time"],
-                             Rcpp::Named("angle") = angleValues
+    Rcpp::Named("angle") = angleValues
   );
 
   outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
-
   return outValue;
 }
 
-Rcpp::DataFrame qts2avts(const Rcpp::DataFrame &qts, const Rcpp::String &fixed_frame)
+Rcpp::DataFrame qts2avts_impl(const Rcpp::DataFrame &qts, const bool body_frame)
 {
   unsigned int nGrid = qts.nrows();
   Rcpp::NumericVector inputTValues = qts["time"];
@@ -143,10 +142,7 @@ Rcpp::DataFrame qts2avts(const Rcpp::DataFrame &qts, const Rcpp::String &fixed_f
     currQValue = Eigen::Quaterniond(inputWValues(i), inputXValues(i), inputYValues(i), inputZValues(i));
     double deltaTime = inputTValues(i) - inputTValues(i - 1);
 
-    if (fixed_frame == "global")
-      currQValue = currQValue * prevQValue.inverse();
-    else if (fixed_frame == "body")
-      currQValue = prevQValue.inverse() * currQValue;
+    currQValue = (body_frame) ? prevQValue.inverse() * currQValue : currQValue * prevQValue.inverse();
 
     currQValue.coeffs() *= (2.0 / deltaTime);
     outputTValues(i - 1) = inputTValues(i);
@@ -163,14 +159,5 @@ Rcpp::DataFrame qts2avts(const Rcpp::DataFrame &qts, const Rcpp::String &fixed_f
   );
 
   outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
-
-  return outValue;
-}
-
-Rcpp::DataFrame avts2qts(const Rcpp::DataFrame &avts,
-                         const double init_t,
-                         const Rcpp::NumericVector init_q)
-{
-  Rcpp::DataFrame outValue;
   return outValue;
 }

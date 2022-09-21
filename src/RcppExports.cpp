@@ -325,40 +325,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// qts2angle
-Rcpp::DataFrame qts2angle(const Rcpp::DataFrame& qts, const bool disable_normalization);
-RcppExport SEXP _squat_qts2angle(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
+// qts2ats_impl
+Rcpp::DataFrame qts2ats_impl(const Rcpp::DataFrame& qts, const bool disable_normalization);
+RcppExport SEXP _squat_qts2ats_impl(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
     Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
-    rcpp_result_gen = Rcpp::wrap(qts2angle(qts, disable_normalization));
+    rcpp_result_gen = Rcpp::wrap(qts2ats_impl(qts, disable_normalization));
     return rcpp_result_gen;
 END_RCPP
 }
-// qts2avts
-Rcpp::DataFrame qts2avts(const Rcpp::DataFrame& qts, const Rcpp::String& fixed_frame);
-RcppExport SEXP _squat_qts2avts(SEXP qtsSEXP, SEXP fixed_frameSEXP) {
+// qts2avts_impl
+Rcpp::DataFrame qts2avts_impl(const Rcpp::DataFrame& qts, const bool body_frame);
+RcppExport SEXP _squat_qts2avts_impl(SEXP qtsSEXP, SEXP body_frameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::String& >::type fixed_frame(fixed_frameSEXP);
-    rcpp_result_gen = Rcpp::wrap(qts2avts(qts, fixed_frame));
-    return rcpp_result_gen;
-END_RCPP
-}
-// avts2qts
-Rcpp::DataFrame avts2qts(const Rcpp::DataFrame& avts, const double init_t, const Rcpp::NumericVector init_q);
-RcppExport SEXP _squat_avts2qts(SEXP avtsSEXP, SEXP init_tSEXP, SEXP init_qSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type avts(avtsSEXP);
-    Rcpp::traits::input_parameter< const double >::type init_t(init_tSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type init_q(init_qSEXP);
-    rcpp_result_gen = Rcpp::wrap(avts2qts(avts, init_t, init_q));
+    Rcpp::traits::input_parameter< const bool >::type body_frame(body_frameSEXP);
+    rcpp_result_gen = Rcpp::wrap(qts2avts_impl(qts, body_frame));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -480,9 +467,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_median_qts_impl", (DL_FUNC) &_squat_median_qts_impl, 1},
     {"_squat_qts2dts_impl", (DL_FUNC) &_squat_qts2dts_impl, 2},
     {"_squat_qts2nts_impl", (DL_FUNC) &_squat_qts2nts_impl, 2},
-    {"_squat_qts2angle", (DL_FUNC) &_squat_qts2angle, 2},
-    {"_squat_qts2avts", (DL_FUNC) &_squat_qts2avts, 2},
-    {"_squat_avts2qts", (DL_FUNC) &_squat_avts2qts, 3},
+    {"_squat_qts2ats_impl", (DL_FUNC) &_squat_qts2ats_impl, 2},
+    {"_squat_qts2avts_impl", (DL_FUNC) &_squat_qts2avts_impl, 2},
     {"_squat_gmean", (DL_FUNC) &_squat_gmean, 3},
     {"_squat_gmedian", (DL_FUNC) &_squat_gmedian, 3},
     {"_squat_RcppExport_registerCCallable", (DL_FUNC) &_squat_RcppExport_registerCCallable, 0},

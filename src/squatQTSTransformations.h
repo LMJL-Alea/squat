@@ -15,75 +15,16 @@ Rcpp::DataFrame qts2nts_impl(
     const bool disable_normalization = false
 );
 
-//' QTS Transformation To Angle Time Series
-//'
-//' This function computes a univariate time series representing the angle
-//' between the first and other attitudes.
-//'
-//' @param qts A quaternion time series stored as a \code{\link[tibble]{tibble}}
-//'   with columns `time`, `w`, `x`, `y` and `z`.
-//' @param disable_normalization A boolean specifying whether quaternion
-//'   normalization should be disabled. Defaults to `FALSE`.
-//'
-//' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
-//'   `time` and `angle` in which `angle` measures the angle between the current
-//'   rotation and the first one.
-//'
-//' @export
-//' @examples
-//' # TO DO
 // [[Rcpp::export]]
-Rcpp::DataFrame qts2angle(
+Rcpp::DataFrame qts2ats_impl(
     const Rcpp::DataFrame &qts,
     const bool disable_normalization = false
 );
 
-//' QTS Transformation to Angular Velocity Time Series
-//'
-//' This function projects a quaternion time series into the space of angular
-//' velocities.
-//'
-//' @param qts A QTS stored as a \code{\link[tibble]{tibble}}s with columns
-//'   `time`, `w`, `x`, `y` and `z`.
-//' @param fixed_frame A string specifying the fixed frame with respect to which
-//'   coordinates of the angular velocity should be computed. Choices are
-//'   `"global"` or `"body"`. Defaults to `"global"`.
-//'
-//' @return A time series stored as a \code{\link[tibble]{tibble}} with columns
-//'   `time`, `x`, `y` and `z` containing the angular velocity at each time
-//'   point.
-//'
-//' @export
-//' @examples
-//' # TO DO
 // [[Rcpp::export]]
-Rcpp::DataFrame qts2avts(
+Rcpp::DataFrame qts2avts_impl(
     const Rcpp::DataFrame &qts,
-    const Rcpp::String &fixed_frame = "global"
-);
-
-//' QTS Transformation from Angular Velocity Time Series
-//'
-//' This function projects back an angular velocity time series into the space
-//' of quaternions.
-//'
-//' @param avts An angular velocity time series stored as a
-//'   \code{\link[tibble]{tibble}}s with columns `time`, `x`, `y` and `z`.
-//' @param init_t A positive scalar specifying the initial time point.
-//' @param init_q A length-4 numeric vector speicyfing the quaternion at the
-//'   initial time point.
-//'
-//' @return A quaternion time series stored as a \code{\link[tibble]{tibble}}
-//'   with columns `time`, `w`, `x`, `y` and `z`.
-//'
-//' @export
-//' @examples
-//' # TO DO
-// [[Rcpp::export]]
-Rcpp::DataFrame avts2qts(
-    const Rcpp::DataFrame &avts,
-    const double init_t,
-    const Rcpp::NumericVector init_q
+    const bool body_frame = false
 );
 
 #endif /* SQUATQTSTRANSFORMATIONS_H */

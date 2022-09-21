@@ -12,9 +12,9 @@ qts2dts(x, y)
 \item{y}{An object of class \link{qts}.}
 }
 \value{
-A time series stored as a \link[tibble:tibble]{tibble::tibble} with columns
-\code{time} and \code{distance} in which \code{distance} measures the angular distance
-between the quaternions of both input QTS at a given time point.
+A time series stored as a \link[tibble:tibble]{tibble::tibble} with columns \code{time} and
+\code{distance} in which \code{distance} measures the angular distance between the
+quaternions of both input QTS at a given time point.
 }
 \description{
 This function computes a real-valued time series reporting the pointwise

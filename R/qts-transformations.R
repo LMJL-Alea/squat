@@ -9,9 +9,9 @@
 #' @param x An object of class [qts].
 #' @param y An object of class [qts].
 #'
-#' @return A time series stored as a [tibble::tibble] with columns
-#'   `time` and `distance` in which `distance` measures the angular distance
-#'   between the quaternions of both input QTS at a given time point.
+#' @return A time series stored as a [tibble::tibble] with columns `time` and
+#'   `distance` in which `distance` measures the angular distance between the
+#'   quaternions of both input QTS at a given time point.
 #'
 #' @export
 #' @examples
@@ -35,9 +35,9 @@ qts2dts <- function(x, y) {
 #' @param disable_normalization A boolean specifying whether quaternion
 #'   normalization should be disabled. Defaults to `FALSE`.
 #'
-#' @return A time series stored as a [tibble::tibble] with columns
-#'   `time` and `norm` in which `norm` measures the angular distance between
-#'   the current quaternion and the identity.
+#' @return A time series stored as a [tibble::tibble] with columns `time` and
+#'   `norm` in which `norm` measures the angular distance between the current
+#'   quaternion and the identity.
 #'
 #' @export
 #' @examples
@@ -46,4 +46,48 @@ qts2nts <- function(x, disable_normalization = FALSE) {
   if (!is_qts(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
   qts2nts_impl(x, disable_normalization = disable_normalization)
+}
+
+#' QTS Transformation To Angle Time Series
+#'
+#' This function computes a univariate time series representing the angle
+#' between the first and other attitudes.
+#'
+#' @param x An object of class [qts].
+#' @param disable_normalization A boolean specifying whether quaternion
+#'   normalization should be disabled. Defaults to `FALSE`.
+#'
+#' @return A time series stored as a [tibble::tibble] with columns `time` and
+#'   `angle` in which `angle` measures the angle between the current rotation
+#'   and the first one.
+#'
+#' @export
+#' @examples
+#' qts2ats(vespa64$igp[[1]])
+qts2ats <- function(x, disable_normalization = FALSE) {
+  if (!is_qts(x))
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  qts2ats_impl(x, disable_normalization = disable_normalization)
+}
+
+#' QTS Transformation to Angular Velocity Time Series
+#'
+#' This function projects a quaternion time series into the space of angular
+#' velocities.
+#'
+#' @param x An object of class [qts].
+#' @param body_frame A boolean specifying whether the fixed frame with respect
+#'   to which coordinates of the angular velocity should be computed is the body
+#'   frame or the global frame. Defaults to `FALSE`.
+#'
+#' @return A time series stored as a [tibble::tibble] with columns `time`, `x`,
+#'   `y` and `z` containing the angular velocity at each time point.
+#'
+#' @export
+#' @examples
+#' qts2avts(vespa64$igp[[1]])
+qts2avts <- function(x, body_frame = FALSE) {
+  if (!is_qts(x))
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  qts2avts_impl(x, body_frame = body_frame)
 }
