@@ -38,10 +38,10 @@ as_qts <- function(x) {
     cli::cli_abort("The input object should be of class {.cls tbl}.")
   if (!all(names(x) == c("time", "w", "x", "y", "z")))
     cli::cli_abort("The input tibble should have exactly the 5 following columns in that order: {.code time}, {.code w}, {.code x}, {.code y} and {.code z}.")
-  x$w <- tibble::num(x$w, notation = "dec")
-  x$x <- tibble::num(x$x, notation = "dec")
-  x$y <- tibble::num(x$y, notation = "dec")
-  x$z <- tibble::num(x$z, notation = "dec")
+  x$w <- tibble::num(x$w, digits = 5, notation = "dec")
+  x$x <- tibble::num(x$x, digits = 5, notation = "dec")
+  x$y <- tibble::num(x$y, digits = 5, notation = "dec")
+  x$z <- tibble::num(x$z, digits = 5, notation = "dec")
   class(x) <- c("qts", class(x))
   x
 }
