@@ -45,35 +45,46 @@ velocities.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">qts2avts</span><span class="op">(</span><span class="va">qts</span>, fixed_frame <span class="op">=</span> <span class="st">"global"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">qts2avts</span><span class="op">(</span><span class="va">x</span>, body_frame <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>qts</dt>
-<dd><p>A QTS stored as a <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></code>s with columns
-<code>time</code>, <code>w</code>, <code>x</code>, <code>y</code> and <code>z</code>.</p></dd>
+    <dl><dt>x</dt>
+<dd><p>An object of class <a href="qts.html">qts</a>.</p></dd>
 
 
-<dt>fixed_frame</dt>
-<dd><p>A string specifying the fixed frame with respect to which
-coordinates of the angular velocity should be computed. Choices are
-<code>"global"</code> or <code>"body"</code>. Defaults to <code>"global"</code>.</p></dd>
+<dt>body_frame</dt>
+<dd><p>A boolean specifying whether the fixed frame with respect
+to which coordinates of the angular velocity should be computed is the body
+frame or the global frame. Defaults to <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A time series stored as a <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></code> with columns
-<code>time</code>, <code>x</code>, <code>y</code> and <code>z</code> containing the angular velocity at each time
-point.</p>
+<p>A time series stored as a <a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble</a> with columns <code>time</code>, <code>x</code>,
+<code>y</code> and <code>z</code> containing the angular velocity at each time point.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># TO DO</span></span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">qts2avts</span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     time        x        y          z</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1 -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">3</span>  -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">65</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">069</span><span style="color: #BB0000;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     2 -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">5</span>  -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">24</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">639</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3 -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">7</span>  -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">38</span> -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">51</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     4 -<span style="color: #BB0000;">0.009</span><span style="color: #BB0000; text-decoration: underline;">05</span> -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">97</span> -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">18</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     5 -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">66</span> -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">73</span> -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">74</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     6 -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">08</span> -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">37</span> -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">25</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     7 -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">53</span> -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">21</span> -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">87</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     8 -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">65</span> -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">42</span> -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">51</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     9 -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">27</span> -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">97</span> -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">01</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    10 -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">76</span> -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">42</span> -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">21</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 90 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
