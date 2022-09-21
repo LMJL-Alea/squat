@@ -25,5 +25,5 @@ The function currently expects that the two input QTS are evaluated on the
 same time grid.
 }
 \examples{
-qts2distance(vespa64$igp[[1]], vespa64$igp[[2]])
+qts2dts(vespa64$igp[[1]], vespa64$igp[[2]])
 }
