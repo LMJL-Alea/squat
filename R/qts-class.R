@@ -157,10 +157,8 @@ exp_qts <- function(x) {
 reorient_qts <- function(x, disable_normalization = FALSE) {
   if (!is_qts(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
-  reorient_qts_impl(
-    qts = x,
-    disable_normalization = disable_normalization
-  )
+  if (!disable_normalization) x <- normalize_qts(x)
+  reorient_qts_impl(x)
 }
 
 #' QTS Normalization

@@ -4,8 +4,7 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export]]
-Rcpp::DataFrame reorient_qts_impl(const Rcpp::DataFrame &qts,
-                                  const bool disable_normalization = false);
+Rcpp::DataFrame reorient_qts_impl(const Rcpp::DataFrame &qts);
 // [[Rcpp::export]]
 Rcpp::DataFrame normalize_qts_impl(const Rcpp::DataFrame &qts);
 // [[Rcpp::export]]

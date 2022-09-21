@@ -2,8 +2,7 @@
 #include "squatSO3Utils.h"
 #include <RcppEigen.h>
 
-Rcpp::DataFrame reorient_qts_impl(const Rcpp::DataFrame &qts,
-                                  const bool disable_normalization)
+Rcpp::DataFrame reorient_qts_impl(const Rcpp::DataFrame &qts)
 {
   unsigned int nSamples = qts.nrows();
   Eigen::Quaterniond qValue;
@@ -18,8 +17,6 @@ Rcpp::DataFrame reorient_qts_impl(const Rcpp::DataFrame &qts,
   refValue.x() = xValues(0);
   refValue.y() = yValues(0);
   refValue.z() = zValues(0);
-  if (!disable_normalization)
-    refValue.normalize();
   refValue = refValue.inverse();
 
   for (unsigned int i = 0;i < nSamples;++i)
@@ -28,8 +25,6 @@ Rcpp::DataFrame reorient_qts_impl(const Rcpp::DataFrame &qts,
     qValue.x() = xValues(i);
     qValue.y() = yValues(i);
     qValue.z() = zValues(i);
-    if (!disable_normalization)
-      qValue.normalize();
 
     qValue = refValue * qValue;
 

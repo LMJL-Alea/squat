@@ -212,14 +212,13 @@ RcppExport SEXP _squat_GetGeodesicMean(SEXP valuesSEXP) {
     return rcpp_result_gen;
 }
 // reorient_qts_impl
-Rcpp::DataFrame reorient_qts_impl(const Rcpp::DataFrame& qts, const bool disable_normalization);
-RcppExport SEXP _squat_reorient_qts_impl(SEXP qtsSEXP, SEXP disable_normalizationSEXP) {
+Rcpp::DataFrame reorient_qts_impl(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_reorient_qts_impl(SEXP qtsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
-    rcpp_result_gen = Rcpp::wrap(reorient_qts_impl(qts, disable_normalization));
+    rcpp_result_gen = Rcpp::wrap(reorient_qts_impl(qts));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -457,7 +456,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_GeodesicQuaternionDistance", (DL_FUNC) &_squat_GeodesicQuaternionDistance, 4},
     {"_squat_RegularizeGrid", (DL_FUNC) &_squat_RegularizeGrid, 5},
     {"_squat_GetGeodesicMean", (DL_FUNC) &_squat_GetGeodesicMean, 1},
-    {"_squat_reorient_qts_impl", (DL_FUNC) &_squat_reorient_qts_impl, 2},
+    {"_squat_reorient_qts_impl", (DL_FUNC) &_squat_reorient_qts_impl, 1},
     {"_squat_normalize_qts_impl", (DL_FUNC) &_squat_normalize_qts_impl, 1},
     {"_squat_derivative_qts_impl", (DL_FUNC) &_squat_derivative_qts_impl, 1},
     {"_squat_log_qts_impl", (DL_FUNC) &_squat_log_qts_impl, 1},

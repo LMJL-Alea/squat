@@ -70,8 +70,8 @@ GetGeodesicMean <- function(values) {
     .Call(`_squat_GetGeodesicMean`, values)
 }
 
-reorient_qts_impl <- function(qts, disable_normalization = FALSE) {
-    .Call(`_squat_reorient_qts_impl`, qts, disable_normalization)
+reorient_qts_impl <- function(qts) {
+    .Call(`_squat_reorient_qts_impl`, qts)
 }
 
 normalize_qts_impl <- function(qts) {

@@ -12,9 +12,7 @@ test_that("Functions related to the QTS class work", {
 })
 
 test_that("The function derivative_qts() works", {
-  withr::with_seed(1234, {
-    expect_snapshot(derivative_qts(vespa64$igp[[1]]))
-  })
+  expect_snapshot(derivative_qts(vespa64$igp[[1]]))
 })
 
 test_that("Logarithm and exponential for QTS work", {
@@ -25,7 +23,8 @@ test_that("Logarithm and exponential for QTS work", {
 })
 
 test_that("Function reorient_qts() works", {
-  expect_snapshot(reorient_qts(vespa64$igp[[1]]))
+  expect_snapshot(reorient_qts(vespa64$igp[[1]], disable_normalization = FALSE))
+  expect_snapshot(reorient_qts(vespa64$igp[[1]], disable_normalization = TRUE))
 })
 
 test_that("Function normalize_qts() works", {
