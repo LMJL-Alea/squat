@@ -46,6 +46,12 @@
     <loc>https://lmjl-alea.github.io/squat/reference/normalize_qts.html</loc>
   </url>
   <url>
+    <loc>https://lmjl-alea.github.io/squat/reference/plot.prcomp_qts.html</loc>
+  </url>
+  <url>
+    <loc>https://lmjl-alea.github.io/squat/reference/prcomp.qts_sample.html</loc>
+  </url>
+  <url>
     <loc>https://lmjl-alea.github.io/squat/reference/qts.html</loc>
   </url>
   <url>
@@ -80,12 +86,6 @@
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/straighten_qts.html</loc>
-  </url>
-  <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/tpca-visualization.html</loc>
-  </url>
-  <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/tpca_qts.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/vespa.html</loc>
