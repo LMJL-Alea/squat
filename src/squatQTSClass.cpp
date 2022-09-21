@@ -34,7 +34,7 @@ Rcpp::DataFrame reorient_qts_impl(const Rcpp::DataFrame &qts)
     zValues(i) = qValue.z();
   }
 
-  resValue.attr("class") = Rcpp::CharacterVector::create("qts", "tbl_df", "tbl", "data.frame");
+  resValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
   return resValue;
 }
 
@@ -61,7 +61,7 @@ Rcpp::DataFrame normalize_qts_impl(const Rcpp::DataFrame &qts)
     zValues(i) = qValue.z();
   }
 
-  outValue.attr("class") = Rcpp::CharacterVector::create("qts", "tbl_df", "tbl", "data.frame");
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
   return outValue;
 }
 
@@ -96,6 +96,7 @@ Rcpp::DataFrame derivative_qts_impl(const Rcpp::DataFrame &qts)
     currentQValue = previousQvalue;
   }
 
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
   return outValue;
 }
 
@@ -119,7 +120,7 @@ Rcpp::DataFrame log_qts_impl(const Rcpp::DataFrame &qts)
     zValues(i) = qValue.z();
   }
 
-  outValue.attr("class") = Rcpp::CharacterVector::create("qts", "tbl_df", "tbl", "data.frame");
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
   return outValue;
 }
 
@@ -143,7 +144,7 @@ Rcpp::DataFrame exp_qts_impl(const Rcpp::DataFrame &qts)
     zValues(i) = qValue.z();
   }
 
-  outValue.attr("class") = Rcpp::CharacterVector::create("qts", "tbl_df", "tbl", "data.frame");
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
   return outValue;
 }
 
@@ -197,7 +198,7 @@ Rcpp::List centring_qts_impl(const Rcpp::DataFrame &qts, const bool standardize)
     outValue = exp_qts_impl(outValue);
   }
 
-  outValue.attr("class") = Rcpp::CharacterVector::create("qts", "tbl_df", "tbl", "data.frame");
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
 
   return Rcpp::List::create(
     Rcpp::Named("qts") = outValue,

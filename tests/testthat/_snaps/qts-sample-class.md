@@ -49,7 +49,7 @@
     Output
       # A tibble: 101 x 5
           time     w      x      y       z
-         <int> <dbl>  <dbl>  <dbl>   <dbl>
+         <int> <dec>  <dec>  <dec>   <dec>
        1     0 0.997 0.0624 0.0402 0.00987
        2     1 0.997 0.0590 0.0387 0.00967
        3     2 0.998 0.0555 0.0367 0.00932
@@ -69,7 +69,7 @@
     Output
       # A tibble: 101 x 5
           time     w      x      y       z
-         <int> <dbl>  <dbl>  <dbl>   <dbl>
+         <int> <dec>  <dec>  <dec>   <dec>
        1     0 0.994 0.0940 0.0529 0.0147 
        2     1 0.994 0.0894 0.0535 0.0146 
        3     2 0.995 0.0847 0.0535 0.0145 
@@ -89,7 +89,7 @@
     Output
       # A tibble: 101 x 5
           time     w      x      y       z
-         <int> <dbl>  <dbl>  <dbl>   <dbl>
+         <int> <dec>  <dec>  <dec>   <dec>
        1     0 0.994 0.0916 0.0589 0.0151 
        2     1 0.994 0.0864 0.0591 0.0149 
        3     2 0.995 0.0818 0.0585 0.0146 

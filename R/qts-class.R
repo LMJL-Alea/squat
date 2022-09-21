@@ -119,7 +119,8 @@ straighten_qts <- function(qts) {
 log_qts <- function(x) {
   if (!is_qts(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
-  log_qts_impl(x)
+  x <- log_qts_impl(x)
+  as_qts(x)
 }
 
 #' QTS Exponential
@@ -139,7 +140,8 @@ log_qts <- function(x) {
 exp_qts <- function(x) {
   if (!is_qts(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
-  exp_qts_impl(x)
+  x <- exp_qts_impl(x)
+  as_qts(x)
 }
 
 #' QTS Reorientation
@@ -162,7 +164,8 @@ reorient_qts <- function(x, disable_normalization = FALSE) {
   if (!is_qts(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
   if (!disable_normalization) x <- normalize_qts(x)
-  reorient_qts_impl(x)
+  x <- reorient_qts_impl(x)
+  as_qts(x)
 }
 
 #' QTS Normalization
@@ -181,7 +184,8 @@ reorient_qts <- function(x, disable_normalization = FALSE) {
 normalize_qts <- function(x) {
   if (!is_qts(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
-  normalize_qts_impl(x)
+  x <- normalize_qts_impl(x)
+  as_qts(x)
 }
 
 #' QTS Centering and Standardization
@@ -214,6 +218,7 @@ centring_qts <- function(x, standardize = FALSE, keep_summary_stats = FALSE) {
   if (!is_qts(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
   out <- centring_qts_impl(x, standardize = standardize)
+  out$qts <- as_qts(out$qts)
   if (keep_summary_stats) return(out)
   out$qts
 }
