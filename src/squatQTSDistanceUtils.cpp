@@ -1,10 +1,9 @@
-#include "distances.h"
+#include "squatQTSDistanceUtils.h"
 
 #include <RcppEigen.h>
 
 Rcpp::NumericMatrix GetCostMatrix(const Rcpp::DataFrame &qts1,
-                                  const Rcpp::DataFrame &qts2,
-                                  const bool disable_normalization)
+                                  const Rcpp::DataFrame &qts2)
 {
   unsigned int n1 = qts1.nrows();
   unsigned int n2 = qts2.nrows();
@@ -27,14 +26,6 @@ Rcpp::NumericMatrix GetCostMatrix(const Rcpp::DataFrame &qts1,
     q1Value.x() = x1Values(i);
     q1Value.y() = y1Values(i);
     q1Value.z() = z1Values(i);
-    if (!disable_normalization)
-    {
-      q1Value.normalize();
-      w1Values(i) = q1Value.w();
-      x1Values(i) = q1Value.x();
-      y1Values(i) = q1Value.y();
-      z1Values(i) = q1Value.z();
-    }
 
     for (unsigned int j = 0;j < n2;++j)
     {
@@ -42,14 +33,6 @@ Rcpp::NumericMatrix GetCostMatrix(const Rcpp::DataFrame &qts1,
       q2Value.x() = x2Values(j);
       q2Value.y() = y2Values(j);
       q2Value.z() = z2Values(j);
-      if (!disable_normalization && i == 0)
-      {
-        q2Value.normalize();
-        w2Values(j) = q2Value.w();
-        x2Values(j) = q2Value.x();
-        y2Values(j) = q2Value.y();
-        z2Values(j) = q2Value.z();
-      }
 
       costMatrix(i, j) = q1Value.angularDistance(q2Value);
     }

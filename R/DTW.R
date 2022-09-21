@@ -45,7 +45,7 @@ DTW <- function(qts1, qts2,
     qts1 <- resample_qts(qts1, disable_normalization = TRUE)
     qts2 <- resample_qts(qts2, disable_normalization = TRUE)
   }
-  M <- GetCostMatrix(qts1, qts2, disable_normalization = TRUE)
+  M <- GetCostMatrix(qts1, qts2)
   dtw::dtw(M, distance.only = distance_only, step.pattern = step_pattern)
 }
 

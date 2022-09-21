@@ -1,4 +1,4 @@
-# The function tpca_qts() works
+# The function prcomp() works for QTS samples
 
     Code
       res_pca
@@ -108,5 +108,5 @@
       
       
       attr(,"class")
-      [1] "qts_tpca"
+      [1] "prcomp_qts"
 

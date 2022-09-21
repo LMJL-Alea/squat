@@ -1,26 +1,25 @@
-#' Tangent PCA for QTS Data
+#' PCA for QTS Sample
 #'
-#' @param x An object of class \code{\link{qts_sample}}.
+#' @param x An object of class [qts_sample].
 #' @param M An integer value specifying the number of principal component to
 #'   compute. Defaults to `5L`.
-#' @param fit A boolean specifying whether the resulting `qts_tpca` object
+#' @param fit A boolean specifying whether the resulting `prcomp_qts` object
 #'   should store a reconstruction of the sample from the retained PCs. Defaults
 #'   to `FALSE`.
+#' @param ... Arguments passed to or from other methods.
 #'
-#' @return An object of class `qts_tpca` which is a list with the following
+#' @return An object of class `prcomp_qts` which is a list with the following
 #'   components:
-#' - An object of class `MFPCAfit` as produced by the function
-#' \code{\link[MFPCA]{MFPCA}},
-#' - An object of class \code{\link{qts}} containing the mean QTS,
-#' - A list of \code{\link{qts}}s containing the required principal components.
+#' - An object of class `MFPCAfit` as produced by the function [MFPCA::MFPCA()],
+#' - An object of class [qts] containing the mean QTS,
+#' - A list of [qts]s containing the required principal components.
 #'
+#' @importFrom stats prcomp
 #' @export
 #'
 #' @examples
-#' res_pca <- tpca_qts(vespa64$igp)
-tpca_qts <- function(x, M = 5, fit = FALSE) {
-  if (!is_qts_sample(x))
-    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts_sample}.")
+#' res_pca <- prcomp(vespa64$igp)
+prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
   check_common_grid <- x |>
     purrr::map("time") |>
     purrr::reduce(rbind) |>
@@ -73,13 +72,14 @@ tpca_qts <- function(x, M = 5, fit = FALSE) {
       ))) |>
       purrr::map(exp_qts)
   )
-  class(res) <- "qts_tpca"
+  class(res) <- "prcomp_qts"
   res
 }
 
-#' Visualization of Tangent PCA for QTS
+#' QTS PCA Visualization
 #'
-#' @param x An object of class `qts_tpca` as produced by \code{\link{tpca_qts}}.
+#' @param x An object of class `prcomp_qts` as produced by the
+#'   [prcomp.qts_sample()] method.
 #' @param what A string specifying what kind of visualization the user wants to
 #'   perform. Choices are words starting with `PC` and ending with a PC number
 #'   (in which case the mean QTS is displayed along with its perturbations due
@@ -92,13 +92,14 @@ tpca_qts <- function(x, M = 5, fit = FALSE) {
 #'   providing a length-2 integer vector argument `plane` which defaults to
 #'   `1:2`.
 #'
-#' @return The \code{\link{plot.qts_tpca}} method does not return anything while
-#'   the \code{\link{autoplot.qts_tpca}} method returns a
-#'   \code{\link[ggplot2]{ggplot}} object.
-#' @name tpca-visualization
+#' @return The [plot.prcomp_qts()] method does not return anything while the
+#'   [autoplot.prcomp_qts()] method returns a [ggplot2::ggplot] object.
+#'
+#' @importFrom graphics plot
+#' @export
 #'
 #' @examples
-#' res_pca <- tpca_qts(vespa64$igp)
+#' res_pca <- prcomp(vespa64$igp)
 #'
 #' # You can plot the effect of a PC on the mean
 #' plot(res_pca, what = "PC1")
@@ -111,19 +112,14 @@ tpca_qts <- function(x, M = 5, fit = FALSE) {
 #'   p <- ggplot2::autoplot(res_pca, what = "scores")
 #'   p + ggplot2::geom_point(ggplot2::aes(color = vespa64$V))
 #' }
-NULL
-
-#' @importFrom graphics plot
-#' @export
-#' @rdname tpca-visualization
-plot.qts_tpca <- function(x, what = "PC1", ...) {
+plot.prcomp_qts <- function(x, what = "PC1", ...) {
   print(autoplot(x, what = what, ...))
 }
 
 #' @importFrom ggplot2 autoplot .data
 #' @export
-#' @rdname tpca-visualization
-autoplot.qts_tpca <- function(x, what = "PC1", ...) {
+#' @rdname plot.prcomp_qts
+autoplot.prcomp_qts <- function(x, what = "PC1", ...) {
   dots <- list(...)
   if (substr(what, 1, 2) == "PC") {
     component <- as.numeric(substr(what, 3, nchar(what)))

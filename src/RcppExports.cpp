@@ -16,19 +16,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// GetCostMatrix
-Rcpp::NumericMatrix GetCostMatrix(const Rcpp::DataFrame& qts1, const Rcpp::DataFrame& qts2, const bool disable_normalization);
-RcppExport SEXP _squat_GetCostMatrix(SEXP qts1SEXP, SEXP qts2SEXP, SEXP disable_normalizationSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts1(qts1SEXP);
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts2(qts2SEXP);
-    Rcpp::traits::input_parameter< const bool >::type disable_normalization(disable_normalizationSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetCostMatrix(qts1, qts2, disable_normalization));
-    return rcpp_result_gen;
-END_RCPP
-}
 // resample_qts
 Rcpp::DataFrame resample_qts(const Rcpp::DataFrame& qts, double tmin, double tmax, const unsigned int nout, const bool disable_normalization);
 static SEXP _squat_resample_qts_try(SEXP qtsSEXP, SEXP tminSEXP, SEXP tmaxSEXP, SEXP noutSEXP, SEXP disable_normalizationSEXP) {
@@ -278,6 +265,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// GetCostMatrix
+Rcpp::NumericMatrix GetCostMatrix(const Rcpp::DataFrame& qts1, const Rcpp::DataFrame& qts2);
+RcppExport SEXP _squat_GetCostMatrix(SEXP qts1SEXP, SEXP qts2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts1(qts1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts2(qts2SEXP);
+    rcpp_result_gen = Rcpp::wrap(GetCostMatrix(qts1, qts2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // mean_qts_impl
 Rcpp::DataFrame mean_qts_impl(const Rcpp::List& qts_list);
 RcppExport SEXP _squat_mean_qts_impl(SEXP qts_listSEXP) {
@@ -450,7 +449,6 @@ RcppExport SEXP _squat_RcppExport_registerCCallable() {
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_squat_GetCostMatrix", (DL_FUNC) &_squat_GetCostMatrix, 3},
     {"_squat_resample_qts", (DL_FUNC) &_squat_resample_qts, 5},
     {"_squat_smooth_qts", (DL_FUNC) &_squat_smooth_qts, 2},
     {"_squat_GeodesicQuaternionDistance", (DL_FUNC) &_squat_GeodesicQuaternionDistance, 4},
@@ -462,6 +460,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_log_qts_impl", (DL_FUNC) &_squat_log_qts_impl, 1},
     {"_squat_exp_qts_impl", (DL_FUNC) &_squat_exp_qts_impl, 1},
     {"_squat_centring_qts_impl", (DL_FUNC) &_squat_centring_qts_impl, 2},
+    {"_squat_GetCostMatrix", (DL_FUNC) &_squat_GetCostMatrix, 2},
     {"_squat_mean_qts_impl", (DL_FUNC) &_squat_mean_qts_impl, 1},
     {"_squat_median_qts_impl", (DL_FUNC) &_squat_median_qts_impl, 1},
     {"_squat_qts2dts_impl", (DL_FUNC) &_squat_qts2dts_impl, 2},
