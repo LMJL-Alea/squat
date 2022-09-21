@@ -34,12 +34,10 @@ NULL
 #' @export
 #' @rdname qts_sample
 as_qts_sample <- function(x) {
+  if (is_qts_sample(x)) return(x)
   if (!is.list(x))
     cli::cli_abort("The input {.arg x} should be a list.")
-  for (qts in x) {
-    if (!is_qts(qts))
-      cli::cli_abort("All elements of the input list should be of class {.cls qts}.")
-  }
+  x <- purrr::map_if(x, ~ !is_qts(.x), as_qts)
   class(x) <- c("qts_sample", class(x))
   x
 }

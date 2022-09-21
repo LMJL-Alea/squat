@@ -12,7 +12,7 @@
       $mean_qts
       # A tibble: 101 x 5
           time     w      x      y       z
-         <int> <dbl>  <dbl>  <dbl>   <dbl>
+         <int> <dec>  <dec>  <dec>   <dec>
        1     0 0.994 0.0940 0.0528 0.0147 
        2     1 0.994 0.0893 0.0535 0.0146 
        3     2 0.995 0.0847 0.0535 0.0145 
@@ -29,7 +29,7 @@
       $principal_qts[[1]]
       # A tibble: 101 x 5
           time     w     x       y      z
-         <int> <dbl> <dbl>   <dbl>  <dbl>
+         <int> <dec> <dec>   <dec>  <dec>
        1     0 0.989 0.126 -0.0474 0.0623
        2     1 0.989 0.127 -0.0399 0.0575
        3     2 0.990 0.126 -0.0334 0.0531
@@ -45,7 +45,7 @@
       $principal_qts[[2]]
       # A tibble: 101 x 5
           time     w      x      y       z
-         <int> <dbl>  <dbl>  <dbl>   <dbl>
+         <int> <dec>  <dec>  <dec>   <dec>
        1     0 0.994 0.0501 0.0710 -0.0668
        2     1 0.994 0.0466 0.0693 -0.0699
        3     2 0.994 0.0439 0.0669 -0.0717
@@ -61,7 +61,7 @@
       $principal_qts[[3]]
       # A tibble: 101 x 5
           time     w         x      y      z
-         <int> <dbl>     <dbl>  <dbl>  <dbl>
+         <int> <dec>     <dec>  <dec>  <dec>
        1     0 0.990  0.0344   0.0699 0.121 
        2     1 0.991  0.0245   0.0609 0.119 
        3     2 0.992  0.0162   0.0530 0.117 
@@ -77,7 +77,7 @@
       $principal_qts[[4]]
       # A tibble: 101 x 5
           time     w        x        y       z
-         <int> <dbl>    <dbl>    <dbl>   <dbl>
+         <int> <dec>    <dec>    <dec>   <dec>
        1     0 0.995  0.0443  -0.0196  -0.0851
        2     1 0.997  0.0248  -0.0176  -0.0769
        3     2 0.997  0.00887 -0.0140  -0.0693
@@ -93,7 +93,7 @@
       $principal_qts[[5]]
       # A tibble: 101 x 5
           time     w      x        y      z
-         <int> <dbl>  <dbl>    <dbl>  <dbl>
+         <int> <dec>  <dec>    <dec>  <dec>
        1     0 0.997 0.0532 -0.0553  0.0165
        2     1 0.997 0.0581 -0.0457  0.0187
        3     2 0.997 0.0626 -0.0368  0.0215
