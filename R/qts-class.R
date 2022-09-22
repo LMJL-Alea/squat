@@ -238,3 +238,61 @@ centring_qts <- function(x, standardize = FALSE, keep_summary_stats = FALSE) {
   if (keep_summary_stats) return(out)
   out$qts
 }
+
+#' QTS Resampling
+#'
+#' This function performs uniform resampling using SLERP.
+#'
+#' @param x An object of class [qts].
+#' @param tmin A numeric value specifying the lower bound of the time interval
+#'   over which uniform resampling should take place. It must satisfy `tmin >=
+#'   min(qts$time)`. Defaults to `NA` in which case it is set to
+#'   `min(qts$time)`.
+#' @param tmax A numeric value specifying the upper bound of the time interval
+#'   over which uniform resampling should take place. It must satisfy `tmax <=
+#'   max(qts$time)`. Defaults to `NA` in which case it is set to
+#'   `max(qts$time)`.
+#' @param nout An integer specifying the size of the uniform grid for time
+#'   resampling. Defaults to `0L` in which case it uses the same grid size as
+#'   the input QTS.
+#' @param disable_normalization A boolean specifying whether quaternion
+#'   normalization should be disabled. Defaults to `FALSE` in which case the
+#'   function makes sure that quaternions are normalized prior to performing
+#'   SLERP interpolation.
+#'
+#' @return An object of class [qts] in which quaternions are uniformly sampled
+#'   in the range `[tmin, tmax]`.
+#'
+#' @export
+#' @examples
+#' resample_qts(vespa64$igp[[1]])
+resample_qts <- function(x,
+                         tmin = NA, tmax = NA, nout = 0L,
+                         disable_normalization = FALSE) {
+  if (!is_qts(x))
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  if (!disable_normalization)
+    x <- normalize_qts(x)
+  x <- resample_qts_impl(x, tmin, tmax, nout)
+  as_qts(x)
+}
+
+#' QTS Smoothing via SLERP Interpolation
+#'
+#' This function performs a smoothing of a QTS by SLERP interpolation.
+#'
+#' @param x An object of class [qts].
+#' @param alpha A numeric value in `[0,1]` specifying the amount of smoothing.
+#'   The closer to one, the smoother the resulting QTS. Defaults to `0.5`.
+#'
+#' @return An object of class [qts] which is a smooth version of the input QTS.
+#'
+#' @export
+#' @examples
+#' smooth_qts(vespa64$igp[[1]])
+smooth_qts <- function(x, alpha = 0.5) {
+  if (!is_qts(x))
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  x <- smooth_qts_impl(x, alpha)
+  as_qts(x)
+}

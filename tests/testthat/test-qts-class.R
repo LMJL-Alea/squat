@@ -54,3 +54,11 @@ test_that("Function centring_qts() works (standardize = FALSE, keep_summary_stat
     keep_summary_stats = TRUE
   ))
 })
+
+test_that("Function resample_qts() works", {
+  expect_snapshot(resample_qts(vespa64$igp[[1]]))
+})
+
+test_that("Function smooth_qts() works", {
+  expect_snapshot(smooth_qts(vespa64$igp[[1]]))
+})

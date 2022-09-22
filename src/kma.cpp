@@ -1,5 +1,5 @@
 #include "kma.h"
-#include "interpolation.h"
+#include "squatQTSClass.h"
 #include "squatSO3Utils.h"
 #include <RcppEigen.h>
 
@@ -27,7 +27,7 @@ Rcpp::NumericMatrix RegularizeGrid(const Rcpp::NumericVector &grid,
     Rcpp::Named("z") = values.row(3)
   );
 
-  qtsValue = resample_qts(qtsValue, gridLowerBound, gridUpperBound, numberOfPoints, true);
+  qtsValue = resample_qts_impl(qtsValue, gridLowerBound, gridUpperBound, numberOfPoints);
 
   Rcpp::NumericMatrix outValue(4, numberOfPoints);
   outValue.row(0) = Rcpp::as<Rcpp::NumericVector>(qtsValue["w"]);

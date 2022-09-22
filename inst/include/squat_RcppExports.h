@@ -27,48 +27,6 @@ namespace squat {
         }
     }
 
-    inline Rcpp::DataFrame resample_qts(const Rcpp::DataFrame& qts, double tmin = NA_REAL, double tmax = NA_REAL, const unsigned int nout = 0, const bool disable_normalization = false) {
-        typedef SEXP(*Ptr_resample_qts)(SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_resample_qts p_resample_qts = NULL;
-        if (p_resample_qts == NULL) {
-            validateSignature("Rcpp::DataFrame(*resample_qts)(const Rcpp::DataFrame&,double,double,const unsigned int,const bool)");
-            p_resample_qts = (Ptr_resample_qts)R_GetCCallable("squat", "_squat_resample_qts");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_resample_qts(Shield<SEXP>(Rcpp::wrap(qts)), Shield<SEXP>(Rcpp::wrap(tmin)), Shield<SEXP>(Rcpp::wrap(tmax)), Shield<SEXP>(Rcpp::wrap(nout)), Shield<SEXP>(Rcpp::wrap(disable_normalization)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::DataFrame >(rcpp_result_gen);
-    }
-
-    inline Rcpp::DataFrame smooth_qts(const Rcpp::DataFrame& qts, const double alpha = 0.5) {
-        typedef SEXP(*Ptr_smooth_qts)(SEXP,SEXP);
-        static Ptr_smooth_qts p_smooth_qts = NULL;
-        if (p_smooth_qts == NULL) {
-            validateSignature("Rcpp::DataFrame(*smooth_qts)(const Rcpp::DataFrame&,const double)");
-            p_smooth_qts = (Ptr_smooth_qts)R_GetCCallable("squat", "_squat_smooth_qts");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_smooth_qts(Shield<SEXP>(Rcpp::wrap(qts)), Shield<SEXP>(Rcpp::wrap(alpha)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::DataFrame >(rcpp_result_gen);
-    }
-
     inline double GeodesicQuaternionDistance(const Rcpp::NumericMatrix& M1, const Rcpp::NumericMatrix& M2, const unsigned int index1, const unsigned int index2) {
         typedef SEXP(*Ptr_GeodesicQuaternionDistance)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_GeodesicQuaternionDistance p_GeodesicQuaternionDistance = NULL;
