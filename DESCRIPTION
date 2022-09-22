@@ -45,6 +45,7 @@ Imports:
     Rcpp,
     RcppEigen,
     roahd,
+    scales,
     tibble,
     tidyr
 Roxygen: list(markdown = TRUE)

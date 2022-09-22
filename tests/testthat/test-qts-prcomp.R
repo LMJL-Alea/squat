@@ -9,6 +9,8 @@ test_that("Visualization code for PCA work", {
   expect_equal(dim(p$data), c(1212, 4))
   p <- ggplot2::autoplot(res_pca, what = "scores")
   expect_equal(dim(p$data), c(64, 2))
+  p <- ggplot2::autoplot(res_pca, what = "variance")
+  expect_equal(dim(p$data), c(5, 2))
 })
 
 test_that("Visualization functions for PCA work", {
@@ -28,5 +30,9 @@ test_that("Visualization functions for PCA work", {
   vdiffr::expect_doppelganger(
     title = "Colored score plot",
     fig = p + ggplot2::geom_point(ggplot2::aes(color = vespa64$V))
+  )
+  vdiffr::expect_doppelganger(
+    title = "Screeplot",
+    fig = plot(res_pca, what = "variance")
   )
 })

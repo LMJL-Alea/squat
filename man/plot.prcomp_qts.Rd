@@ -3,11 +3,14 @@
 \name{plot.prcomp_qts}
 \alias{plot.prcomp_qts}
 \alias{autoplot.prcomp_qts}
+\alias{screeplot.prcomp_qts}
 \title{QTS PCA Visualization}
 \usage{
 \method{plot}{prcomp_qts}(x, what = "PC1", ...)
 
 \method{autoplot}{prcomp_qts}(x, what = "PC1", ...)
+
+\method{screeplot}{prcomp_qts}(x, ...)
 }
 \arguments{
 \item{x}{An object of class \code{prcomp_qts} as produced by the

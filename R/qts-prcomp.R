@@ -136,8 +136,29 @@ autoplot.prcomp_qts <- function(x, what = "PC1", ...) {
       cli::cli_inform("The {.code plane} length-2 integer vector argument is not specified. Defaulting to {.field 1:2}.")
       plot_tpca_scores(x, plane = 1:2)
     }
+  } else if (what == "variance") {
+    screeplot(x)
   } else
-    cli::cli_abort("The {.code what} argument should be either {.field scores} or a principal component specified starting with {.field PC}.")
+    cli::cli_abort("The {.arg what} argument should be either {.field scores} or {.field variance} or a principal component specified starting with {.field PC}.")
+}
+
+#' @importFrom stats screeplot
+#' @export
+#' @rdname plot.prcomp_qts
+screeplot.prcomp_qts <- function(x, ...) {
+  tibble::tibble(
+    lambda = x$tpca$values,
+    m = seq_along(.data$lambda)
+  ) |>
+    ggplot2::ggplot(ggplot2::aes(.data$m, .data$lambda)) +
+    ggplot2::geom_col() +
+    ggplot2::labs(
+      title = "Screeplot of QTS PCA",
+      x = "Principal Component Index",
+      y = "Percentage of variance explained"
+    ) +
+    ggplot2::scale_y_continuous(labels = scales::percent) +
+    ggplot2::theme_linedraw()
 }
 
 plot_tpca_component <- function(tpca, component = 1, original_space = TRUE) {
