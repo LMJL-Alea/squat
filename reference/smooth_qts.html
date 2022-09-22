@@ -42,14 +42,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">smooth_qts</span><span class="op">(</span><span class="va">qts</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">smooth_qts</span><span class="op">(</span><span class="va">x</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>qts</dt>
-<dd><p>A quaternion time series stored as a <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></code>
-with columns <code>time</code>, <code>w</code>, <code>x</code>, <code>y</code> and <code>z</code>.</p></dd>
+    <dl><dt>x</dt>
+<dd><p>An object of class <a href="qts.html">qts</a>.</p></dd>
 
 
 <dt>alpha</dt>
@@ -61,17 +60,26 @@ The closer to one, the smoother the resulting QTS. Defaults to <code>0.5</code>.
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A quaternion time series stored as a <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></code></p>
-
-
-<p>with columns <code>time</code>, <code>w</code>, <code>x</code>, <code>y</code> and <code>z</code> which is a smooth version of
-the input QTS.</p>
+<p>An object of class <a href="qts.html">qts</a> which is a smooth version of the input QTS.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># TO DO</span></span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">smooth_qts</span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 101 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     time         w         x         y         z</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dec:.5!&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dec:.5!&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dec:.5!&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dec:.5!&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     0   0.994<span style="text-decoration: underline;">67</span>   0.076<span style="text-decoration: underline;">37</span>   0.068<span style="text-decoration: underline;">03</span>   0.013<span style="text-decoration: underline;">01</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1   0.995<span style="text-decoration: underline;">05</span>   0.073<span style="text-decoration: underline;">02</span>   0.066<span style="text-decoration: underline;">18</span>   0.012<span style="text-decoration: underline;">68</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     2   0.995<span style="text-decoration: underline;">52</span>   0.068<span style="text-decoration: underline;">88</span>   0.063<span style="text-decoration: underline;">61</span>   0.012<span style="text-decoration: underline;">13</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     3   0.996<span style="text-decoration: underline;">01</span>   0.064<span style="text-decoration: underline;">53</span>   0.060<span style="text-decoration: underline;">55</span>   0.011<span style="text-decoration: underline;">30</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     4   0.996<span style="text-decoration: underline;">47</span>   0.060<span style="text-decoration: underline;">45</span>   0.057<span style="text-decoration: underline;">32</span>   0.010<span style="text-decoration: underline;">20</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     5   0.996<span style="text-decoration: underline;">88</span>   0.056<span style="text-decoration: underline;">84</span>   0.054<span style="text-decoration: underline;">03</span>   0.008<span style="text-decoration: underline;">84</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     6   0.997<span style="text-decoration: underline;">24</span>   0.053<span style="text-decoration: underline;">80</span>   0.050<span style="text-decoration: underline;">75</span>   0.007<span style="text-decoration: underline;">24</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     7   0.997<span style="text-decoration: underline;">54</span>   0.051<span style="text-decoration: underline;">28</span>   0.047<span style="text-decoration: underline;">43</span>   0.005<span style="text-decoration: underline;">39</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     8   0.997<span style="text-decoration: underline;">82</span>   0.049<span style="text-decoration: underline;">12</span>   0.044<span style="text-decoration: underline;">03</span>   0.003<span style="text-decoration: underline;">33</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     9   0.998<span style="text-decoration: underline;">07</span>   0.047<span style="text-decoration: underline;">09</span>   0.040<span style="text-decoration: underline;">49</span>   0.001<span style="text-decoration: underline;">11</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 91 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
