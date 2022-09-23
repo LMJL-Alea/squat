@@ -59,3 +59,30 @@ test_that("The mean() method works for qts_sample objects", {
 test_that("The median() method works for qts_sample objects", {
   expect_snapshot(median(vespa64$igp))
 })
+
+test_that("Visualization code for QTS samples work", {
+  p <- ggplot2::autoplot(vespa64$igp)
+  expect_equal(dim(p$data), c(25856, 6))
+  p <- ggplot2::autoplot(vespa64$igp, memberships = c(rep(1, 32), rep(2, 32)))
+  expect_equal(dim(p$data), c(25856, 6))
+  p <- ggplot2::autoplot(vespa64$igp, highlighted = c(TRUE, rep(FALSE, 63)))
+  expect_equal(dim(p$data), c(404, 6))
+})
+
+test_that("Visualization functions for QTS work", {
+  skip_if_not_installed("vdiffr")
+  skip_on_covr()
+  skip_on_ci()
+  vdiffr::expect_doppelganger(
+    title = "QTS sample plot",
+    fig = plot(vespa64$igp)
+  )
+  vdiffr::expect_doppelganger(
+    title = "QTS sample plot with memberships",
+    fig = plot(vespa64$igp, memberships = c(rep(1, 32), rep(2, 32)))
+  )
+  vdiffr::expect_doppelganger(
+    title = "QTS sample plot with highlighted observations",
+    fig = plot(vespa64$igp, highlighted = c(TRUE, rep(FALSE, 63)))
+  )
+})

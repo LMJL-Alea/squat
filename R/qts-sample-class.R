@@ -219,3 +219,83 @@ median.qts_sample <- function(x, na.rm = FALSE, ...) {
   if (!is_qts_sample(x)) x <- as_qts_sample(x)
   median_qts_impl(x)
 }
+
+#' QTS Sample Visualization
+#'
+#' @param x An object of class [qts_sample].
+#' @param memberships A vector coercible as factor specifying a group membership
+#'   for each QTS in the sample. Defaults to `NULL`, in which case no grouping
+#'   structure is displayed.
+#' @param highlighted A boolean vector specifying whether each QTS in the sample
+#'   should be hightlighted. Defaults to `NULL`, in which case no QTS is
+#'   hightlighted w.r.t. the others.
+#' @param ... Further arguments to be passed to methods.
+#'
+#' @return The [plot.qts_sample()] method does not return anything while the
+#'   [autoplot.qts_sample()] method returns a [ggplot2::ggplot] object.
+#'
+#' @importFrom graphics plot
+#' @export
+#'
+#' @examples
+#' plot(vespa64$igp)
+#' ggplot2::autoplot(vespa64$igp)
+plot.qts_sample <- function(x, memberships = NULL, highlighted = NULL, ...) {
+  print(autoplot(x, memberships = memberships, highlighted = highlighted, ...))
+}
+
+#' @importFrom ggplot2 autoplot .data
+#' @export
+#' @rdname plot.qts_sample
+autoplot.qts_sample <- function(x, memberships = NULL, highlighted = NULL, ...) {
+  if (!is.null(memberships)) {
+    if (length(memberships) != length(x))
+      cli::cli_abort("The length of the {.arg memberships} argument should match the number of QTS in the sample.")
+    memberships <- as.factor(memberships)
+  }
+  if (!is.null(highlighted)) {
+    if (length(highlighted) != length(x))
+      cli::cli_abort("The length of the {.arg highlighted} argument should match the number of QTS in the sample.")
+    if (!is.logical(highlighted))
+      cli::cli_abort("The {.arg highlighted} argument should be a logical vector.")
+  }
+
+  n <- length(x)
+  if (is.null(highlighted)) highlighted <- rep(FALSE, n)
+  if (is.null(memberships)) memberships <- as.factor(seq_len(n))
+
+  data <- tibble::tibble(x, id = seq_len(n) , highlighted, memberships) |>
+    tidyr::unnest(.data$x) |>
+    tidyr::pivot_longer(cols = .data$w:.data$z)
+
+  p <- ggplot2::ggplot(data, ggplot2::aes(
+      x = .data$time,
+      y = .data$value,
+      group = .data$id,
+      colour = .data$memberships
+    ) ) +
+    ggplot2::geom_line() +
+    ggplot2::facet_wrap(ggplot2::vars(.data$name), ncol = 1, scales = "free") +
+    ggplot2::theme_linedraw() +
+    ggplot2::theme(legend.position = "none") +
+    ggplot2::labs(
+      title = "Quaternion Time Series",
+      x = "Time",
+      y = ""
+    )
+
+  if (sum(highlighted) > 0) {
+    if (!requireNamespace("gghighlight", quietly = TRUE))
+      cli::cli_alert_info("You need to install the {.pkg gghighlight} package to enable highlighting QTS.")
+    else {
+      p <- p +
+        gghighlight::gghighlight(
+          any(.data$highlighted),
+          calculate_per_facet = TRUE,
+          label_key = memberships
+        )
+    }
+  }
+
+  p
+}

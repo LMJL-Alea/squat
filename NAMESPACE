@@ -2,11 +2,13 @@
 
 S3method(autoplot,prcomp_qts)
 S3method(autoplot,qts)
+S3method(autoplot,qts_sample)
 S3method(format,qts)
 S3method(mean,qts_sample)
 S3method(median,qts_sample)
 S3method(plot,prcomp_qts)
 S3method(plot,qts)
+S3method(plot,qts_sample)
 S3method(prcomp,qts_sample)
 S3method(screeplot,prcomp_qts)
 export(DTW)
