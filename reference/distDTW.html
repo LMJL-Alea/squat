@@ -48,16 +48,14 @@
 <span>  labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  resample <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  disable_normalization <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  step_pattern <span class="op">=</span> <span class="fu">dtw</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/dtw/man/stepPattern.html" class="external-link">symmetric2</a></span>,</span>
-<span>  quotient_space <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  step_pattern <span class="op">=</span> <span class="fu">dtw</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/dtw/man/stepPattern.html" class="external-link">symmetric2</a></span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>qts_list</dt>
-<dd><p>A list of <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></code>s storing a sample of
-quaternion time series.</p></dd>
+<dd><p>An object of class <a href="qts_sample.html">qts_sample</a>.</p></dd>
 
 
 <dt>normalize_distance</dt>
@@ -83,30 +81,23 @@ always deal with unit quaternions.</p></dd>
 
 
 <dt>step_pattern</dt>
-<dd><p>A <code><a href="https://rdrr.io/pkg/dtw/man/stepPattern.html" class="external-link">stepPattern</a></code> specifying the local
-constraints on the warping path. Defaults to <code><a href="https://rdrr.io/pkg/dtw/man/stepPattern.html" class="external-link">symmetric2</a></code>
-which uses symmetric and normalizable warping paths with no local slope
-constraints. See <code><a href="https://rdrr.io/pkg/dtw/man/stepPattern.html" class="external-link">stepPattern</a></code> for more information.</p></dd>
-
-
-<dt>quotient_space</dt>
-<dd><p>A boolean specifying whether to make the distance
-invariant to the coordinate system into which rotations are expressed.
-Defaults to <code>FALSE</code> for backward compatibility and faster computation.</p></dd>
+<dd><p>A <a href="https://rdrr.io/pkg/dtw/man/stepPattern.html" class="external-link">dtw::stepPattern</a> specifying the local constraints on
+the warping path. Defaults to <a href="https://rdrr.io/pkg/dtw/man/stepPattern.html" class="external-link">dtw::symmetric2</a> which uses symmetric and
+normalizable warping paths with no local slope constraints. See
+<a href="https://rdrr.io/pkg/dtw/man/stepPattern.html" class="external-link">dtw::stepPattern</a> for more information.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></code> object storing the distance matrix
-between QTS in a sample via DTW.</p>
+<p>A <a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist</a> object storing the distance matrix between QTS in a
+sample via DTW.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># TO DO</span></span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu">distDTW</span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
