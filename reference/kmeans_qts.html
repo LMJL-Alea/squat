@@ -49,10 +49,10 @@ QTS.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">kmeans_qts</span><span class="op">(</span></span>
-<span>  <span class="va">qts_list</span>,</span>
+<span>  <span class="va">x</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  centroid <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>  diss <span class="op">=</span> <span class="st">"l2"</span>,</span>
+<span>  dissimilarity <span class="op">=</span> <span class="st">"l2"</span>,</span>
 <span>  warping <span class="op">=</span> <span class="st">"affine"</span>,</span>
 <span>  iter_max <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  nstart <span class="op">=</span> <span class="fl">1000</span>,</span>
@@ -62,9 +62,8 @@ QTS.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>qts_list</dt>
-<dd><p>A list of QTS stored as <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></code>s with
-columns <code>time</code>, <code>w</code>, <code>x</code>, <code>y</code> and <code>z</code>.</p></dd>
+    <dl><dt>x</dt>
+<dd><p>An object of class <a href="qts_sample.html">qts_sample</a>.</p></dd>
 
 
 <dt>k</dt>
@@ -77,9 +76,9 @@ to <code>1L</code>.</p></dd>
 Choices are <code>mean</code> and <code>medoid</code>. Defaults to <code>mean</code>.</p></dd>
 
 
-<dt>diss</dt>
-<dd><p>A string specifying which type of dissimilarity should be used.
-Choices are <code>l2</code> and <code>pearson</code>. Defaults to <code>l2</code>.</p></dd>
+<dt>dissimilarity</dt>
+<dd><p>A string specifying which type of dissimilarity should
+be used. Choices are <code>l2</code> and <code>pearson</code>. Defaults to <code>l2</code>.</p></dd>
 
 
 <dt>warping</dt>
@@ -90,7 +89,7 @@ used. Choices are <code>none</code>, <code>shift</code>, <code>dilation</code> a
 
 <dt>iter_max</dt>
 <dd><p>An integer specifying the maximum number of iterations for
-terminating the k-mean algorithm. Defautls to <code>20L</code>.</p></dd>
+terminating the k-mean algorithm. Defaults to <code>20L</code>.</p></dd>
 
 
 <dt>nstart</dt>
@@ -107,9 +106,14 @@ restarts of the k-mean algorithm in parallel. Defaults to <code>1L</code>.</p></
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A <code><a href="https://rdrr.io/pkg/fdacluster/man/kma.html" class="external-link">kma</a></code> object storing the results of the best
-k-mean alignment algorithm run.</p>
-    </div>
+<p>An object of class <code>kma_qts</code> which is effectively a list with three
+components:</p><ul><li><p><code>qts_aligned</code>: An object of class <a href="qts_sample.html">qts_sample</a> storing the sample of
+aligned QTS;</p></li>
+<li><p><code>qts_centers</code>: A list of objects of class <a href="qts.html">qts</a> representing the centers of
+the clusters;</p></li>
+<li><p><code>best_kma_result</code>: An object of class <a href="https://rdrr.io/pkg/fdacluster/man/kma.html" class="external-link">fdacluster::kma</a> storing the results
+of the best k-mean alignment result among all initialization that were tried.</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
