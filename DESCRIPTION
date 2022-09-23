@@ -39,7 +39,6 @@ Imports:
     ggplot2,
     ggrepel,
     MFPCA,
-    nloptr,
     pbapply,
     purrr,
     Rcpp,
