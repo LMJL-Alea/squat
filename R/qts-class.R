@@ -1,8 +1,8 @@
 #' QTS Class
 #'
 #' A collection of functions that implements the QTS class. It currently
-#' provides the `as_qts()` function for QTS coercion of tibbles and the
-#' `is_qts()` function for checking if an object is a QTS.
+#' provides the `as_qts()` function for QTS coercion of [tibble::tibble]s and
+#' the `is_qts()` function for checking if an object is a QTS.
 #'
 #' A quaternion time series (QTS) is stored as a \code{\link[tibble]{tibble}}
 #' with 5 columns:

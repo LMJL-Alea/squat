@@ -26,8 +26,8 @@ An object of class \link{qts}.
 }
 \description{
 A collection of functions that implements the QTS class. It currently
-provides the \code{as_qts()} function for QTS coercion of tibbles and the
-\code{is_qts()} function for checking if an object is a QTS.
+provides the \code{as_qts()} function for QTS coercion of \link[tibble:tibble]{tibble::tibble}s and
+the \code{is_qts()} function for checking if an object is a QTS.
 }
 \details{
 A quaternion time series (QTS) is stored as a \code{\link[tibble]{tibble}}
