@@ -89,7 +89,7 @@ rnorm_qts <- function(n, mean_qts, alpha = 0.01, beta = 0.001) {
     listCholCov = list(CholC1, CholC2, CholC3)
   )
   qts_list <- purrr::map(1:n, ~ {
-    as_qts(tibble(
+    as_qts(tibble::tibble(
       time = time_grid,
       w = 0,
       x = mean_qts[[1]][.x, ],

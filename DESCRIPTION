@@ -42,7 +42,6 @@ Imports:
     pbapply,
     purrr,
     Rcpp,
-    RcppEigen,
     roahd,
     scales,
     tibble,

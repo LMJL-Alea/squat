@@ -1,3 +1,44 @@
 url: https://lmjl-alea.github.io/squat/
 template:
   bootstrap: 5
+
+reference:
+  - title: QTS Class
+    contents:
+    - qts
+    - derivative_qts
+    - straighten_qts
+    - log_qts
+    - exp_qts
+    - reorient_qts
+    - normalize_qts
+    - centring_qts
+    - resample_qts
+    - smooth_qts
+    - plot.qts
+  - title: QTS Sample Class
+    contents:
+    - qts_sample
+    - rnorm_qts
+    - scale_qts
+    - mean.qts_sample
+    - median.qts_sample
+    - plot.qts_sample
+  - title: QTS Transformations
+    contents:
+    - qts2dts
+    - qts2nts
+    - qts2ats
+    - qts2avts
+  - title: Principal Component Analysis
+    contents:
+    - prcomp.qts_sample
+    - plot.prcomp_qts
+  - title: K-Means Alignment Clustering
+    contents:
+    - kmeans_qts
+    - plot.kma_qts
+  - title: Distances
+    contents:
+    - DTW
+    - distDTW
