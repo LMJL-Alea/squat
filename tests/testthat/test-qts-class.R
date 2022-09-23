@@ -62,3 +62,24 @@ test_that("Function resample_qts() works", {
 test_that("Function smooth_qts() works", {
   expect_snapshot(smooth_qts(vespa64$igp[[1]]))
 })
+
+test_that("Visualization code for QTS work", {
+  p <- ggplot2::autoplot(vespa64$igp[[1]])
+  expect_equal(dim(p$data), c(404, 3))
+  p <- ggplot2::autoplot(vespa64$igp[[1]], change_points = c(10, 80))
+  expect_equal(dim(p$data), c(404, 3))
+})
+
+test_that("Visualization functions for QTS work", {
+  skip_if_not_installed("vdiffr")
+  skip_on_covr()
+  skip_on_ci()
+  vdiffr::expect_doppelganger(
+    title = "QTS plot",
+    fig = plot(vespa64$igp[[1]])
+  )
+  vdiffr::expect_doppelganger(
+    title = "QTS plot with change points",
+    fig = plot(vespa64$igp[[1]], change_points = c(10, 80))
+  )
+})

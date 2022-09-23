@@ -296,3 +296,58 @@ smooth_qts <- function(x, alpha = 0.5) {
   x <- smooth_qts_impl(x, alpha)
   as_qts(x)
 }
+
+#' QTS Visualization
+#'
+#' @param x An object of class [qts].
+#' @param change_points An integer vector specifying the indices of the change
+#'   points to display if any. Defaults to `NULL`, in which case no change
+#'   points are displayed.
+#' @param ... Further arguments to be passed to methods.
+#'
+#' @return The [plot.qts()] method does not return anything while the
+#'   [autoplot.qts()] method returns a [ggplot2::ggplot] object.
+#'
+#' @importFrom graphics plot
+#' @export
+#'
+#' @examples
+#' plot(vespa64$igp[[1]])
+#' ggplot2::autoplot(vespa64$igp[[1]])
+plot.qts <- function(x, change_points = NULL, ...) {
+  print(autoplot(x, change_points = change_points, ...))
+}
+
+#' @importFrom ggplot2 autoplot .data
+#' @export
+#' @rdname plot.qts
+autoplot.qts <- function(x, change_points = NULL, ...) {
+  if (!is.null(change_points)) {
+    if (!all(change_points %in% 1:nrow(x)))
+      cli::cli_abort("The change point indices are out of bounds.")
+    change_points <- x$time[change_points]
+  }
+  x <- tidyr::pivot_longer(x, cols = .data$w:.data$z)
+  p <- ggplot2::ggplot(x, ggplot2::aes(
+    x = .data$time,
+    y = .data$value
+  )) +
+    ggplot2::geom_line() +
+    ggplot2::facet_wrap(ggplot2::vars(.data$name), ncol = 1, scales = "free") +
+    ggplot2::theme_linedraw() +
+    ggplot2::labs(
+      title = "Quaternion Time Series",
+      x = "Time",
+      y = ""
+    )
+
+  if (!is.null(change_points)) {
+    p <- p +
+      ggplot2::geom_point(
+        data = subset(x, x$time %in% change_points),
+        color = "red"
+      )
+  }
+
+  p
+}
