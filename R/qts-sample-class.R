@@ -291,8 +291,10 @@ autoplot.qts_sample <- function(x, memberships = NULL, highlighted = NULL, ...) 
       p <- p +
         gghighlight::gghighlight(
           any(.data$highlighted),
+          unhighlighted_params = list(colour = NULL, alpha = 0.1),
           calculate_per_facet = TRUE,
-          label_key = memberships
+          label_key = memberships,
+          label_params = list(fill = "white", seed = 1234)
         )
     }
   }

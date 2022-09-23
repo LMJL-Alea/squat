@@ -22,9 +22,13 @@ to \code{FALSE}.}
 An object of class \code{prcomp_qts} which is a list with the following
 components:
 \itemize{
-\item An object of class \code{MFPCAfit} as produced by the function \code{\link[MFPCA:MFPCA]{MFPCA::MFPCA()}},
-\item An object of class \link{qts} containing the mean QTS,
-\item A list of \link{qts}s containing the required principal components.
+\item \code{tpca}: An object of class \code{MFPCAfit} as produced by the function
+\code{\link[MFPCA:MFPCA]{MFPCA::MFPCA()}},
+\item \code{var_props}: A numeric vector storing the percentage of variance explained
+by each PC,
+\item \code{mean_qts}: An object of class \link{qts} containing the mean QTS,
+\item \code{principal_qts}: A list of \link{qts}s containing the required principal
+components.
 }
 }
 \description{

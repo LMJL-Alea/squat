@@ -20,7 +20,7 @@
 perform. Choices are words starting with \code{PC} and ending with a PC number
 (in which case the mean QTS is displayed along with its perturbations due
 to the required PC) or \code{scores} (in which case individuals are projected on
-the required plance). Defaults to \code{PC1}.}
+the required plane). Defaults to \code{PC1}.}
 
 \item{...}{If \code{what = "PC?"}, the user can specify whether to plot the QTS in
 the tangent space or in the original space by providing a boolean argument

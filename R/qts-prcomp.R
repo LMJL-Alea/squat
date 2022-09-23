@@ -10,9 +10,13 @@
 #'
 #' @return An object of class `prcomp_qts` which is a list with the following
 #'   components:
-#' - An object of class `MFPCAfit` as produced by the function [MFPCA::MFPCA()],
-#' - An object of class [qts] containing the mean QTS,
-#' - A list of [qts]s containing the required principal components.
+#' - `tpca`: An object of class `MFPCAfit` as produced by the function
+#' [MFPCA::MFPCA()],
+#' - `var_props`: A numeric vector storing the percentage of variance explained
+#' by each PC,
+#' - `mean_qts`: An object of class [qts] containing the mean QTS,
+#' - `principal_qts`: A list of [qts]s containing the required principal
+#' components.
 #'
 #' @importFrom stats prcomp
 #' @export
@@ -28,6 +32,9 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
   if (check_common_grid > 0)
     cli::cli_abort("All input QTS should be evaluated on the same grid.")
   grid <- x[[1]]$time
+  npc_max <- min(length(x) - 1, length(grid))
+  if (M > npc_max)
+    cli::cli_abort("The maximum number of principal component is {npc_max}. Please choose a value of {.arg M} smaller or equal to that value.")
   qts_log <- purrr::map(x, log_qts)
   fd_x <- funData::funData(
     argvals = grid,
@@ -48,8 +55,14 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
       purrr::reduce(rbind)
   )
   mfd <- funData::multiFunData(fd_x, fd_y, fd_z)
-  uniExpansions <- purrr::map(1:3, ~ list(type = "splines1D"))
+  uniExpansions <- purrr::map(1:3, ~ list(type = "splines1D", k = npc_max))
   tpca <- MFPCA::MFPCA(mfd, M = M, uniExpansions = uniExpansions, fit = fit)
+  if (M == npc_max)
+    tot_var <- sum(tpca$values)
+  else {
+    tpca_full <- MFPCA::MFPCA(mfd, M = npc_max, uniExpansions = uniExpansions, fit = FALSE)
+    tot_var <- sum(tpca_full$values)
+  }
   mean_qts <- tpca$meanFunction |>
     purrr::map(~ as.numeric(.x@X)) |>
     purrr::set_names(c("x", "y", "z")) |>
@@ -59,6 +72,7 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
   mean_qts <- exp_qts(as_qts(mean_qts[c(4, 5, 1:3)]))
   res <- list(
     tpca = tpca,
+    var_props = tpca$values / tot_var,
     mean_qts = mean_qts,
     principal_qts = tpca$functions |>
       purrr::map(~ purrr::array_tree(.x@X, margin = 1)) |>
@@ -84,7 +98,7 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
 #'   perform. Choices are words starting with `PC` and ending with a PC number
 #'   (in which case the mean QTS is displayed along with its perturbations due
 #'   to the required PC) or `scores` (in which case individuals are projected on
-#'   the required plance). Defaults to `PC1`.
+#'   the required plane). Defaults to `PC1`.
 #' @param ... If `what = "PC?"`, the user can specify whether to plot the QTS in
 #'   the tangent space or in the original space by providing a boolean argument
 #'   `original_space` which defaults to `TRUE`. If `what = "scores"`, the user
@@ -147,7 +161,7 @@ autoplot.prcomp_qts <- function(x, what = "PC1", ...) {
 #' @rdname plot.prcomp_qts
 screeplot.prcomp_qts <- function(x, ...) {
   tibble::tibble(
-    lambda = x$tpca$values,
+    lambda = x$var_props,
     m = seq_along(.data$lambda)
   ) |>
     ggplot2::ggplot(ggplot2::aes(.data$m, .data$lambda)) +
@@ -189,7 +203,7 @@ plot_tpca_component <- function(tpca, component = 1, original_space = TRUE) {
     ggplot2::theme_linedraw() +
     ggplot2::labs(
       title = cli::pluralize("Mean QTS perturbed by PC{component}"),
-      subtitle = cli::pluralize("Percentage of variance explained: {round(tpca$tpca$values[component] * 100, digits = 1)}%"),
+      subtitle = cli::pluralize("Percentage of variance explained: {round(tpca$var_props[component] * 100, digits = 1)}%"),
       x = "Time (%)",
       y = "",
       color = ""
@@ -208,8 +222,8 @@ plot_tpca_scores <- function(tpca, plane = 1:2) {
     ggplot2::theme_linedraw() +
     ggplot2::labs(
       title = cli::pluralize("Individuals projected on the PC{plane[1]}-{plane[2]} plane"),
-      subtitle = cli::pluralize("Combined percentage of variance explained: {round(sum(tpca$tpca$values[plane]) * 100, digits = 1)}%"),
-      x = cli::pluralize("PC{plane[1]} ({round(sum(tpca$tpca$values[plane[1]]) * 100, digits = 1)}%)"),
-      y = cli::pluralize("PC{plane[2]} ({round(sum(tpca$tpca$values[plane[2]]) * 100, digits = 1)}%)")
+      subtitle = cli::pluralize("Combined percentage of variance explained: {round(sum(tpca$var_props[plane]) * 100, digits = 1)}%"),
+      x = cli::pluralize("PC{plane[1]} ({round(sum(tpca$var_props[plane[1]]) * 100, digits = 1)}%)"),
+      y = cli::pluralize("PC{plane[2]} ({round(sum(tpca$var_props[plane[2]]) * 100, digits = 1)}%)")
     )
 }
