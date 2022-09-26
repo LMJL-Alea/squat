@@ -37,7 +37,8 @@ The \code{\link[=plot.prcomp_qts]{plot.prcomp_qts()}} method does not return any
 QTS PCA Visualization
 }
 \examples{
-res_pca <- prcomp(vespa64$igp)
+df <- as_qts_sample(vespa64$igp[1:16])
+res_pca <- prcomp(df)
 
 # You can plot the effect of a PC on the mean
 plot(res_pca, what = "PC1")
@@ -48,6 +49,6 @@ plot(res_pca, what = "scores")
 # You can color points according to a categorical variable
 if (requireNamespace("ggplot2", quietly = TRUE)) {
   p <- ggplot2::autoplot(res_pca, what = "scores")
-  p + ggplot2::geom_point(ggplot2::aes(color = vespa64$V))
+  p + ggplot2::geom_point(ggplot2::aes(color = vespa64$V[1:16]))
 }
 }

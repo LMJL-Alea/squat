@@ -1,4 +1,10 @@
-## Resubmission
+## Resubmission 2
+
+In this resubmission, I have:
+
+- reduced the execution time of the examples of the `prcomp_qts()` topic.
+
+## Resubmission 1
 
 In this resubmission, I have:
 
