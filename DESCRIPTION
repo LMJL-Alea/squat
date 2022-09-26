@@ -1,5 +1,5 @@
 Package: squat
-Title: Statistics for QUAternion Temporal Data
+Title: Statistics for Quaternion Temporal Data
 Version: 0.0.1
 Authors@R: c(
     person(given = "Lise", 
@@ -20,7 +20,7 @@ Authors@R: c(
            role = "ctb"))
 Description: An implementation of statistical tools for the analysis 
     of unit quaternion time series. It relies on pre-existing 
-    quaternion data structure provided by the Eigen library.
+    quaternion data structure provided by the 'Eigen' C++ library.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true

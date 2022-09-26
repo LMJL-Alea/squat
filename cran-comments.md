@@ -1,3 +1,10 @@
+## Resubmission
+
+In this resubmission, I have:
+
+- quoted the name of the 'Eigen' C++ library in the description of the package;
+- corrected the title of the package to respect title case.
+
 ## Test environments
 
 - local macOS R installation, R 4.2.1
