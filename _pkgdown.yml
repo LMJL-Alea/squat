@@ -11,6 +11,8 @@ reference:
   - title: QTS Sample Class
     contents:
     - qts_sample
+    - "[.qts_sample"
+    - append
     - rnorm_qts
     - scale
     - mean.qts_sample
