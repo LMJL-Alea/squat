@@ -35,6 +35,7 @@ NULL
 #' @rdname qts_sample
 as_qts_sample <- function(x) {
   if (is_qts_sample(x)) return(x)
+  if (is_qts(x)) x <- list(x)
   if (!is.list(x))
     cli::cli_abort("The input {.arg x} should be a list.")
   x <- purrr::map_if(x, ~ !is_qts(.x), as_qts)
@@ -104,7 +105,7 @@ rnorm_qts <- function(n, mean_qts, alpha = 0.01, beta = 0.001) {
 #' QTS Sample Centering and Standardization
 #'
 #' @param x An object coercible into a numeric matrix or an object of class
-#'   [qts_sample] representing a sample of observed QTS.
+#'   [`qts_sample`] representing a sample of observed QTS.
 #' @param center A boolean specifying whether to center the sample. If set to
 #'   `FALSE`, the original sample is returned, meaning that no standardization
 #'   is performed regardless of whether argument `scale` was set to `TRUE` or
@@ -121,12 +122,14 @@ rnorm_qts <- function(n, mean_qts, alpha = 0.01, beta = 0.001) {
 #' @param ... Extra arguments passed on to next methods.
 #'
 #' @return A list of properly rescaled QTS stored as an object of class
-#'   [qts_sample] when `keep_summary_stats = FALSE`. Otherwise a list with three
-#'   components:
+#'   [`qts_sample`] when `keep_summary_stats = FALSE`. Otherwise a list with
+#'   three components:
 #' - `rescaled_sample`: a list of properly rescaled QTS stored as an object of
-#' class [qts_sample];
-#' - `mean`: a numeric vector with the quaternion Fréchet mean;
-#' - `sd`: a numeric vector with the quaternion Fréchet standard deviation.
+#' class [`qts_sample`];
+#' - `mean`: a list of numeric vectors storing the corresponding quaternion
+#' Fréchet means;
+#' - `sd`: a numeric vector storing the corresponding quaternion Fréchet
+#' standard deviations.
 #'
 #' @export
 #' @examples
