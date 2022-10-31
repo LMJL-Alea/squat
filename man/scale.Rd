@@ -21,7 +21,7 @@ scale(x, center = TRUE, scale = TRUE, ...)
 }
 \arguments{
 \item{x}{An object coercible into a numeric matrix or an object of class
-\link{qts_sample} representing a sample of observed QTS.}
+\code{\link{qts_sample}} representing a sample of observed QTS.}
 
 \item{center}{A boolean specifying whether to center the sample. If set to
 \code{FALSE}, the original sample is returned, meaning that no standardization
@@ -43,13 +43,15 @@ rescaled QTS is returned.}
 }
 \value{
 A list of properly rescaled QTS stored as an object of class
-\link{qts_sample} when \code{keep_summary_stats = FALSE}. Otherwise a list with three
-components:
+\code{\link{qts_sample}} when \code{keep_summary_stats = FALSE}. Otherwise a list with
+three components:
 \itemize{
 \item \code{rescaled_sample}: a list of properly rescaled QTS stored as an object of
-class \link{qts_sample};
-\item \code{mean}: a numeric vector with the quaternion Fréchet mean;
-\item \code{sd}: a numeric vector with the quaternion Fréchet standard deviation.
+class \code{\link{qts_sample}};
+\item \code{mean}: a list of numeric vectors storing the corresponding quaternion
+Fréchet means;
+\item \code{sd}: a numeric vector storing the corresponding quaternion Fréchet
+standard deviations.
 }
 }
 \description{

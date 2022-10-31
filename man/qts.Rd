@@ -14,7 +14,7 @@ is_qts(x)
 \method{format}{qts}(x, digits = 5, ...)
 }
 \arguments{
-\item{x}{A \link[tibble:tibble]{tibble::tibble} with columns \code{time}, \code{w}, \code{x}, \code{y} and \code{z}.}
+\item{x}{A \code{\link[tibble:tibble]{tibble::tibble}} with columns \code{time}, \code{w}, \code{x}, \code{y} and \code{z}.}
 
 \item{digits}{An integer value specifying the number of digits to keep for
 printing. Defaults to \code{5L}.}
@@ -26,12 +26,12 @@ An object of class \link{qts}.
 }
 \description{
 A collection of functions that implements the QTS class. It currently
-provides the \code{as_qts()} function for QTS coercion of \link[tibble:tibble]{tibble::tibble}s and
-the \code{is_qts()} function for checking if an object is a QTS.
+provides the \code{\link[=as_qts]{as_qts()}} function for QTS coercion of \code{\link[tibble:tibble]{tibble::tibble}}s
+and the \code{\link[=is_qts]{is_qts()}} function for checking if an object is a QTS.
 }
 \details{
-A quaternion time series (QTS) is stored as a \code{\link[tibble]{tibble}}
-with 5 columns:
+A quaternion time series (QTS) is stored as a \code{\link[tibble:tibble]{tibble::tibble}} with 5
+columns:
 \itemize{
 \item \code{time}: A first column specifying the time points at which quaternions were
 collected;

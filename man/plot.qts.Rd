@@ -5,18 +5,18 @@
 \alias{autoplot.qts}
 \title{QTS Visualization}
 \usage{
-\method{plot}{qts}(x, change_points = NULL, ...)
+\method{plot}{qts}(x, highlighted_points = NULL, ...)
 
-\method{autoplot}{qts}(x, change_points = NULL, ...)
+\method{autoplot}{qts}(x, highlighted_points = NULL, ...)
 }
 \arguments{
 \item{x}{An object of class \link{qts}.}
 
-\item{change_points}{An integer vector specifying the indices of the change
-points to display if any. Defaults to \code{NULL}, in which case no change
-points are displayed.}
+\item{highlighted_points}{An integer vector specifying point indices to be
+highlighted. Defaults to \code{NULL}, in which case no point will be highlighted
+with respect to the others.}
 
-\item{...}{Further arguments to be passed to methods.}
+\item{...}{Further arguments to be passed on to next methods.}
 }
 \value{
 The \code{\link[=plot.qts]{plot.qts()}} method does not return anything while the

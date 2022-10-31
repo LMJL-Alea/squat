@@ -18,13 +18,13 @@ object. Defaults to \code{FALSE} in which case only the centered
 \code{\link{qts}} is returned.}
 }
 \value{
-If \code{keep_summary_stats = FALSE}, an object of class \code{\link{qts}}
-in which quaternions have been centered (and possibly standardized) around
-their geometric mean. If \code{keep_summary_stats = TRUE}, a list with three
+If \code{keep_summary_stats = FALSE}, an object of class \code{\link{qts}} in which
+quaternions have been centered (and possibly standardized) around their
+geometric mean. If \code{keep_summary_stats = TRUE}, a list with three
 components:
 \itemize{
-\item \code{qts}: an object of class \code{\link{qts}} in which quaternions have
-been centered (and possibly standardized) around their geometric mean;
+\item \code{qts}: an object of class \code{\link{qts}} in which quaternions have been centered
+(and possibly standardized) around their geometric mean;
 \item \code{mean}: a numeric vector with the quaternion Fréchet mean;
 \item \code{sd}: a numeric value with the quaternion Fréchet standard deviation.
 }

@@ -1,11 +1,11 @@
 #' QTS Class
 #'
 #' A collection of functions that implements the QTS class. It currently
-#' provides the `as_qts()` function for QTS coercion of [tibble::tibble]s and
-#' the `is_qts()` function for checking if an object is a QTS.
+#' provides the [`as_qts()`] function for QTS coercion of [`tibble::tibble`]s
+#' and the [`is_qts()`] function for checking if an object is a QTS.
 #'
-#' A quaternion time series (QTS) is stored as a \code{\link[tibble]{tibble}}
-#' with 5 columns:
+#' A quaternion time series (QTS) is stored as a [`tibble::tibble`] with 5
+#' columns:
 #' - `time`: A first column specifying the time points at which quaternions were
 #' collected;
 #' - `w`: A second column specifying the first coordinate of the collected
@@ -17,7 +17,7 @@
 #' - `z`: A fifth column specifying the fourth coordinate of the collected
 #' quaternions.
 #'
-#' @param x A [tibble::tibble] with columns `time`, `w`, `x`, `y` and `z`.
+#' @param x A [`tibble::tibble`] with columns `time`, `w`, `x`, `y` and `z`.
 #' @param digits An integer value specifying the number of digits to keep for
 #'   printing. Defaults to `5L`.
 #' @param ... Further arguments passed to or from other methods.
@@ -116,7 +116,7 @@ normalize_qts <- function(x) {
 #' its quaternions. This is effectively achieved by left-multiplying each
 #' quaternion by the inverse of their geometric mean.
 #'
-#' @param x An object of class \code{\link{qts}}.
+#' @param x An object of class [`qts`].
 #' @param standardize A boolean specifying whether to standardize the QTS in
 #'   addition to centering it. Defaults to `FALSE`.
 #' @param keep_summary_stats A boolean specifying whether the mean and standard
@@ -124,12 +124,12 @@ normalize_qts <- function(x) {
 #'   object. Defaults to `FALSE` in which case only the centered
 #'   \code{\link{qts}} is returned.
 #'
-#' @return If `keep_summary_stats = FALSE`, an object of class \code{\link{qts}}
-#'   in which quaternions have been centered (and possibly standardized) around
-#'   their geometric mean. If `keep_summary_stats = TRUE`, a list with three
+#' @return If `keep_summary_stats = FALSE`, an object of class [`qts`] in which
+#'   quaternions have been centered (and possibly standardized) around their
+#'   geometric mean. If `keep_summary_stats = TRUE`, a list with three
 #'   components:
-#'   - `qts`: an object of class \code{\link{qts}} in which quaternions have
-#'   been centered (and possibly standardized) around their geometric mean;
+#'   - `qts`: an object of class [`qts`] in which quaternions have been centered
+#'   (and possibly standardized) around their geometric mean;
 #' - `mean`: a numeric vector with the quaternion Fréchet mean;
 #' - `sd`: a numeric value with the quaternion Fréchet standard deviation.
 #'
@@ -162,10 +162,10 @@ smooth_qts <- function(x, alpha = 0.5) {
 #' QTS Visualization
 #'
 #' @param x An object of class [qts].
-#' @param change_points An integer vector specifying the indices of the change
-#'   points to display if any. Defaults to `NULL`, in which case no change
-#'   points are displayed.
-#' @param ... Further arguments to be passed to methods.
+#' @param highlighted_points An integer vector specifying point indices to be
+#'   highlighted. Defaults to `NULL`, in which case no point will be highlighted
+#'   with respect to the others.
+#' @param ... Further arguments to be passed on to next methods.
 #'
 #' @return The [plot.qts()] method does not return anything while the
 #'   [autoplot.qts()] method returns a [ggplot2::ggplot] object.
@@ -176,18 +176,18 @@ smooth_qts <- function(x, alpha = 0.5) {
 #' @examples
 #' plot(vespa64$igp[[1]])
 #' ggplot2::autoplot(vespa64$igp[[1]])
-plot.qts <- function(x, change_points = NULL, ...) {
-  print(autoplot(x, change_points = change_points, ...))
+plot.qts <- function(x, highlighted_points = NULL, ...) {
+  print(autoplot(x, highlighted_points = highlighted_points, ...))
 }
 
 #' @importFrom ggplot2 autoplot .data
 #' @export
 #' @rdname plot.qts
-autoplot.qts <- function(x, change_points = NULL, ...) {
-  if (!is.null(change_points)) {
-    if (!all(change_points %in% 1:nrow(x)))
+autoplot.qts <- function(x, highlighted_points = NULL, ...) {
+  if (!is.null(highlighted_points)) {
+    if (!all(highlighted_points %in% 1:nrow(x)))
       cli::cli_abort("The change point indices are out of bounds.")
-    change_points <- x$time[change_points]
+    highlighted_points <- x$time[highlighted_points]
   }
   x <- tidyr::pivot_longer(x, cols = "w":"z")
   p <- ggplot2::ggplot(x, ggplot2::aes(
@@ -203,10 +203,10 @@ autoplot.qts <- function(x, change_points = NULL, ...) {
       y = ""
     )
 
-  if (!is.null(change_points)) {
+  if (!is.null(highlighted_points)) {
     p <- p +
       ggplot2::geom_point(
-        data = subset(x, x$time %in% change_points),
+        data = subset(x, x$time %in% highlighted_points),
         color = "red"
       )
   }
