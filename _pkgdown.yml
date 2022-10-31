@@ -28,6 +28,8 @@ reference:
     - normalize
     - resample
     - smooth
+    - hemispherize
+    - moving_average
   - title: QTS Transformations
     contents:
     - qts2dts

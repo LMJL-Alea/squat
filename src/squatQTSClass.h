@@ -27,5 +27,12 @@ Rcpp::DataFrame smooth_qts_impl(
     const Rcpp::DataFrame &qts,
     const double alpha = 0.5
 );
+// [[Rcpp::export]]
+Rcpp::DataFrame hemispherize_qts_impl(const Rcpp::DataFrame &qts);
+// [[Rcpp::export]]
+Rcpp::DataFrame moving_average_qts_impl(
+    const Rcpp::DataFrame &qts,
+    const unsigned int window_size
+);
 
 #endif /* SQUATQTSCLASS_H */

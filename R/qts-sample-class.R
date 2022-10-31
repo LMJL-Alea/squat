@@ -24,7 +24,6 @@
 #' @param simplify A boolean value specifying whether the resulting subset
 #'   should be turned into a single QTS in case the subset is of size 1.
 #'   Defaults to `FALSE`.
-#' @inheritParams base::append
 #'
 #' @return An object of class [`qts_sample`].
 #' @name qts_sample

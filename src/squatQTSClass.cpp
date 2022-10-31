@@ -353,3 +353,83 @@ Rcpp::DataFrame smooth_qts_impl(const Rcpp::DataFrame &qts,
   outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
   return outValue;
 }
+
+Rcpp::DataFrame hemispherize_qts_impl(const Rcpp::DataFrame &qts)
+{
+  unsigned int nGrid = qts.nrows();
+  Rcpp::DataFrame outValue = Rcpp::clone(qts);
+  Rcpp::NumericVector wValues = outValue["w"];
+  Rcpp::NumericVector xValues = outValue["x"];
+  Rcpp::NumericVector yValues = outValue["y"];
+  Rcpp::NumericVector zValues = outValue["z"];
+
+  std::vector<Eigen::Quaterniond> qValues(nGrid);
+  for (unsigned int i = 0;i < nGrid;++i)
+  {
+    qValues[i] = Eigen::Quaterniond(wValues(i), xValues(i), yValues(i), zValues(i));
+    if (i == 0)
+      continue;
+    if (qValues[i].dot(qValues[i - 1]) < 0)
+    {
+      qValues[i].coeffs() *= -1.0;
+      wValues(i) = qValues[i].w();
+      xValues(i) = qValues[i].x();
+      yValues(i) = qValues[i].y();
+      zValues(i) = qValues[i].z();
+    }
+  }
+
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+  return outValue;
+}
+
+Rcpp::DataFrame moving_average_qts_impl(const Rcpp::DataFrame &qts,
+                                        const unsigned int window_size)
+{
+  unsigned int nGrid = qts.nrows();
+  Rcpp::DataFrame outValue = Rcpp::clone(qts);
+  Rcpp::NumericVector inputWValues = qts["w"];
+  Rcpp::NumericVector inputXValues = qts["x"];
+  Rcpp::NumericVector inputYValues = qts["y"];
+  Rcpp::NumericVector inputZValues = qts["z"];
+  Eigen::Vector4d inputFirstQValue = {inputWValues(0), inputXValues(0), inputYValues(0), inputZValues(0)};
+  Rcpp::NumericVector outputWValues = outValue["w"];
+  Rcpp::NumericVector outputXValues = outValue["x"];
+  Rcpp::NumericVector outputYValues = outValue["y"];
+  Rcpp::NumericVector outputZValues = outValue["z"];
+  std::vector<Eigen::VectorXd> qValues;
+  Eigen::Vector4d qVector;
+
+  for (int i = 0;i < nGrid;++i)
+  {
+    unsigned int minIndex = std::max(0, i - (int)window_size);
+    unsigned int maxIndex = std::min((int)nGrid - 1, i + (int)window_size);
+    qValues.resize(maxIndex - minIndex + 1);
+    for (unsigned int j = minIndex;j <= maxIndex;++j)
+    {
+      qVector = {inputWValues(j), inputXValues(j), inputYValues(j), inputZValues(j)};
+      qValues[j - minIndex] = qVector;
+    }
+    qVector = gmedian(qValues);
+    outputWValues(i) = qVector(0);
+    outputXValues(i) = qVector(1);
+    outputYValues(i) = qVector(2);
+    outputZValues(i) = qVector(3);
+  }
+
+  outValue = hemispherize_qts_impl(outValue);
+
+  Eigen::Vector4d outputFirstQValue = {outputWValues(0), outputXValues(0), outputYValues(0), outputZValues(0)};
+
+  if (outputFirstQValue.dot(inputFirstQValue) < 0)
+  {
+    outputWValues = -1.0 * outputWValues;
+    outputXValues = -1.0 * outputXValues;
+    outputYValues = -1.0 * outputYValues;
+    outputZValues = -1.0 * outputZValues;
+  }
+
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+  return outValue;
+}
+

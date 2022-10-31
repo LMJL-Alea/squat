@@ -45,6 +45,14 @@ smooth_qts_impl <- function(qts, alpha = 0.5) {
     .Call(`_squat_smooth_qts_impl`, qts, alpha)
 }
 
+hemispherize_qts_impl <- function(qts) {
+    .Call(`_squat_hemispherize_qts_impl`, qts)
+}
+
+moving_average_qts_impl <- function(qts, window_size) {
+    .Call(`_squat_moving_average_qts_impl`, qts, window_size)
+}
+
 GetCostMatrix <- function(qts1, qts2) {
     .Call(`_squat_GetCostMatrix`, qts1, qts2)
 }

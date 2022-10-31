@@ -294,3 +294,67 @@ smooth.qts_sample <- function(x, alpha = 0.5, ...) {
   res <- purrr::map(x, smooth, alpha = alpha)
   as_qts_sample(res)
 }
+
+#' QTS Hemispherization
+#'
+#' This function ensures that there are no discontinuities in QTS due to
+#' quaternion flips since two unit quaternions q and -q encode the same
+#' rotation.
+#'
+#' @param x An object of class [`qts`] or [`qts_sample`].
+#'
+#' @return An object of the same class as the input argument `x` with no
+#'   quaternion flip discontinuities.
+#'
+#' @export
+#' @examples
+#' hemispherize(vespa64$igp[[1]])
+#' hemispherize(vespa64$igp)
+hemispherize <- function(x) {
+  UseMethod("hemispherize")
+}
+
+#' @export
+#' @rdname hemispherize
+hemispherize.qts <- function(x) {
+  smooth_qts(x = x)
+}
+
+#' @export
+#' @rdname hemispherize
+hemispherize.qts_sample <- function(x) {
+  res <- purrr::map(x, hemispherize)
+  as_qts_sample(res)
+}
+
+#' QTS Moving Average
+#'
+#' This function performs QTS smoothing via moving average.
+#'
+#' @param x An object of class [`qts`] or [`qts_sample`].
+#' @param window_size An integer value specifying the size of the sliding window
+#'   used to compute the median value. Defaults to `0L`.
+#'
+#' @return An object of the same class as the input argument `x` storing the
+#'   smoothed QTS.
+#'
+#' @export
+#' @examples
+#' moving_average(vespa64$igp[[1]], window_size = 5)
+#' moving_average(vespa64$igp, window_size = 5)
+moving_average <- function(x, window_size = 0) {
+  UseMethod("moving_average")
+}
+
+#' @export
+#' @rdname moving_average
+moving_average.qts <- function(x, window_size = 0) {
+  moving_average_qts(x = x, window_size = window_size)
+}
+
+#' @export
+#' @rdname moving_average
+moving_average.qts_sample <- function(x, window_size = 0) {
+  res <- purrr::map(x, moving_average, window_size = window_size)
+  as_qts_sample(res)
+}

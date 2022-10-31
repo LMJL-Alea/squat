@@ -1,7 +1,9 @@
 test_that("Functions related to the QTS class work", {
   expect_true(is_qts_sample(vespa64$igp))
   expect_true(is_qts_sample(as_qts_sample(vespa64$igp)))
-  expect_equal(vespa64$igp[1, simplify = TRUE], vespa64$igp[[1]])
+  x <- vespa64$igp[1, simplify = TRUE]
+  expect_true(is_qts(x))
+  expect_equal(x, vespa64$igp[[1]])
   expect_snapshot(vespa64$igp[1])
 })
 

@@ -6,6 +6,10 @@ with appropriate class for the output.
 as input argument.
 * Rename `change_points` argument to the `plot.qts()` function to better reflect
 its flexibility.
+* Added subset operator for QTS sample objects.
+* Added `append` S3 method for QTS sample objects.
+* Added `hemispherize()` function to remove any discontinuities in QTS due to
+quaternion flips.
 
 # squat 0.0.1
 

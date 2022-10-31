@@ -41,3 +41,13 @@ test_that("The function smooth() works", {
   expect_snapshot(smooth(vespa64$igp[[1]]))
   expect_snapshot(smooth(vespa64$igp))
 })
+
+test_that("The function hemispherize() works", {
+  expect_snapshot(hemispherize(vespa64$igp[[1]]))
+  expect_snapshot(hemispherize(vespa64$igp))
+})
+
+test_that("The function moving_average() works", {
+  expect_equal(moving_average(vespa64$igp[[1]]), vespa64$igp[[1]])
+  expect_equal(moving_average(vespa64$igp), vespa64$igp)
+})
