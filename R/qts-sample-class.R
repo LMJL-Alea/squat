@@ -103,14 +103,14 @@ rnorm_qts <- function(n, mean_qts, alpha = 0.01, beta = 0.001) {
 
 #' QTS Sample Centering and Standardization
 #'
-#' @param x An object of class [qts_sample] representing a sample of observed
-#'   QTS.
-#' @param center A boolean specifying whether to center the sample of QTS. If
-#'   set to `FALSE`, the original sample is returned, meaning that no
-#'   standardization is performed regardless of whether argument `scale` was set
-#'   to `TRUE` or not. Defaults to `TRUE`.
-#' @param scale A boolean specifying whether to standardize the sample of QTS
-#'   once they have been centered. Defaults to `TRUE`.
+#' @param x An object coercible into a numeric matrix or an object of class
+#'   [qts_sample] representing a sample of observed QTS.
+#' @param center A boolean specifying whether to center the sample. If set to
+#'   `FALSE`, the original sample is returned, meaning that no standardization
+#'   is performed regardless of whether argument `scale` was set to `TRUE` or
+#'   not. Defaults to `TRUE`.
+#' @param scale A boolean specifying whether to standardize the sample once it
+#'   has been centered. Defaults to `TRUE`.
 #' @param by_row A boolean specifying whether the QTS scaling should happen for
 #'   each data point (`by_row = TRUE`) or for each time point (`by_row =
 #'   FALSE`). Defaults to `FALSE`.

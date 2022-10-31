@@ -4,26 +4,28 @@ template:
 
 reference:
   - title: QTS Class
-    contents:
+  - contents:
     - qts
-    - derivative_qts
-    - straighten_qts
-    - log_qts
-    - exp_qts
-    - reorient_qts
-    - normalize_qts
-    - centring_qts
-    - resample_qts
-    - smooth_qts
+    - centring
     - plot.qts
   - title: QTS Sample Class
     contents:
     - qts_sample
     - rnorm_qts
-    - scale_qts
+    - scale
     - mean.qts_sample
     - median.qts_sample
     - plot.qts_sample
+  - title: QTS Wrangling
+  - contents:
+    - differentiate
+    - straighten
+    - log
+    - exp
+    - reorient
+    - normalize
+    - resample
+    - smooth
   - title: QTS Transformations
     contents:
     - qts2dts

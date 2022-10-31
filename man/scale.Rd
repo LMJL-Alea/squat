@@ -20,16 +20,16 @@ scale(x, center = TRUE, scale = TRUE, ...)
 )
 }
 \arguments{
-\item{x}{An object of class \link{qts_sample} representing a sample of observed
-QTS.}
+\item{x}{An object coercible into a numeric matrix or an object of class
+\link{qts_sample} representing a sample of observed QTS.}
 
-\item{center}{A boolean specifying whether to center the sample of QTS. If
-set to \code{FALSE}, the original sample is returned, meaning that no
-standardization is performed regardless of whether argument \code{scale} was set
-to \code{TRUE} or not. Defaults to \code{TRUE}.}
+\item{center}{A boolean specifying whether to center the sample. If set to
+\code{FALSE}, the original sample is returned, meaning that no standardization
+is performed regardless of whether argument \code{scale} was set to \code{TRUE} or
+not. Defaults to \code{TRUE}.}
 
-\item{scale}{A boolean specifying whether to standardize the sample of QTS
-once they have been centered. Defaults to \code{TRUE}.}
+\item{scale}{A boolean specifying whether to standardize the sample once it
+has been centered. Defaults to \code{TRUE}.}
 
 \item{...}{Extra arguments passed on to next methods.}
 
