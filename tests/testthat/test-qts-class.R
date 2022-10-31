@@ -11,56 +11,28 @@ test_that("Functions related to the QTS class work", {
   expect_equal(qts1, qts3)
 })
 
-test_that("The function derivative_qts() works", {
-  expect_snapshot(derivative_qts(vespa64$igp[[1]]))
-})
-
-test_that("Logarithm and exponential for QTS work", {
-  x <- log_qts(vespa64$igp[[1]])
-  expect_snapshot(x)
-  y <- exp_qts(x)
-  expect_equal(y, vespa64$igp[[1]])
-})
-
-test_that("Function reorient_qts() works", {
-  expect_snapshot(reorient_qts(vespa64$igp[[1]], disable_normalization = FALSE))
-  expect_snapshot(reorient_qts(vespa64$igp[[1]], disable_normalization = TRUE))
-})
-
-test_that("Function normalize_qts() works", {
-  expect_snapshot(normalize_qts(vespa64$igp[[1]]))
-})
-
-test_that("Function centring_qts() works (standardize = FALSE, keep_summary_stats = FALSE)", {
-  expect_snapshot(centring_qts(
+test_that("Function centring() works (standardize = FALSE, keep_summary_stats = FALSE)", {
+  expect_snapshot(centring(
     x = vespa64$igp[[1]],
     standardize = FALSE,
     keep_summary_stats = FALSE
   ))
 })
 
-test_that("Function centring_qts() works (standardize = TRUE, keep_summary_stats = FALSE)", {
-  expect_snapshot(centring_qts(
+test_that("Function centring() works (standardize = TRUE, keep_summary_stats = FALSE)", {
+  expect_snapshot(centring(
     x = vespa64$igp[[1]],
     standardize = TRUE,
     keep_summary_stats = FALSE
   ))
 })
 
-test_that("Function centring_qts() works (standardize = FALSE, keep_summary_stats = TRUE)", {
-  expect_snapshot(centring_qts(
+test_that("Function centring() works (standardize = FALSE, keep_summary_stats = TRUE)", {
+  expect_snapshot(centring(
     x = vespa64$igp[[1]],
     standardize = FALSE,
     keep_summary_stats = TRUE
   ))
-})
-
-test_that("Function resample_qts() works", {
-  expect_snapshot(resample_qts(vespa64$igp[[1]]))
-})
-
-test_that("Function smooth_qts() works", {
-  expect_snapshot(smooth_qts(vespa64$igp[[1]]))
 })
 
 test_that("Visualization code for QTS work", {

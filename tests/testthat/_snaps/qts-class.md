@@ -1,107 +1,7 @@
-# The function derivative_qts() works
+# Function centring() works (standardize = FALSE, keep_summary_stats = FALSE)
 
     Code
-      derivative_qts(vespa64$igp[[1]])
-    Output
-      # A tibble: 100 x 5
-          time         w         x         y         z
-         <int> <dec:.5!> <dec:.5!> <dec:.5!> <dec:.5!>
-       1     1   0.99998  -0.00519  -0.00222  -0.00040
-       2     2   0.99998  -0.00529  -0.00305  -0.00057
-       3     3   0.99998  -0.00534  -0.00367  -0.00094
-       4     4   0.99998  -0.00447  -0.00352  -0.00119
-       5     5   0.99999  -0.00374  -0.00345  -0.00140
-       6     6   0.99999  -0.00292  -0.00331  -0.00158
-       7     7   0.99999  -0.00212  -0.00327  -0.00182
-       8     8   0.99999  -0.00166  -0.00341  -0.00209
-       9     9   0.99999  -0.00145  -0.00371  -0.00229
-      10    10   0.99999  -0.00168  -0.00394  -0.00239
-      # ... with 90 more rows
-
-# Logarithm and exponential for QTS work
-
-    Code
-      x
-    Output
-      # A tibble: 101 x 5
-          time         w         x         y         z
-         <int> <dec:.5!> <dec:.5!> <dec:.5!> <dec:.5!>
-       1     0   0.00000   0.07988   0.07001   0.01336
-       2     1   0.00000   0.07470   0.06775   0.01315
-       3     2   0.00000   0.06942   0.06467   0.01271
-       4     3   0.00000   0.06406   0.06099   0.01186
-       5     4   0.00000   0.05956   0.05749   0.01072
-       6     5   0.00000   0.05578   0.05408   0.00933
-       7     6   0.00000   0.05280   0.05084   0.00772
-       8     7   0.00000   0.05061   0.04765   0.00584
-       9     8   0.00000   0.04887   0.04434   0.00366
-      10     9   0.00000   0.04733   0.04074   0.00126
-      # ... with 91 more rows
-
-# Function reorient_qts() works
-
-    Code
-      reorient_qts(vespa64$igp[[1]], disable_normalization = FALSE)
-    Output
-      # A tibble: 101 x 5
-          time         w         x         y         z
-         <int> <dec:.5!> <dec:.5!> <dec:.5!> <dec:.5!>
-       1     0   1.00000   0.00000   0.00000   0.00000
-       2     1   0.99998  -0.00519  -0.00222  -0.00040
-       3     2   0.99993  -0.01048  -0.00527  -0.00097
-       4     3   0.99983  -0.01582  -0.00895  -0.00190
-       5     4   0.99971  -0.02029  -0.01248  -0.00307
-       6     5   0.99957  -0.02402  -0.01595  -0.00444
-       7     6   0.99943  -0.02693  -0.01927  -0.00599
-       8     7   0.99929  -0.02904  -0.02258  -0.00777
-       9     8   0.99914  -0.03067  -0.02604  -0.00979
-      10     9   0.99897  -0.03209  -0.02980  -0.01201
-      # ... with 91 more rows
-
----
-
-    Code
-      reorient_qts(vespa64$igp[[1]], disable_normalization = TRUE)
-    Output
-      # A tibble: 101 x 5
-          time         w         x         y         z
-         <int> <dec:.5!> <dec:.5!> <dec:.5!> <dec:.5!>
-       1     0   1.00000   0.00000   0.00000   0.00000
-       2     1   0.99998  -0.00519  -0.00222  -0.00040
-       3     2   0.99993  -0.01048  -0.00527  -0.00097
-       4     3   0.99983  -0.01582  -0.00895  -0.00190
-       5     4   0.99971  -0.02029  -0.01248  -0.00307
-       6     5   0.99957  -0.02402  -0.01595  -0.00444
-       7     6   0.99943  -0.02693  -0.01927  -0.00599
-       8     7   0.99929  -0.02904  -0.02258  -0.00777
-       9     8   0.99914  -0.03067  -0.02604  -0.00979
-      10     9   0.99897  -0.03209  -0.02980  -0.01201
-      # ... with 91 more rows
-
-# Function normalize_qts() works
-
-    Code
-      normalize_qts(vespa64$igp[[1]])
-    Output
-      # A tibble: 101 x 5
-          time         w         x         y         z
-         <int> <dec:.5!> <dec:.5!> <dec:.5!> <dec:.5!>
-       1     0   0.99427   0.07973   0.06988   0.01334
-       2     1   0.99483   0.07457   0.06763   0.01313
-       3     2   0.99542   0.06931   0.06457   0.01269
-       4     3   0.99602   0.06398   0.06091   0.01184
-       5     4   0.99652   0.05949   0.05742   0.01070
-       6     5   0.99694   0.05572   0.05403   0.00932
-       7     6   0.99729   0.05275   0.05079   0.00772
-       8     7   0.99757   0.05056   0.04761   0.00583
-       9     8   0.99782   0.04883   0.04430   0.00366
-      10     9   0.99805   0.04730   0.04071   0.00125
-      # ... with 91 more rows
-
-# Function centring_qts() works (standardize = FALSE, keep_summary_stats = FALSE)
-
-    Code
-      centring_qts(x = vespa64$igp[[1]], standardize = FALSE, keep_summary_stats = FALSE)
+      centring(x = vespa64$igp[[1]], standardize = FALSE, keep_summary_stats = FALSE)
     Output
       # A tibble: 101 x 5
           time         w         x         y         z
@@ -118,10 +18,10 @@
       10     9   0.99761   0.06156   0.03147   0.00204
       # ... with 91 more rows
 
-# Function centring_qts() works (standardize = TRUE, keep_summary_stats = FALSE)
+# Function centring() works (standardize = TRUE, keep_summary_stats = FALSE)
 
     Code
-      centring_qts(x = vespa64$igp[[1]], standardize = TRUE, keep_summary_stats = FALSE)
+      centring(x = vespa64$igp[[1]], standardize = TRUE, keep_summary_stats = FALSE)
     Output
       # A tibble: 101 x 5
           time         w         x         y         z
@@ -138,10 +38,10 @@
       10     9   0.99894   0.04091   0.02091   0.00135
       # ... with 91 more rows
 
-# Function centring_qts() works (standardize = FALSE, keep_summary_stats = TRUE)
+# Function centring() works (standardize = FALSE, keep_summary_stats = TRUE)
 
     Code
-      centring_qts(x = vespa64$igp[[1]], standardize = FALSE, keep_summary_stats = TRUE)
+      centring(x = vespa64$igp[[1]], standardize = FALSE, keep_summary_stats = TRUE)
     Output
       $qts
       # A tibble: 101 x 5
@@ -165,44 +65,4 @@
       $sd
       [1] 0
       
-
-# Function resample_qts() works
-
-    Code
-      resample_qts(vespa64$igp[[1]])
-    Output
-      # A tibble: 101 x 5
-          time         w         x         y         z
-         <dbl> <dec:.5!> <dec:.5!> <dec:.5!> <dec:.5!>
-       1     0   0.99427   0.07973   0.06988   0.01334
-       2     1   0.99483   0.07457   0.06763   0.01313
-       3     2   0.99542   0.06931   0.06457   0.01269
-       4     3   0.99602   0.06398   0.06091   0.01184
-       5     4   0.99652   0.05949   0.05742   0.01070
-       6     5   0.99694   0.05572   0.05403   0.00932
-       7     6   0.99729   0.05275   0.05079   0.00772
-       8     7   0.99757   0.05056   0.04761   0.00583
-       9     8   0.99782   0.04883   0.04430   0.00366
-      10     9   0.99805   0.04730   0.04071   0.00125
-      # ... with 91 more rows
-
-# Function smooth_qts() works
-
-    Code
-      smooth_qts(vespa64$igp[[1]])
-    Output
-      # A tibble: 101 x 5
-          time         w         x         y         z
-         <int> <dec:.5!> <dec:.5!> <dec:.5!> <dec:.5!>
-       1     0   0.99467   0.07637   0.06803   0.01301
-       2     1   0.99505   0.07302   0.06618   0.01268
-       3     2   0.99552   0.06888   0.06361   0.01213
-       4     3   0.99601   0.06453   0.06055   0.01130
-       5     4   0.99647   0.06045   0.05732   0.01020
-       6     5   0.99688   0.05684   0.05403   0.00884
-       7     6   0.99724   0.05380   0.05075   0.00724
-       8     7   0.99754   0.05128   0.04743   0.00539
-       9     8   0.99782   0.04912   0.04403   0.00333
-      10     9   0.99807   0.04709   0.04049   0.00111
-      # ... with 91 more rows
 

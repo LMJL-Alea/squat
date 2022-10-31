@@ -22,7 +22,7 @@
       attr(,"class")
       [1] "qts_sample" "list"      
 
-# The function scale_qts() works (center = TRUE, by_row = FALSE, keep_summary_stats = FALSE)
+# The function scale() works (center = TRUE, by_row = FALSE, keep_summary_stats = FALSE)
 
     Code
       qts_list[[1]]
@@ -42,7 +42,7 @@
       10     9   0.99948  -0.03085  -0.00056  -0.00936
       # ... with 91 more rows
 
-# The function scale_qts() works (center = TRUE, by_row = TRUE, keep_summary_stats = FALSE)
+# The function scale() works (center = TRUE, by_row = TRUE, keep_summary_stats = FALSE)
 
     Code
       qts_list[[1]]

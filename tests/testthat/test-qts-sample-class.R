@@ -4,33 +4,33 @@ test_that("The function rnorm_qts() works", {
   })
 })
 
-test_that("The function scale_qts() works (center = TRUE, by_row = FALSE, keep_summary_stats = FALSE)", {
-  qts_list <- scale_qts(
+test_that("The function scale() works (center = TRUE, by_row = FALSE, keep_summary_stats = FALSE)", {
+  qts_list <- scale(
     x = vespa64$igp,
     center = TRUE,
-    standardize = TRUE,
+    scale = TRUE,
     by_row = FALSE,
     keep_summary_stats = FALSE
   )
   expect_snapshot(qts_list[[1]])
 })
 
-test_that("The function scale_qts() works (center = FALSE, by_row = FALSE, keep_summary_stats = FALSE)", {
-  qts_list <- scale_qts(
+test_that("The function scale() works (center = FALSE, by_row = FALSE, keep_summary_stats = FALSE)", {
+  qts_list <- scale(
     x = vespa64$igp,
     center = FALSE,
-    standardize = TRUE,
+    scale = TRUE,
     by_row = FALSE,
     keep_summary_stats = FALSE
   )
   expect_equal(qts_list, vespa64$igp)
 })
 
-test_that("The function scale_qts() works (center = FALSE, by_row = FALSE, keep_summary_stats = TRUE)", {
-  qts_list <- scale_qts(
+test_that("The function scale() works (center = FALSE, by_row = FALSE, keep_summary_stats = TRUE)", {
+  qts_list <- scale(
     x = vespa64$igp,
     center = FALSE,
-    standardize = TRUE,
+    scale = TRUE,
     by_row = FALSE,
     keep_summary_stats = TRUE
   )
@@ -41,11 +41,11 @@ test_that("The function scale_qts() works (center = FALSE, by_row = FALSE, keep_
   ))
 })
 
-test_that("The function scale_qts() works (center = TRUE, by_row = TRUE, keep_summary_stats = FALSE)", {
-  qts_list <- scale_qts(
+test_that("The function scale() works (center = TRUE, by_row = TRUE, keep_summary_stats = FALSE)", {
+  qts_list <- scale(
     x = vespa64$igp,
     center = TRUE,
-    standardize = TRUE,
+    scale = TRUE,
     by_row = TRUE,
     keep_summary_stats = FALSE
   )

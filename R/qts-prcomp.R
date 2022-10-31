@@ -161,10 +161,12 @@ autoplot.prcomp_qts <- function(x, what = "PC1", ...) {
 #' @export
 #' @rdname plot.prcomp_qts
 screeplot.prcomp_qts <- function(x, ...) {
-  tibble::tibble(
+  plot_data <- tibble::tibble(
     lambda = x$var_props,
     m = seq_along(.data$lambda)
-  ) |>
+  )
+
+  plot_data |>
     ggplot2::ggplot(ggplot2::aes(.data$m, .data$lambda)) +
     ggplot2::geom_col() +
     ggplot2::labs(
@@ -196,8 +198,11 @@ plot_tpca_component <- function(tpca, component = 1, original_space = TRUE) {
   plot_mean$col <- "mean"
   plot_lb$col <- cli::pluralize("mean - med(|scores|) * PC{component}")
   plot_ub$col <- cli::pluralize("mean + med(|scores|) * PC{component}")
-  rbind(plot_mean, plot_lb, plot_ub) |>
-    tidyr::pivot_longer(-c(.data$time, .data$col)) |>
+
+  plot_data <- rbind(plot_mean, plot_lb, plot_ub) |>
+    tidyr::pivot_longer(-c("time", "col"))
+
+  plot_data |>
     ggplot2::ggplot(ggplot2::aes(x = .data$time, y = .data$value, color = .data$col)) +
     ggplot2::geom_line() +
     ggplot2::facet_wrap(ggplot2::vars(.data$name), ncol = 1, scales = "free") +
@@ -216,7 +221,10 @@ plot_tpca_scores <- function(tpca, plane = 1:2) {
     cli::cli_abort("The {.code plane} argument should be of length two.")
   scores <- tpca$tpca$scores[, plane]
   n <- nrow(scores)
-  tibble::tibble(x = scores[, 1], y = scores[, 2]) |>
+
+  plot_data <- tibble::tibble(x = scores[, 1], y = scores[, 2])
+
+  plot_data |>
     ggplot2::ggplot(ggplot2::aes(.data$x, .data$y, label = 1:n)) +
     ggplot2::geom_point() +
     ggrepel::geom_label_repel(seed = 1234) +

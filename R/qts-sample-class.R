@@ -103,14 +103,14 @@ rnorm_qts <- function(n, mean_qts, alpha = 0.01, beta = 0.001) {
 
 #' QTS Sample Centering and Standardization
 #'
-#' @param x An object of class \code{\link{qts_sample}} representing a sample of
-#'   observed QTS.
+#' @param x An object of class [qts_sample] representing a sample of observed
+#'   QTS.
 #' @param center A boolean specifying whether to center the sample of QTS. If
 #'   set to `FALSE`, the original sample is returned, meaning that no
-#'   standardization is performed regardless of whether argument `standardize`
-#'   was set to `TRUE` or not. Defaults to `TRUE`.
-#' @param standardize A boolean specifying whether to standardize the sample of
-#'   QTS once they have been centered. Defaults to `TRUE`.
+#'   standardization is performed regardless of whether argument `scale` was set
+#'   to `TRUE` or not. Defaults to `TRUE`.
+#' @param scale A boolean specifying whether to standardize the sample of QTS
+#'   once they have been centered. Defaults to `TRUE`.
 #' @param by_row A boolean specifying whether the QTS scaling should happen for
 #'   each data point (`by_row = TRUE`) or for each time point (`by_row =
 #'   FALSE`). Defaults to `FALSE`.
@@ -118,28 +118,38 @@ rnorm_qts <- function(n, mean_qts, alpha = 0.01, beta = 0.001) {
 #'   deviation used for standardizing the data should be stored in the output
 #'   object. Defaults to `FALSE` in which case only the list of properly
 #'   rescaled QTS is returned.
+#' @param ... Extra arguments passed on to next methods.
 #'
 #' @return A list of properly rescaled QTS stored as an object of class
-#'   \code{\link{qts_sample}} when `keep_summary_stats = FALSE`.
-#'   Otherwise a list with three components:
+#'   [qts_sample] when `keep_summary_stats = FALSE`. Otherwise a list with three
+#'   components:
 #' - `rescaled_sample`: a list of properly rescaled QTS stored as an object of
-#' class \code{\link{qts_sample}};
+#' class [qts_sample];
 #' - `mean`: a numeric vector with the quaternion Fréchet mean;
 #' - `sd`: a numeric vector with the quaternion Fréchet standard deviation.
 #'
 #' @export
-#'
 #' @examples
-#' x <- scale_qts(vespa64$igp)
+#' x <- scale(vespa64$igp)
 #' x[[1]]
-scale_qts <- function(x,
-                      center = TRUE,
-                      standardize = TRUE,
-                      by_row = FALSE,
-                      keep_summary_stats = FALSE) {
-  if (!is_qts_sample(x))
-    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts_sample}.")
+scale <- function(x, center = TRUE, scale = TRUE, ...) {
+  UseMethod("scale")
+}
 
+#' @export
+#' @rdname scale
+scale.default <- function(x, center = TRUE, scale = TRUE, ...) {
+  base::scale(x = x, center = center, scale = scale)
+}
+
+#' @export
+#' @rdname scale
+scale.qts_sample <- function(x,
+                             center = TRUE,
+                             scale = TRUE,
+                             by_row = FALSE,
+                             keep_summary_stats = FALSE,
+                             ...) {
   if (!center) {
     if (!keep_summary_stats) return(x)
     return(list(
@@ -158,9 +168,7 @@ scale_qts <- function(x,
       purrr::map(as_qts)
   }
 
-  std_data <- purrr::map(x, centring_qts,
-                         standardize = standardize,
-                         keep_summary_stats = TRUE)
+  std_data <- purrr::map(x, centring, standardize = scale, keep_summary_stats = TRUE)
   x <- purrr::map(std_data, "qts")
 
   if (!by_row) {
@@ -265,8 +273,8 @@ autoplot.qts_sample <- function(x, memberships = NULL, highlighted = NULL, ...) 
   if (is.null(memberships)) memberships <- as.factor(seq_len(n))
 
   data <- tibble::tibble(x, id = seq_len(n) , highlighted, memberships) |>
-    tidyr::unnest(.data$x) |>
-    tidyr::pivot_longer(cols = .data$w:.data$z)
+    tidyr::unnest("x") |>
+    tidyr::pivot_longer(cols = "w":"z")
 
   p <- ggplot2::ggplot(data, ggplot2::aes(
       x = .data$time,
