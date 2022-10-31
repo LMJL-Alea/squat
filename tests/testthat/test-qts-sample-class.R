@@ -1,3 +1,16 @@
+test_that("Functions related to the QTS class work", {
+  expect_true(is_qts_sample(vespa64$igp))
+  expect_true(is_qts_sample(as_qts_sample(vespa64$igp)))
+  expect_equal(vespa64$igp[1, simplify = TRUE], vespa64$igp[[1]])
+  expect_snapshot(vespa64$igp[1])
+})
+
+test_that("The function append() works", {
+  x <- append(vespa64$igp, vespa64$igp[1])
+  y <- append(vespa64$igp, vespa64$igp[[1]])
+  expect_equal(x, y)
+})
+
 test_that("The function rnorm_qts() works", {
   withr::with_seed(1234, {
     expect_snapshot(rnorm_qts(1, vespa64$igp[[1]]))

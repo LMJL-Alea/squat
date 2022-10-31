@@ -4,28 +4,37 @@
 \alias{qts_sample}
 \alias{as_qts_sample}
 \alias{is_qts_sample}
+\alias{[.qts_sample}
 \title{QTS Sample Class}
 \usage{
 as_qts_sample(x)
 
 is_qts_sample(x)
+
+\method{[}{qts_sample}(x, i, simplify = FALSE)
 }
 \arguments{
 \item{x}{A list of \code{\link[tibble:tibble]{tibble::tibble}}s, each of which with columns
 \code{time}, \code{w}, \code{x}, \code{y} and \code{z}.}
+
+\item{i}{A valid expression to subset observations from a QTS sample.}
+
+\item{simplify}{A boolean value specifying whether the resulting subset
+should be turned into a single QTS in case the subset is of size 1.
+Defaults to \code{FALSE}.}
 }
 \value{
 An object of class \code{\link{qts_sample}}.
 }
 \description{
 A collection of functions that implements the QTS sample class. It currently
-provides the \code{as_qts_sample()} function for QTS sample coercion of lists of
-\code{\link{qts}} objects and the \code{is_qts_sample()} function for checking if
-an object is a QTS sample.
+provides the \code{\link[=as_qts_sample]{as_qts_sample()}} function for QTS sample coercion of lists of
+\code{\link{qts}} objects, the \code{\link[=is_qts_sample]{is_qts_sample()}} function for checking if an object
+is a QTS sample and the subset operator.
 }
 \details{
 A QTS sample is a collection of quaternion time series (QTS), each of which
-is stored as a \code{\link[tibble]{tibble}} with 5 columns:
+is stored as a \code{\link[tibble:tibble]{tibble::tibble}} with 5 columns:
 \itemize{
 \item \code{time}: A first column specifying the time points at which quaternions were
 collected;

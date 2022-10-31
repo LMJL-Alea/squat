@@ -1,12 +1,12 @@
 #' QTS Sample Class
 #'
 #' A collection of functions that implements the QTS sample class. It currently
-#' provides the `as_qts_sample()` function for QTS sample coercion of lists of
-#' \code{\link{qts}} objects and the `is_qts_sample()` function for checking if
-#' an object is a QTS sample.
+#' provides the [`as_qts_sample()`] function for QTS sample coercion of lists of
+#' [`qts`] objects, the [`is_qts_sample()`] function for checking if an object
+#' is a QTS sample and the subset operator.
 #'
 #' A QTS sample is a collection of quaternion time series (QTS), each of which
-#' is stored as a \code{\link[tibble]{tibble}} with 5 columns:
+#' is stored as a [`tibble::tibble`] with 5 columns:
 #' - `time`: A first column specifying the time points at which quaternions were
 #' collected;
 #' - `w`: A second column specifying the first coordinate of the collected
@@ -20,6 +20,11 @@
 #'
 #' @param x A list of [`tibble::tibble`]s, each of which with columns
 #'   `time`, `w`, `x`, `y` and `z`.
+#' @param i A valid expression to subset observations from a QTS sample.
+#' @param simplify A boolean value specifying whether the resulting subset
+#'   should be turned into a single QTS in case the subset is of size 1.
+#'   Defaults to `FALSE`.
+#' @inheritParams base::append
 #'
 #' @return An object of class [`qts_sample`].
 #' @name qts_sample
@@ -47,6 +52,49 @@ as_qts_sample <- function(x) {
 #' @rdname qts_sample
 is_qts_sample <- function(x) {
   "qts_sample" %in% class(x)
+}
+
+#' @export
+#' @rdname qts_sample
+"[.qts_sample" <- function(x, i, simplify = FALSE) {
+  if (missing(i)) return(x)
+  class(x) <- "list"
+  x <- x[i]
+  if (simplify && length(x) == 1) return(as_qts(x[[1]]))
+  as_qts_sample(x)
+}
+
+#' QTS Sample Concatenation
+#'
+#' @param x An object of class [`qts_sample`].
+#' @inheritParams base::append
+#' @param y Either an object of class [`qts_sample`] or an object of class
+#'   [`qts`].
+#' @param ... Extra arguments to be passed on to next methods.
+#'
+#' @export
+#' @examples
+#' append(vespa64$igp, vespa64$igp[1])
+#' append(vespa64$igp, vespa64$igp[[1]])
+append <- function(x, ...) {
+  UseMethod("append")
+}
+
+#' @export
+#' @rdname append
+append.default <- function(x, values, after = length(x), ...) {
+  base::append(x = x, values = values, after = after)
+}
+
+#' @export
+#' @rdname append
+append.qts_sample <- function(x, y, ...) {
+  if (missing(y)) return(x)
+  if (is_qts(y)) y <- as_qts_sample(y)
+  if (!is_qts_sample(y))
+    cli::cli_abort("The rhs object should be of class either {.cls qts} or {.cls qts_sample}.")
+  x[(length(x) + 1):(length(x) + length(y))] <- y
+  as_qts_sample(x)
 }
 
 #' QTS Random Sampling
