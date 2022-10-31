@@ -34,6 +34,8 @@
 #' y <- as_qts_sample(x)
 #' is_qts_sample(x)
 #' is_qts_sample(y)
+#' x[1]
+#' x[1, simplify = TRUE]
 NULL
 
 #' @export
