@@ -19,16 +19,16 @@
     <loc>https://lmjl-alea.github.io/squat/reference/DTW.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/centring_qts.html</loc>
+    <loc>https://lmjl-alea.github.io/squat/reference/centring.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/derivative_qts.html</loc>
+    <loc>https://lmjl-alea.github.io/squat/reference/differentiate.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/distDTW.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/exp_qts.html</loc>
+    <loc>https://lmjl-alea.github.io/squat/reference/exp.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/index.html</loc>
@@ -37,7 +37,7 @@
     <loc>https://lmjl-alea.github.io/squat/reference/kmeans_qts.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/log_qts.html</loc>
+    <loc>https://lmjl-alea.github.io/squat/reference/log.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/mean.qts_sample.html</loc>
@@ -46,7 +46,7 @@
     <loc>https://lmjl-alea.github.io/squat/reference/median.qts_sample.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/normalize_qts.html</loc>
+    <loc>https://lmjl-alea.github.io/squat/reference/normalize.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/plot.kma_qts.html</loc>
@@ -82,22 +82,22 @@
     <loc>https://lmjl-alea.github.io/squat/reference/qts_sample.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/reorient_qts.html</loc>
+    <loc>https://lmjl-alea.github.io/squat/reference/reorient.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/resample_qts.html</loc>
+    <loc>https://lmjl-alea.github.io/squat/reference/resample.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/rnorm_qts.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/scale_qts.html</loc>
+    <loc>https://lmjl-alea.github.io/squat/reference/scale.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/smooth_qts.html</loc>
+    <loc>https://lmjl-alea.github.io/squat/reference/smooth.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/straighten_qts.html</loc>
+    <loc>https://lmjl-alea.github.io/squat/reference/straighten.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/vespa.html</loc>
