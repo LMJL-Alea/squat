@@ -65,7 +65,7 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
 <dd><p>An object coercible into a numeric matrix or an object of class
-<a href="qts_sample.html">qts_sample</a> representing a sample of observed QTS.</p></dd>
+<code><a href="qts_sample.html">qts_sample</a></code> representing a sample of observed QTS.</p></dd>
 
 
 <dt>center</dt>
@@ -101,11 +101,13 @@ rescaled QTS is returned.</p></dd>
     
 
 <p>A list of properly rescaled QTS stored as an object of class
-<a href="qts_sample.html">qts_sample</a> when <code>keep_summary_stats = FALSE</code>. Otherwise a list with three
-components:</p><ul><li><p><code>rescaled_sample</code>: a list of properly rescaled QTS stored as an object of
-class <a href="qts_sample.html">qts_sample</a>;</p></li>
-<li><p><code>mean</code>: a numeric vector with the quaternion Fréchet mean;</p></li>
-<li><p><code>sd</code>: a numeric vector with the quaternion Fréchet standard deviation.</p></li>
+<code><a href="qts_sample.html">qts_sample</a></code> when <code>keep_summary_stats = FALSE</code>. Otherwise a list with
+three components:</p><ul><li><p><code>rescaled_sample</code>: a list of properly rescaled QTS stored as an object of
+class <code><a href="qts_sample.html">qts_sample</a></code>;</p></li>
+<li><p><code>mean</code>: a list of numeric vectors storing the corresponding quaternion
+Fréchet means;</p></li>
+<li><p><code>sd</code>: a numeric vector storing the corresponding quaternion Fréchet
+standard deviations.</p></li>
 </ul></div>
 
     <div class="section level2">
