@@ -317,7 +317,7 @@ hemispherize <- function(x) {
 #' @export
 #' @rdname hemispherize
 hemispherize.qts <- function(x) {
-  smooth_qts(x = x)
+  hemispherize_qts(x = x)
 }
 
 #' @export
