@@ -4,43 +4,76 @@
 #' k-means alignment algorithm for jointly clustering and aligning the input
 #' QTS.
 #'
-#' @param x An object of class [qts_sample].
-#' @param k An integer specifying the number of clusters to be formed. Defaults
-#'   to `1L`.
-#' @param centroid A string specifying which type of centroid should be used.
-#'   Choices are `mean` and `medoid`. Defaults to `mean`.
+#' @param x Either a numeric matrix of data, or an object that can be coerced to
+#'   such a matrix (such as a numeric vector or a data frame with all numeric
+#'   columns) or an object of class [qts_sample].
+#' @param k An integer value specifying the number of clusters to be look for.
+#' @param iter_max An integer value specifying the maximum number of iterations
+#'   for terminating the k-mean algorithm. Defaults to `10L`.
+#' @param nstart An integer value specifying the number of random restarts of
+#'   the algorithm. The higher `nstart`, the more robust the result. Defaults to
+#'   `1L`.
+#' @inheritParams stats::kmeans
+#' @param centroid A string specifying which type of centroid should be used
+#'   when applying kmeans on a QTS sample. Choices are `mean` and `medoid`.
+#'   Defaults to `mean`.
 #' @param dissimilarity A string specifying which type of dissimilarity should
-#'   be used. Choices are `l2` and `pearson`. Defaults to `l2`.
+#'   be used when applying kmeans on a QTS sample. Choices are `l2` and
+#'   `pearson`. Defaults to `l2`.
 #' @param warping A string specifying which class of warping functions should be
-#'   used. Choices are `none`, `shift`, `dilation` and `affine`. Defaults to
-#'   `affine`.
-#' @param iter_max An integer specifying the maximum number of iterations for
-#'   terminating the k-mean algorithm. Defaults to `20L`.
-#' @param nstart An integer specifying the number of random restart for making
-#'   the k-mean results more robust. Defaults to `1000L`.
-#' @param ncores An integer specifying the number of cores to run the multiple
-#'   restarts of the k-mean algorithm in parallel. Defaults to `1L`.
+#'   used when applying kmeans on a QTS sample. Choices are `none`, `shift`,
+#'   `dilation` and `affine`. Defaults to `affine`.
+#' @param ncores An integer value specifying the number of cores to use for
+#'   running in parallel the multiple restarts of the k-mean algorithm when
+#'   applying kmeans on a QTS sample. Defaults to `1L`.
 #'
-#' @return An object of class `kma_qts` which is effectively a list with three
-#'   components:
+#' @return An object of class [`stats::kmeans`] if the input `x` is NOT of class
+#'   [`qts_sample`]. Otherwise, an object of class `kma_qts` which is
+#'   effectively a list with three components:
 #' - `qts_aligned`: An object of class [qts_sample] storing the sample of
 #' aligned QTS;
 #' - `qts_centers`: A list of objects of class [qts] representing the centers of
 #' the clusters;
 #' - `best_kma_result`: An object of class [fdacluster::kma] storing the results
 #' of the best k-mean alignment result among all initialization that were tried.
-#' @export
 #'
+#' @export
 #' @examples
-#' res_kma <- kmeans_qts(vespa64$igp, k = 2, nstart = 1)
-kmeans_qts <-function(x,
-                      k = 1,
-                      centroid = "mean",
-                      dissimilarity = "l2",
-                      warping = "affine",
-                      iter_max = 20,
-                      nstart = 1000,
-                      ncores = 1L) {
+#' res_kma <- kmeans(vespa64$igp, k = 2)
+kmeans <- function(x, k, iter_max = 10, nstart = 1, ...) {
+  UseMethod("kmeans")
+}
+
+#' @export
+#' @rdname kmeans
+kmeans.default <- function(x,
+                           k,
+                           iter_max = 10,
+                           nstart = 1,
+                           algorithm =  c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
+                           trace = FALSE,
+                           ...) {
+  stats::kmeans(
+    x = x,
+    centers = k,
+    iter.max = iter_max,
+    nstart = nstart,
+    algorithm = algorithm,
+    trace = trace
+  )
+}
+
+#' @export
+#' @rdname kmeans
+kmeans.qts_sample <-function(x,
+                             k = 1,
+                             iter_max = 10,
+                             nstart = 1,
+                             centroid = "mean",
+                             dissimilarity = "l2",
+                             warping = "affine",
+                             ncores = 1L,
+                             ...) {
   if (!is_qts_sample(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts_sample}.")
 
@@ -128,8 +161,7 @@ kmeans_qts <-function(x,
 
 #' QTS K-Means Visualization
 #'
-#' @param x An object of class `kmeans_qts` as produced by the [kmeans_qts()]
-#'   function.
+#' @param x An object of class `kma_qts` as produced by the [kmeans()] function.
 #' @param ... Further arguments to be passed to other methods.
 #'
 #' @return The [plot.kma_qts()] method does not return anything while the
@@ -139,7 +171,7 @@ kmeans_qts <-function(x,
 #' @export
 #'
 #' @examples
-#' res_kma <- kmeans_qts(vespa64$igp, k = 2, nstart = 1)
+#' res_kma <- kmeans(vespa64$igp, k = 2, nstart = 1)
 #' plot(res_kma)
 #' ggplot2::autoplot(res_kma)
 plot.kma_qts <- function(x, ...) {

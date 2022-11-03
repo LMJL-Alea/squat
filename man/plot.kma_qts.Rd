@@ -10,8 +10,7 @@
 \method{autoplot}{kma_qts}(x, ...)
 }
 \arguments{
-\item{x}{An object of class \code{kmeans_qts} as produced by the \code{\link[=kmeans_qts]{kmeans_qts()}}
-function.}
+\item{x}{An object of class \code{kma_qts} as produced by the \code{\link[=kmeans]{kmeans()}} function.}
 
 \item{...}{Further arguments to be passed to other methods.}
 }
@@ -23,7 +22,7 @@ The \code{\link[=plot.kma_qts]{plot.kma_qts()}} method does not return anything 
 QTS K-Means Visualization
 }
 \examples{
-res_kma <- kmeans_qts(vespa64$igp, k = 2, nstart = 1)
+res_kma <- kmeans(vespa64$igp, k = 2, nstart = 1)
 plot(res_kma)
 ggplot2::autoplot(res_kma)
 }

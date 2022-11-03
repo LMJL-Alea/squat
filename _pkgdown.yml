@@ -42,7 +42,7 @@ reference:
     - plot.prcomp_qts
   - title: K-Means Alignment Clustering
     contents:
-    - kmeans_qts
+    - kmeans
     - plot.kma_qts
   - title: Distances
     contents:
