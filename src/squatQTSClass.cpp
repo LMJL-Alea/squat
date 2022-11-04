@@ -279,7 +279,6 @@ Rcpp::DataFrame resample_qts_impl(const Rcpp::DataFrame &qts,
 
     posSup = std::upper_bound(posSup, inputTimeValues.end(), tnew);
     posInf = posSup - 1;
-    // Rcpp::Rcout << *posInf << " " << *posSup << std::endl;
 
     if (posInf != oldPosInf)
     {
@@ -309,7 +308,6 @@ Rcpp::DataFrame resample_qts_impl(const Rcpp::DataFrame &qts,
       {
         double range = xsup - xinf;
         double alpha = (tnew - xinf) / range;
-        Rcpp::Rcout << Qinf.coeffs().transpose() << " " << Qsup.coeffs().transpose() << std::endl;
         Qinterp = Qinf.slerp(alpha, Qsup);
       }
     }
