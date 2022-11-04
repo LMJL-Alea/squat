@@ -217,7 +217,7 @@ Rcpp::DataFrame resample_qts_impl(const Rcpp::DataFrame &qts,
   int sizeIn = qts.nrows();
   unsigned int sizeOut = (nout == 0) ? sizeIn : nout;
 
-  Eigen::Quaterniond Qinf, Qsup;
+  Eigen::Quaterniond Qinf, Qsup, Qinterp;
   double xinf, xsup;
 
   Rcpp::NumericVector inputTimeValues = qts["time"];
@@ -270,15 +270,16 @@ Rcpp::DataFrame resample_qts_impl(const Rcpp::DataFrame &qts,
 
     if (posSup == inputTimeValues.end())
     {
-      outputWValues(i) = inputTimeValues(sizeIn - 1);
-      outputXValues(i) = inputTimeValues(sizeIn - 1);
-      outputYValues(i) = inputTimeValues(sizeIn - 1);
-      outputZValues(i) = inputTimeValues(sizeIn - 1);
+      outputWValues(i) = inputWValues(sizeIn - 1);
+      outputXValues(i) = inputXValues(sizeIn - 1);
+      outputYValues(i) = inputYValues(sizeIn - 1);
+      outputZValues(i) = inputZValues(sizeIn - 1);
       continue;
     }
 
     posSup = std::upper_bound(posSup, inputTimeValues.end(), tnew);
     posInf = posSup - 1;
+    // Rcpp::Rcout << *posInf << " " << *posSup << std::endl;
 
     if (posInf != oldPosInf)
     {
@@ -289,6 +290,8 @@ Rcpp::DataFrame resample_qts_impl(const Rcpp::DataFrame &qts,
       Qinf.y() = inputYValues(idxInf);
       Qinf.z() = inputZValues(idxInf);
     }
+
+    Qinterp = Qinf;
 
     if (posSup != inputTimeValues.end())
     {
@@ -306,14 +309,15 @@ Rcpp::DataFrame resample_qts_impl(const Rcpp::DataFrame &qts,
       {
         double range = xsup - xinf;
         double alpha = (tnew - xinf) / range;
-        Qinf = Qinf.slerp(alpha, Qsup);
+        Rcpp::Rcout << Qinf.coeffs().transpose() << " " << Qsup.coeffs().transpose() << std::endl;
+        Qinterp = Qinf.slerp(alpha, Qsup);
       }
     }
 
-    outputWValues(i) = Qinf.w();
-    outputXValues(i) = Qinf.x();
-    outputYValues(i) = Qinf.y();
-    outputZValues(i) = Qinf.z();
+    outputWValues(i) = Qinterp.w();
+    outputXValues(i) = Qinterp.x();
+    outputYValues(i) = Qinterp.y();
+    outputZValues(i) = Qinterp.z();
 
     oldPosSup = posSup;
     oldPosInf = posInf;
