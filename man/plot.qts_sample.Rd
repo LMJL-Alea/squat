@@ -5,9 +5,15 @@
 \alias{autoplot.qts_sample}
 \title{QTS Sample Visualization}
 \usage{
-\method{plot}{qts_sample}(x, memberships = NULL, highlighted = NULL, ...)
+\method{plot}{qts_sample}(x, memberships = NULL, highlighted = NULL, with_animation = FALSE, ...)
 
-\method{autoplot}{qts_sample}(x, memberships = NULL, highlighted = NULL, ...)
+\method{autoplot}{qts_sample}(
+  x,
+  memberships = NULL,
+  highlighted = NULL,
+  with_animation = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{An object of class \link{qts_sample}.}
@@ -19,6 +25,10 @@ structure is displayed.}
 \item{highlighted}{A boolean vector specifying whether each QTS in the sample
 should be hightlighted. Defaults to \code{NULL}, in which case no QTS is
 hightlighted w.r.t. the others.}
+
+\item{with_animation}{A boolean value specifying whether to create a an
+animated plot or a static \link[ggplot2:ggplot]{ggplot2::ggplot} object. Defaults to \code{FALSE}
+which will create a static plot.}
 
 \item{...}{Further arguments to be passed to methods.}
 }

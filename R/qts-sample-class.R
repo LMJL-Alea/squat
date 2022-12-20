@@ -289,6 +289,9 @@ median.qts_sample <- function(x, na.rm = FALSE, ...) {
 #' @param highlighted A boolean vector specifying whether each QTS in the sample
 #'   should be hightlighted. Defaults to `NULL`, in which case no QTS is
 #'   hightlighted w.r.t. the others.
+#' @param with_animation A boolean value specifying whether to create a an
+#'   animated plot or a static [ggplot2::ggplot] object. Defaults to `FALSE`
+#'   which will create a static plot.
 #' @param ... Further arguments to be passed to methods.
 #'
 #' @return The [plot.qts_sample()] method does not return anything while the
@@ -300,34 +303,84 @@ median.qts_sample <- function(x, na.rm = FALSE, ...) {
 #' @examples
 #' plot(vespa64$igp)
 #' ggplot2::autoplot(vespa64$igp)
-plot.qts_sample <- function(x, memberships = NULL, highlighted = NULL, ...) {
-  print(autoplot(x, memberships = memberships, highlighted = highlighted, ...))
+plot.qts_sample <- function(x,
+                            memberships = NULL,
+                            highlighted = NULL,
+                            with_animation = FALSE,
+                            ...) {
+  print(autoplot(
+    x,
+    memberships = memberships,
+    highlighted = highlighted,
+    with_animation = with_animation,
+    ...
+  ))
 }
 
 #' @importFrom ggplot2 autoplot .data
 #' @export
 #' @rdname plot.qts_sample
-autoplot.qts_sample <- function(x, memberships = NULL, highlighted = NULL, ...) {
+autoplot.qts_sample <- function(x,
+                                memberships = NULL,
+                                highlighted = NULL,
+                                with_animation = FALSE,
+                                ...) {
   if (!is.null(memberships)) {
     if (length(memberships) != length(x))
-      cli::cli_abort("The length of the {.arg memberships} argument should match the number of QTS in the sample.")
+      cli::cli_abort("The length of the {.arg memberships} argument should match
+                     the number of QTS in the sample.")
     memberships <- as.factor(memberships)
   }
   if (!is.null(highlighted)) {
     if (length(highlighted) != length(x))
-      cli::cli_abort("The length of the {.arg highlighted} argument should match the number of QTS in the sample.")
+      cli::cli_abort("The length of the {.arg highlighted} argument should match
+                     the number of QTS in the sample.")
     if (!is.logical(highlighted))
       cli::cli_abort("The {.arg highlighted} argument should be a logical vector.")
   }
 
   n <- length(x)
   if (is.null(highlighted)) highlighted <- rep(FALSE, n)
-  if (is.null(memberships)) memberships <- as.factor(seq_len(n))
+  use_memberships <- FALSE
+  if (is.null(memberships))
+    memberships <- as.factor(seq_len(n))
+  else
+    use_memberships <- TRUE
 
-  data <- tibble::tibble(x, id = seq_len(n) , highlighted, memberships) |>
-    tidyr::unnest("x") |>
-    tidyr::pivot_longer(cols = "w":"z")
+  data <- tibble::tibble(x, id = as.factor(seq_len(n)), highlighted, memberships) |>
+    tidyr::unnest("x")
 
+  if (with_animation) {
+    if (!requireNamespace("gganimate", quietly = TRUE))
+      cli::cli_abort("You first need to install the {.pkg gganimate} package to
+                     create animation plots.")
+    return(
+      data |>
+        tidyr::pivot_longer(cols = "x":"z") |>
+        ggplot2::ggplot(ggplot2::aes(
+          x = .data$w, y = .data$value,
+          color = if (use_memberships) .data$memberships else .data$id
+        )) +
+        ggplot2::geom_point() +
+        ggplot2::geom_line(alpha = 0.25) +
+        ggplot2::facet_wrap(ggplot2::vars(.data$name), nrow = 1) +
+        ggplot2::labs(
+          title = "QTS Sample",
+          x = expression(cos(theta / 2)),
+          y = expression(sin(theta / 2) %*% component)
+        ) +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          aspect.ratio = 1,
+          legend.position = if (use_memberships) "right" else "none",
+          axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5)
+        ) +
+        gganimate::transition_reveal(.data$time) +
+        gganimate::ease_aes()
+    )
+  }
+
+  data <- tidyr::pivot_longer(data, cols = "w":"z")
   p <- ggplot2::ggplot(data, ggplot2::aes(
       x = .data$time,
       y = .data$value,

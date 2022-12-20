@@ -51,6 +51,7 @@ Depends:
     R (>= 4.1.0)
 Suggests: 
     covr,
+    gganimate,
     gghighlight,
     testthat (>= 3.0.0),
     vdiffr,
