@@ -26,7 +26,6 @@ kmeans(x, k, iter_max = 10, nstart = 1, ...)
   centroid = "mean",
   dissimilarity = "l2",
   warping = "affine",
-  ncores = 1L,
   ...
 )
 }
@@ -66,10 +65,6 @@ be used when applying kmeans on a QTS sample. Choices are \code{l2} and
 \item{warping}{A string specifying which class of warping functions should be
 used when applying kmeans on a QTS sample. Choices are \code{none}, \code{shift},
 \code{dilation} and \code{affine}. Defaults to \code{affine}.}
-
-\item{ncores}{An integer value specifying the number of cores to use for
-running in parallel the multiple restarts of the k-mean algorithm when
-applying kmeans on a QTS sample. Defaults to \code{1L}.}
 }
 \value{
 An object of class \code{\link[stats:kmeans]{stats::kmeans}} if the input \code{x} is NOT of class

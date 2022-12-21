@@ -359,7 +359,8 @@ autoplot.qts_sample <- function(x,
         tidyr::pivot_longer(cols = "x":"z") |>
         ggplot2::ggplot(ggplot2::aes(
           x = .data$w, y = .data$value,
-          color = if (use_memberships) .data$memberships else .data$id
+          group = .data$id,
+          colour = .data$memberships
         )) +
         ggplot2::geom_point() +
         ggplot2::geom_line(alpha = 0.25) +
@@ -367,12 +368,13 @@ autoplot.qts_sample <- function(x,
         ggplot2::labs(
           title = "QTS Sample",
           x = expression(cos(theta / 2)),
-          y = expression(sin(theta / 2) %*% component)
+          y = expression(sin(theta / 2) %*% component),
+          colour = "Group"
         ) +
         ggplot2::theme_bw() +
         ggplot2::theme(
           aspect.ratio = 1,
-          legend.position = if (use_memberships) "right" else "none",
+          legend.position = if (use_memberships) "top" else "none",
           axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5)
         ) +
         gganimate::transition_reveal(.data$time) +

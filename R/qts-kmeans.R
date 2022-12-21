@@ -23,9 +23,6 @@
 #' @param warping A string specifying which class of warping functions should be
 #'   used when applying kmeans on a QTS sample. Choices are `none`, `shift`,
 #'   `dilation` and `affine`. Defaults to `affine`.
-#' @param ncores An integer value specifying the number of cores to use for
-#'   running in parallel the multiple restarts of the k-mean algorithm when
-#'   applying kmeans on a QTS sample. Defaults to `1L`.
 #'
 #' @return An object of class [`stats::kmeans`] if the input `x` is NOT of class
 #'   [`qts_sample`]. Otherwise, an object of class `kma_qts` which is
@@ -72,7 +69,6 @@ kmeans.qts_sample <-function(x,
                              centroid = "mean",
                              dissimilarity = "l2",
                              warping = "affine",
-                             ncores = 1L,
                              ...) {
   if (!is_qts_sample(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts_sample}.")
@@ -99,10 +95,6 @@ kmeans.qts_sample <-function(x,
     }
   }
 
-  cl <- NULL
-  if (ncores > 1L)
-    cl <- parallel::makeCluster(ncores)
-
   B <- choose(n, k)
 
   if (nstart > B)
@@ -110,13 +102,14 @@ kmeans.qts_sample <-function(x,
   else
     init <- replicate(nstart, sample.int(n, k), simplify = FALSE)
 
-  solutions <- pbapply::pblapply(
-    X = init,
-    FUN = function(.init) {
+  .kma_with_multiple_restarts <- function(init_values) {
+    pb <- progressr::progressor(along = init_values)
+    furrr::future_map(init_values, ~ {
+      pb()
       fdacluster::kma(
-        grid,
-        values,
-        seeds = .init,
+        x = grid,
+        y = values,
+        seeds = .x,
         n_clust = k,
         center_method = centroid,
         warping_method = warping,
@@ -125,15 +118,11 @@ kmeans.qts_sample <-function(x,
         warping_options = c(0.1, 0.1),
         use_fence = FALSE
       )
-    },
-    cl = cl
-  )
+    }, .options = furrr::furrr_options(seed = TRUE))
+  }
 
-  if (!is.null(cl))
-    parallel::stopCluster(cl)
-
+  solutions <- .kma_with_multiple_restarts(init)
   wss_vector <- purrr::map_dbl(solutions, ~ sum(.x$final_dissimilarity))
-
   opt <- solutions[[which.min(wss_vector)]]
 
   centers <- purrr::map(1:opt$n_clust_final, ~ {

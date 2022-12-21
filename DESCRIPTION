@@ -39,7 +39,7 @@ Imports:
     ggplot2,
     ggrepel,
     MFPCA,
-    pbapply,
+    progressr,
     purrr,
     Rcpp,
     roahd,
@@ -51,6 +51,7 @@ Depends:
     R (>= 4.1.0)
 Suggests: 
     covr,
+    future,
     gganimate,
     gghighlight,
     testthat (>= 3.0.0),

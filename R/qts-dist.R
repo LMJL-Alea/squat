@@ -40,22 +40,28 @@ distDTW <- function(qts_list,
 
   indices <- linear_index(n)
 
-  d <- furrr::future_map_dbl(indices$k, ~ {
-    i <- indices$i[.x]
-    j <- indices$j[.x]
-    dtw_data <- DTW(
-      qts1 = qts_list[[i]],
-      qts2 = qts_list[[j]],
-      resample = FALSE,
-      disable_normalization = TRUE,
-      distance_only = TRUE,
-      step_pattern = step_pattern
-    )
-    if (normalize_distance)
-      dtw_data$normalizedDistance
-    else
-      dtw_data$distance
-  }, .options = furrr::furrr_options(seed = TRUE))
+  .pairwise_distances <- function(linear_indices) {
+    pb <- progressr::progressor(along = linear_indices)
+    furrr::future_map_dbl(linear_indices, ~ {
+      pb()
+      i <- indices$i[.x]
+      j <- indices$j[.x]
+      dtw_data <- DTW(
+        qts1 = qts_list[[i]],
+        qts2 = qts_list[[j]],
+        resample = FALSE,
+        disable_normalization = TRUE,
+        distance_only = TRUE,
+        step_pattern = step_pattern
+      )
+      if (normalize_distance)
+        dtw_data$normalizedDistance
+      else
+        dtw_data$distance
+    }, .options = furrr::furrr_options(seed = TRUE))
+  }
+
+  d <- .pairwise_distances(indices$k)
 
   attributes(d) <- NULL
   attr(d, "Labels") <- labels
@@ -66,10 +72,8 @@ distDTW <- function(qts_list,
 }
 
 linear_index <- function(n) {
-  res <- purrr::cross_df(
-    .l = list(j = 1:n, i = 1:n),
-    .filter = ~ .x <= .y
-  )
+  res <- tidyr::expand_grid(i = 1:n, j = 1:n)
+  res <- subset(res, res$j > res$i)
   res$k <- n * (res$i - 1) - res$i * (res$i - 1) / 2 + res$j - res$i
   res
 }
