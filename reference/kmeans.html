@@ -73,7 +73,6 @@ QTS.</p>
 <span>  centroid <span class="op">=</span> <span class="st">"mean"</span>,</span>
 <span>  dissimilarity <span class="op">=</span> <span class="st">"l2"</span>,</span>
 <span>  warping <span class="op">=</span> <span class="st">"affine"</span>,</span>
-<span>  ncores <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -134,12 +133,6 @@ be used when applying kmeans on a QTS sample. Choices are <code>l2</code> and
 <dd><p>A string specifying which class of warping functions should be
 used when applying kmeans on a QTS sample. Choices are <code>none</code>, <code>shift</code>,
 <code>dilation</code> and <code>affine</code>. Defaults to <code>affine</code>.</p></dd>
-
-
-<dt>ncores</dt>
-<dd><p>An integer value specifying the number of cores to use for
-running in parallel the multiple restarts of the k-mean algorithm when
-applying kmeans on a QTS sample. Defaults to <code>1L</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
