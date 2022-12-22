@@ -77,8 +77,10 @@ p <- ggplot2::autoplot(vespa64$igp, with_animation = TRUE)
 gganimate::anim_save("man/figures/README-animated-plot.gif", p)
 ```
 
-![](man/figures/README-animated-plot.gif) You can compute the geometric
-mean of the sample and append it to the sample for visualization:
+![](man/figures/README-animated-plot.gif)
+
+You can compute the geometric mean of the sample and append it to the
+sample for visualization:
 
 ``` r
 m <- mean(vespa64$igp)
@@ -88,7 +90,7 @@ plot(sample_and_mean, highlighted = c(rep(FALSE, 64), TRUE))
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
-You can compute the pairwise distance matrix based on the DTW for now:
+You can compute the pairwise distance matrix (based on the DTW for now):
 
 ``` r
 D <- distDTW(vespa64$igp)

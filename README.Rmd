@@ -70,6 +70,7 @@ gganimate::anim_save("man/figures/README-animated-plot.gif", p)
 ```
 
 ![](man/figures/README-animated-plot.gif)
+
 You can compute the geometric mean of the sample and append it to the sample for visualization:
 
 ```{r}
@@ -78,7 +79,7 @@ sample_and_mean <- append(vespa64$igp, m)
 plot(sample_and_mean, highlighted = c(rep(FALSE, 64), TRUE))
 ```
 
-You can compute the pairwise distance matrix based on the DTW for now:
+You can compute the pairwise distance matrix (based on the DTW for now):
 ```{r}
 D <- distDTW(vespa64$igp)
 C <- exp(-D / (sqrt(2) * 4 * bw.SJ(D))) |> 
