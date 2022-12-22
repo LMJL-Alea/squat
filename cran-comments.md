@@ -1,19 +1,6 @@
-## Resubmission 2
-
-In this resubmission, I have:
-
-- reduced the execution time of the examples of the `prcomp_qts()` topic.
-
-## Resubmission 1
-
-In this resubmission, I have:
-
-- quoted the name of the 'Eigen' C++ library in the description of the package;
-- corrected the title of the package to respect title case.
-
 ## Test environments
 
-- local macOS R installation, R 4.2.1
+- local macOS R installation, R 4.2.2
 - continuous integration via GH actions:
     - macOS latest release
     - windows latest release
@@ -31,17 +18,10 @@ In this resubmission, I have:
 
 There was no ERROR and no WARNINGs.
 
-There were 2 NOTEs:
+There were 1 NOTE:
 
-    * checking examples ... [28s] NOTE
-    Examples with CPU (user + system) or elapsed time > 5s
-                    user system elapsed
-    plot.prcomp_qts 7.34   0.28    7.77
-
-The size varies according to the system on which the package is installed.
-
-    * checking for detritus in the temp directory ... NOTE
-    Found the following files/directories:
-      'lastMiKTeXException'
-
-This NOTE appears only on Windows.
+    * checking installed package size ... NOTE
+      installed size is 13.0Mb
+      sub-directories of 1Mb or more:
+        data   1.1Mb
+        libs  11.6Mb
