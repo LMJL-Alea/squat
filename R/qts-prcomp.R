@@ -32,7 +32,7 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
   if (check_common_grid > 0)
     cli::cli_abort("All input QTS should be evaluated on the same grid.")
   grid <- x[[1]]$time
-  npc_max <- min(length(x) - 1, length(grid))
+  npc_max <- min(length(x), length(grid)) - 1
   if (M > npc_max)
     cli::cli_abort("The maximum number of principal component is {npc_max}. Please choose a value of {.arg M} smaller or equal to that value.")
   qts_log <- purrr::map(x, log_qts)
@@ -55,12 +55,17 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
       purrr::reduce(rbind)
   )
   mfd <- funData::multiFunData(fd_x, fd_y, fd_z)
-  uniExpansions <- purrr::map(1:3, ~ list(type = "splines1D", k = npc_max))
+  uniExpansions <- purrr::map(1:3, ~ list(type = "splines1Dpen", k = npc_max))
   tpca <- MFPCA::MFPCA(mfd, M = M, uniExpansions = uniExpansions, fit = fit)
+  # uniExpansions <- purrr::map(1:3, ~ list(type = "splines1D", k = M))
+  # tpca <- MFPCA::MFPCA(mfd, M = M, uniExpansions = uniExpansions, fit = fit, approx.eigen = TRUE)
   if (M == npc_max)
     tot_var <- sum(tpca$values)
   else {
+    # uniExpansions <- purrr::map(1:3, ~ list(type = "splines1Dpen", k = npc_max))
     tpca_full <- MFPCA::MFPCA(mfd, M = npc_max, uniExpansions = uniExpansions, fit = FALSE)
+    # uniExpansions <- purrr::map(1:3, ~ list(type = "splines1D", k = npc_max))
+    # tpca_full <- MFPCA::MFPCA(mfd, M = npc_max, uniExpansions = uniExpansions, fit = FALSE, approx.eigen = TRUE)
     tot_var <- sum(tpca_full$values)
   }
   mean_qts <- tpca$meanFunction |>
