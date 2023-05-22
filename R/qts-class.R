@@ -95,37 +95,30 @@ centring <- function(x, standardize = FALSE, keep_summary_stats = FALSE) {
   out$qts
 }
 
-#' QTS Visualization
+#' Plot for [`qts`] objects
 #'
-#' @param x An object of class [qts].
+#' This function creates a visualization of a QTS and returns the corresponding
+#' [ggplot2::ggplot] object which enable further customization of the plot.
+#'
+#' @param object An object of class [qts].
 #' @param highlighted_points An integer vector specifying point indices to be
 #'   highlighted. Defaults to `NULL`, in which case no point will be highlighted
 #'   with respect to the others.
 #' @param ... Further arguments to be passed on to next methods.
 #'
-#' @return The [plot.qts()] method does not return anything while the
-#'   [autoplot.qts()] method returns a [ggplot2::ggplot] object.
+#' @return A [ggplot2::ggplot] object.
 #'
-#' @importFrom graphics plot
-#' @export
-#'
-#' @examples
-#' plot(vespa64$igp[[1]])
-#' ggplot2::autoplot(vespa64$igp[[1]])
-plot.qts <- function(x, highlighted_points = NULL, ...) {
-  print(autoplot(x, highlighted_points = highlighted_points, ...))
-}
-
 #' @importFrom ggplot2 autoplot .data
 #' @export
-#' @rdname plot.qts
-autoplot.qts <- function(x, highlighted_points = NULL, ...) {
+#' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
+#' ggplot2::autoplot(vespa64$igp[[1]])
+autoplot.qts <- function(object, highlighted_points = NULL, ...) {
   if (!is.null(highlighted_points)) {
-    if (!all(highlighted_points %in% 1:nrow(x)))
+    if (!all(highlighted_points %in% 1:nrow(object)))
       cli::cli_abort("The change point indices are out of bounds.")
-    highlighted_points <- x$time[highlighted_points]
+    highlighted_points <- object$time[highlighted_points]
   }
-  x <- tidyr::pivot_longer(x, cols = "w":"z")
+  x <- tidyr::pivot_longer(object, cols = "w":"z")
   p <- ggplot2::ggplot(x, ggplot2::aes(
     x = .data$time,
     y = .data$value
@@ -148,4 +141,22 @@ autoplot.qts <- function(x, highlighted_points = NULL, ...) {
   }
 
   p
+}
+
+#' Plot for [`qts`] objects
+#'
+#' This function creates a visualization of a QTS **without** returning the plot
+#' data as an object.
+#'
+#' @param x An object of class [qts].
+#' @inheritParams autoplot.qts
+#'
+#' @return NULL
+#'
+#' @importFrom graphics plot
+#' @export
+#' @examples
+#' plot(vespa64$igp[[1]])
+plot.qts <- function(x, highlighted_points = NULL, ...) {
+  print(autoplot(x, highlighted_points = highlighted_points, ...))
 }

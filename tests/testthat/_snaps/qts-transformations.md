@@ -16,7 +16,7 @@
        8     7  0.00775
        9     8  0.00808
       10     9  0.00824
-      # ... with 91 more rows
+      # i 91 more rows
 
 # the function qts2nts() works
 
@@ -36,7 +36,7 @@
        8     7 0.140
        9     8 0.132
       10     9 0.125
-      # ... with 91 more rows
+      # i 91 more rows
 
 ---
 
@@ -56,7 +56,7 @@
        8     7 0.140
        9     8 0.132
       10     9 0.125
-      # ... with 91 more rows
+      # i 91 more rows
 
 # the function qts2ats() works
 
@@ -76,7 +76,7 @@
        8     7 0.0752
        9     8 0.0828
       10     9 0.0908
-      # ... with 91 more rows
+      # i 91 more rows
 
 ---
 
@@ -96,7 +96,7 @@
        8     7 0.0752
        9     8 0.0828
       10     9 0.0908
-      # ... with 91 more rows
+      # i 91 more rows
 
 # the function qts2avts() works
 
@@ -116,7 +116,7 @@
        8     8 -0.00365 -0.00642 -0.00451  
        9     9 -0.00327 -0.00697 -0.00501  
       10    10 -0.00376 -0.00742 -0.00521  
-      # ... with 90 more rows
+      # i 90 more rows
 
 ---
 
@@ -136,5 +136,5 @@
        8     8 -0.00331 -0.00682 -0.00417 
        9     9 -0.00290 -0.00742 -0.00458 
       10    10 -0.00337 -0.00789 -0.00478 
-      # ... with 90 more rows
+      # i 90 more rows
 

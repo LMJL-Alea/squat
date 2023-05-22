@@ -2,27 +2,21 @@
 % Please edit documentation in R/qts-kmeans.R
 \name{plot.kma_qts}
 \alias{plot.kma_qts}
-\alias{autoplot.kma_qts}
-\title{QTS K-Means Visualization}
+\title{Plot for \code{kma_qts} objects}
 \usage{
 \method{plot}{kma_qts}(x, ...)
-
-\method{autoplot}{kma_qts}(x, ...)
 }
 \arguments{
 \item{x}{An object of class \code{kma_qts} as produced by the \code{\link[=kmeans]{kmeans()}} function.}
 
 \item{...}{Further arguments to be passed to other methods.}
 }
-\value{
-The \code{\link[=plot.kma_qts]{plot.kma_qts()}} method does not return anything while the
-\code{\link[=autoplot.kma_qts]{autoplot.kma_qts()}} method returns a \link[ggplot2:ggplot]{ggplot2::ggplot} object.
-}
 \description{
-QTS K-Means Visualization
+This function creates a visualization of the results of the k-means alignment
+algorithm applied on a sample of QTS \strong{without} returning the plot data as
+an object.
 }
 \examples{
-res_kma <- kmeans(vespa64$igp, k = 2, nstart = 1)
+res_kma <- kmeans(vespa64$igp[1:10], k = 2, nstart = 1)
 plot(res_kma)
-ggplot2::autoplot(res_kma)
 }

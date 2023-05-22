@@ -2,12 +2,9 @@
 % Please edit documentation in R/qts-class.R
 \name{plot.qts}
 \alias{plot.qts}
-\alias{autoplot.qts}
-\title{QTS Visualization}
+\title{Plot for \code{\link{qts}} objects}
 \usage{
 \method{plot}{qts}(x, highlighted_points = NULL, ...)
-
-\method{autoplot}{qts}(x, highlighted_points = NULL, ...)
 }
 \arguments{
 \item{x}{An object of class \link{qts}.}
@@ -18,14 +15,10 @@ with respect to the others.}
 
 \item{...}{Further arguments to be passed on to next methods.}
 }
-\value{
-The \code{\link[=plot.qts]{plot.qts()}} method does not return anything while the
-\code{\link[=autoplot.qts]{autoplot.qts()}} method returns a \link[ggplot2:ggplot]{ggplot2::ggplot} object.
-}
 \description{
-QTS Visualization
+This function creates a visualization of a QTS \strong{without} returning the plot
+data as an object.
 }
 \examples{
 plot(vespa64$igp[[1]])
-ggplot2::autoplot(vespa64$igp[[1]])
 }

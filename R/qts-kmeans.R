@@ -10,19 +10,8 @@
 #' @param k An integer value specifying the number of clusters to be look for.
 #' @param iter_max An integer value specifying the maximum number of iterations
 #'   for terminating the k-mean algorithm. Defaults to `10L`.
-#' @param nstart An integer value specifying the number of random restarts of
-#'   the algorithm. The higher `nstart`, the more robust the result. Defaults to
-#'   `1L`.
 #' @inheritParams stats::kmeans
-#' @param centroid A string specifying which type of centroid should be used
-#'   when applying kmeans on a QTS sample. Choices are `mean` and `medoid`.
-#'   Defaults to `mean`.
-#' @param dissimilarity A string specifying which type of dissimilarity should
-#'   be used when applying kmeans on a QTS sample. Choices are `l2` and
-#'   `pearson`. Defaults to `l2`.
-#' @param warping A string specifying which class of warping functions should be
-#'   used when applying kmeans on a QTS sample. Choices are `none`, `shift`,
-#'   `dilation` and `affine`. Defaults to `affine`.
+#' @inheritParams fdacluster::fdakmeans
 #'
 #' @return An object of class [`stats::kmeans`] if the input `x` is NOT of class
 #'   [`qts_sample`]. Otherwise, an object of class `kma_qts` which is
@@ -31,13 +20,14 @@
 #' aligned QTS;
 #' - `qts_centers`: A list of objects of class [qts] representing the centers of
 #' the clusters;
-#' - `best_kma_result`: An object of class [fdacluster::kma] storing the results
-#' of the best k-mean alignment result among all initialization that were tried.
+#' - `best_kma_result`: An object of class [fdacluster::caps] storing the
+#' results of the best k-mean alignment result among all initialization that
+#' were tried.
 #'
 #' @export
 #' @examples
-#' res_kma <- kmeans(vespa64$igp, k = 2)
-kmeans <- function(x, k, iter_max = 10, nstart = 1, ...) {
+#' res_kma <- kmeans(vespa64$igp[1:10], k = 2)
+kmeans <- function(x, k, ...) {
   UseMethod("kmeans")
 }
 
@@ -64,121 +54,118 @@ kmeans.default <- function(x,
 #' @rdname kmeans
 kmeans.qts_sample <-function(x,
                              k = 1,
-                             iter_max = 10,
-                             nstart = 1,
-                             centroid = "mean",
-                             dissimilarity = "l2",
-                             warping = "affine",
+                             centroid_type = "mean",
+                             metric = "l2",
+                             warping_class = "affine",
                              ...) {
   if (!is_qts_sample(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts_sample}.")
 
-  q_list <- purrr::map(x, log_qts)
-  q_list <- purrr::map(q_list, ~ rbind(.x$x, .x$y, .x$z))
+  q_list <- log(x)
+  q_list <- purrr::map(q_list, \(.x) rbind(.x$x, .x$y, .x$z))
   t_list <- purrr::map(x, "time")
 
   # Prep data
-  n <- length(q_list)
-  d <- dim(q_list[[1]])[1]
-  p <- dim(q_list[[1]])[2]
+  N <- length(q_list)
+  L <- dim(q_list[[1]])[1]
+  P <- dim(q_list[[1]])[2]
 
   if (is.null(t_list))
-    grid <- 0:(p-1)
+    grid <- 0:(P-1)
   else
-    grid <- matrix(nrow = n, ncol = p)
+    grid <- matrix(nrow = N, ncol = P)
 
-  values <- array(dim = c(n, d, p))
-  for (i in 1:n) {
-    values[i, , ] <- q_list[[i]]
+  values <- array(dim = c(N, L, P))
+  for (n in 1:N) {
+    values[n, , ] <- q_list[[n]]
     if (!is.null(t_list)) {
-      grid[i, ] <- t_list[[i]]
+      grid[n, ] <- t_list[[n]]
     }
   }
 
-  B <- choose(n, k)
-
-  if (nstart > B)
-    init <- utils::combn(n, k, simplify = FALSE)
-  else
-    init <- replicate(nstart, sample.int(n, k), simplify = FALSE)
-
-  .kma_with_multiple_restarts <- function(init_values) {
-    pb <- progressr::progressor(along = init_values)
-    furrr::future_map(init_values, ~ {
-      pb()
-      fdacluster::kma(
-        x = grid,
-        y = values,
-        seeds = .x,
-        n_clust = k,
-        center_method = centroid,
-        warping_method = warping,
-        dissimilarity_method = dissimilarity,
-        use_verbose = FALSE,
-        warping_options = c(0.1, 0.1),
-        use_fence = FALSE
-      )
-    }, .options = furrr::furrr_options(seed = TRUE))
-  }
-
-  solutions <- .kma_with_multiple_restarts(init)
-  wss_vector <- purrr::map_dbl(solutions, ~ sum(.x$final_dissimilarity))
-  opt <- solutions[[which.min(wss_vector)]]
-
-  centers <- purrr::map(1:opt$n_clust_final, ~ {
-    exp_qts(as_qts(tibble::tibble(
-      time = opt$x_centers_final[.x, ],
-      w    = 0,
-      x    = opt$y_centers_final[.x, 1, ],
-      y    = opt$y_centers_final[.x, 2, ],
-      z    = opt$y_centers_final[.x, 3, ]
-    )))
-  })
+  out <- fdacluster::fdakmeans(
+    x = grid,
+    y = values,
+    n_clusters = k,
+    seeding_strategy = "kmeans++",
+    warping_class = warping_class,
+    centroid_type = centroid_type,
+    metric = metric,
+    cluster_on_phase = FALSE
+  )
 
   res <- list(
-    qts_aligned = as_qts_sample(purrr::imap(x, ~ {
-      .x$time <- opt$x_final[.y, ]
-      .x
-    })),
-    qts_centers = centers,
-    best_kma_result = opt
+    qts_aligned = purrr::imap(out$memberships, \(.label, .id) {
+      exp(as_qts(tibble::tibble(
+        time = out$grids[.label, ],
+        w    = 0,
+        x    = out$aligned_curves[.id, 1, ],
+        y    = out$aligned_curves[.id, 2, ],
+        z    = out$aligned_curves[.id, 3, ]
+      )))
+    }),
+    qts_centers = purrr::map(1:out$n_clusters, \(.id) {
+      exp(as_qts(tibble::tibble(
+        time = out$grids[.id, ],
+        w    = 0,
+        x    = out$center_curves[.id, 1, ],
+        y    = out$center_curves[.id, 2, ],
+        z    = out$center_curves[.id, 3, ]
+      )))
+    }),
+    best_kma_result = out
   )
 
   class(res) <- "kma_qts"
   res
 }
 
-#' QTS K-Means Visualization
+#' Plot for `kma_qts` objects
 #'
-#' @param x An object of class `kma_qts` as produced by the [kmeans()] function.
+#' This function creates a visualization of the results of the k-means alignment
+#' algorithm applied on a sample of QTS and returns the corresponding
+#' [ggplot2::ggplot] object which enable further customization of the plot.
+#'
+#' @param object An object of class `kma_qts` as produced by the
+#'   [kmeans.qts_sample()] method.
 #' @param ... Further arguments to be passed to other methods.
 #'
-#' @return The [plot.kma_qts()] method does not return anything while the
-#'   [autoplot.kma_qts()] method returns a [ggplot2::ggplot] object.
+#' @return A [ggplot2::ggplot] object.
 #'
-#' @importFrom graphics plot
-#' @export
-#'
-#' @examples
-#' res_kma <- kmeans(vespa64$igp, k = 2, nstart = 1)
-#' plot(res_kma)
-#' ggplot2::autoplot(res_kma)
-plot.kma_qts <- function(x, ...) {
-  print(autoplot(x, ...))
-}
-
 #' @importFrom ggplot2 autoplot .data
 #' @export
-#' @rdname plot.kma_qts
-autoplot.kma_qts <- function(x, ...) {
-  data <- as_qts_sample(c(x$qts_centers, x$qts_aligned))
-  n <- length(x$qts_aligned)
-  k <- length(x$qts_centers)
-  memb <- c(1:k, x$best_kma_result$labels)
+#' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
+#' res_kma <- kmeans(vespa64$igp[1:10], k = 2, nstart = 1)
+#' ggplot2::autoplot(res_kma)
+autoplot.kma_qts <- function(object, ...) {
+  data <- as_qts_sample(c(object$qts_centers, object$qts_aligned))
+  n <- length(object$qts_aligned)
+  k <- length(object$qts_centers)
+  memb <- c(1:k, object$best_kma_result$memberships)
   high <- c(rep(TRUE, k), rep(FALSE, n))
   autoplot(data, memberships = memb, highlighted = high) +
     ggplot2::labs(
       title = "K-Means Alignment Clustering Results",
       subtitle = cli::pluralize("Using {k} cluster{?s}")
     )
+}
+
+#' Plot for `kma_qts` objects
+#'
+#' This function creates a visualization of the results of the k-means alignment
+#' algorithm applied on a sample of QTS **without** returning the plot data as
+#' an object.
+#'
+#' @param x An object of class `kma_qts` as produced by the [kmeans()] function.
+#' @inheritParams autoplot.kma_qts
+#'
+#' @return NULL
+#'
+#' @importFrom graphics plot
+#' @export
+#' @examples
+#' res_kma <- kmeans(vespa64$igp[1:10], k = 2, nstart = 1)
+#' plot(res_kma)
+plot.kma_qts <- function(x, ...) {
+  print(autoplot(x, ...))
 }

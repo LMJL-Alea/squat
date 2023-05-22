@@ -122,7 +122,7 @@ append.qts_sample <- function(x, y, ...) {
 rnorm_qts <- function(n, mean_qts, alpha = 0.01, beta = 0.001) {
   if (!is_qts(mean_qts))
     cli::cli_abort("The {.arg mean_qts} parameter should be of class {.cls qts}.")
-  mean_qts <- log_qts(mean_qts)
+  mean_qts <- log(mean_qts)
   time_grid <- mean_qts$time
   C1 <- roahd::exp_cov_function(time_grid, alpha = alpha, beta = beta)
   C2 <- roahd::exp_cov_function(time_grid, alpha = alpha, beta = beta)
@@ -280,9 +280,13 @@ median.qts_sample <- function(x, na.rm = FALSE, ...) {
   median_qts_impl(x)
 }
 
-#' QTS Sample Visualization
+#' Plot for [`qts_sample`] objects
 #'
-#' @param x An object of class [qts_sample].
+#' This function creates a visualization of a sample of QTS and returns the
+#' corresponding [ggplot2::ggplot] object which enable further customization of
+#' the plot.
+#'
+#' @param object An object of class [`qts_sample`].
 #' @param memberships A vector coercible as factor specifying a group membership
 #'   for each QTS in the sample. Defaults to `NULL`, in which case no grouping
 #'   structure is displayed.
@@ -294,52 +298,32 @@ median.qts_sample <- function(x, na.rm = FALSE, ...) {
 #'   which will create a static plot.
 #' @param ... Further arguments to be passed to methods.
 #'
-#' @return The [plot.qts_sample()] method does not return anything while the
-#'   [autoplot.qts_sample()] method returns a [ggplot2::ggplot] object.
+#' @return A [ggplot2::ggplot] object.
 #'
-#' @importFrom graphics plot
-#' @export
-#'
-#' @examples
-#' plot(vespa64$igp)
-#' ggplot2::autoplot(vespa64$igp)
-plot.qts_sample <- function(x,
-                            memberships = NULL,
-                            highlighted = NULL,
-                            with_animation = FALSE,
-                            ...) {
-  print(autoplot(
-    x,
-    memberships = memberships,
-    highlighted = highlighted,
-    with_animation = with_animation,
-    ...
-  ))
-}
-
 #' @importFrom ggplot2 autoplot .data
 #' @export
-#' @rdname plot.qts_sample
-autoplot.qts_sample <- function(x,
+#' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
+#' ggplot2::autoplot(vespa64$igp)
+autoplot.qts_sample <- function(object,
                                 memberships = NULL,
                                 highlighted = NULL,
                                 with_animation = FALSE,
                                 ...) {
   if (!is.null(memberships)) {
-    if (length(memberships) != length(x))
+    if (length(memberships) != length(object))
       cli::cli_abort("The length of the {.arg memberships} argument should match
                      the number of QTS in the sample.")
     memberships <- as.factor(memberships)
   }
   if (!is.null(highlighted)) {
-    if (length(highlighted) != length(x))
+    if (length(highlighted) != length(object))
       cli::cli_abort("The length of the {.arg highlighted} argument should match
                      the number of QTS in the sample.")
     if (!is.logical(highlighted))
       cli::cli_abort("The {.arg highlighted} argument should be a logical vector.")
   }
 
-  n <- length(x)
+  n <- length(object)
   if (is.null(highlighted)) highlighted <- rep(FALSE, n)
   use_memberships <- FALSE
   if (is.null(memberships))
@@ -347,8 +331,8 @@ autoplot.qts_sample <- function(x,
   else
     use_memberships <- TRUE
 
-  data <- tibble::tibble(x, id = as.factor(seq_len(n)), highlighted, memberships) |>
-    tidyr::unnest("x")
+  data <- tibble::tibble(object, id = as.factor(seq_len(n)), highlighted, memberships) |>
+    tidyr::unnest("object")
 
   if (with_animation) {
     if (!requireNamespace("gganimate", quietly = TRUE))
@@ -384,11 +368,11 @@ autoplot.qts_sample <- function(x,
 
   data <- tidyr::pivot_longer(data, cols = "w":"z")
   p <- ggplot2::ggplot(data, ggplot2::aes(
-      x = .data$time,
-      y = .data$value,
-      group = .data$id,
-      colour = .data$memberships
-    ) ) +
+    x = .data$time,
+    y = .data$value,
+    group = .data$id,
+    colour = .data$memberships
+  ) ) +
     ggplot2::geom_line() +
     ggplot2::facet_wrap(ggplot2::vars(.data$name), ncol = 1, scales = "free") +
     ggplot2::theme_linedraw() +
@@ -415,4 +399,32 @@ autoplot.qts_sample <- function(x,
   }
 
   p
+}
+
+#' Plot for [`qts_sample`] objects
+#'
+#' This function creates a visualization of a sample of QTS **without**
+#' returning the corresponding [ggplot2::ggplot] object
+#'
+#' @param x An object of class [`qts_sample`].
+#' @inheritParams autoplot.qts_sample
+#'
+#' @return NULL
+#'
+#' @importFrom graphics plot
+#' @export
+#' @examples
+#' plot(vespa64$igp)
+plot.qts_sample <- function(x,
+                            memberships = NULL,
+                            highlighted = NULL,
+                            with_animation = FALSE,
+                            ...) {
+  print(autoplot(
+    x,
+    memberships = memberships,
+    highlighted = highlighted,
+    with_animation = with_animation,
+    ...
+  ))
 }

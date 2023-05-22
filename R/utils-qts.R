@@ -16,7 +16,7 @@ straighten_qts <- function(qts) {
   time_values <- qts$time
   t1 <- time_values[1]
   tP <- time_values[P]
-  qts <- log_qts(qts)
+  qts <- log(qts)
   for (i in 3:5) {
     y1 <- qts[[i]][1]
     yP <- qts[[i]][P]
@@ -24,7 +24,7 @@ straighten_qts <- function(qts) {
     qts[[i]] <- qts[[i]] - a * (time_values - t1)
   }
   qts$w <- rep(0, P)
-  exp_qts(qts)
+  exp(qts)
 }
 
 log_qts <- function(x) {

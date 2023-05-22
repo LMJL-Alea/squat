@@ -35,5 +35,5 @@ components.
 PCA for QTS Sample
 }
 \examples{
-res_pca <- prcomp(vespa64$igp)
+res_pca <- prcomp(vespa64$igp[1:16])
 }

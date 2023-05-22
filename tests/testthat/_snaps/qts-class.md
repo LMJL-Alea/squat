@@ -16,7 +16,7 @@
        8     7   0.99714   0.06478   0.03830   0.00674
        9     8   0.99738   0.06307   0.03503   0.00451
       10     9   0.99761   0.06156   0.03147   0.00204
-      # ... with 91 more rows
+      # i 91 more rows
 
 # Function centring() works (standardize = TRUE, keep_summary_stats = FALSE)
 
@@ -36,7 +36,7 @@
        8     7   0.99874   0.04306   0.02546   0.00448
        9     8   0.99885   0.04192   0.02328   0.00300
       10     9   0.99894   0.04091   0.02091   0.00135
-      # ... with 91 more rows
+      # i 91 more rows
 
 # Function centring() works (standardize = FALSE, keep_summary_stats = TRUE)
 
@@ -57,7 +57,7 @@
        8     7   0.99714   0.06478   0.03830   0.00674
        9     8   0.99738   0.06307   0.03503   0.00451
       10     9   0.99761   0.06156   0.03147   0.00204
-      # ... with 91 more rows
+      # i 91 more rows
       
       $mean
       [1]  0.9998551535 -0.0143000963  0.0092262363  0.0002360886

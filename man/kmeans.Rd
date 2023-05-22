@@ -6,7 +6,7 @@
 \alias{kmeans.qts_sample}
 \title{QTS K-Means Alignment Algorithm}
 \usage{
-kmeans(x, k, iter_max = 10, nstart = 1, ...)
+kmeans(x, k, ...)
 
 \method{kmeans}{default}(
   x,
@@ -21,11 +21,9 @@ kmeans(x, k, iter_max = 10, nstart = 1, ...)
 \method{kmeans}{qts_sample}(
   x,
   k = 1,
-  iter_max = 10,
-  nstart = 1,
-  centroid = "mean",
-  dissimilarity = "l2",
-  warping = "affine",
+  centroid_type = "mean",
+  metric = "l2",
+  warping_class = "affine",
   ...
 )
 }
@@ -36,14 +34,13 @@ columns) or an object of class \link{qts_sample}.}
 
 \item{k}{An integer value specifying the number of clusters to be look for.}
 
+\item{...}{not used.}
+
 \item{iter_max}{An integer value specifying the maximum number of iterations
 for terminating the k-mean algorithm. Defaults to \code{10L}.}
 
-\item{nstart}{An integer value specifying the number of random restarts of
-the algorithm. The higher \code{nstart}, the more robust the result. Defaults to
-\code{1L}.}
-
-\item{...}{not used.}
+\item{nstart}{if \code{centers} is a number, how many random sets
+    should be chosen?}
 
 \item{algorithm}{character: may be abbreviated.  Note that
     \code{"Lloyd"} and \code{"Forgy"} are alternative names for one
@@ -54,17 +51,24 @@ the algorithm. The higher \code{nstart}, the more robust the result. Defaults to
     tracing information on the progress of the algorithm is
     produced.  Higher values may produce more tracing information.}
 
-\item{centroid}{A string specifying which type of centroid should be used
-when applying kmeans on a QTS sample. Choices are \code{mean} and \code{medoid}.
-Defaults to \code{mean}.}
+\item{centroid_type}{A string specifying the type of centroid to compute.
+Choices are \code{"mean"}, \code{"medoid"}, \code{"lowess"} or \code{"poly"}. Defaults to
+\code{"mean"}. If LOWESS appproximation is chosen, the user can append an
+integer between 0 and 100 as in \code{"lowess20"}. This number will be used as
+the smoother span. This gives the proportion of points in the plot which
+influence the smooth at each value. Larger values give more smoothness. The
+default value is 10\%. If polynomial approximation is chosen, the user can
+append an positive integer as in \code{"poly3"}. This number will be used as the
+degree of the polynomial model. The default value is \code{4L}.}
 
-\item{dissimilarity}{A string specifying which type of dissimilarity should
-be used when applying kmeans on a QTS sample. Choices are \code{l2} and
-\code{pearson}. Defaults to \code{l2}.}
+\item{metric}{A string specifying the metric used to compare curves. Choices
+are \code{"l2"} or \code{"pearson"}. Defaults to \code{"l2"}. Used only when
+\code{warping_class != "srsf"}. For the boundary-preserving warping class, the
+L2 distance between the SRSFs of the original curves is used.}
 
-\item{warping}{A string specifying which class of warping functions should be
-used when applying kmeans on a QTS sample. Choices are \code{none}, \code{shift},
-\code{dilation} and \code{affine}. Defaults to \code{affine}.}
+\item{warping_class}{A string specifying the warping class Choices are
+\code{"affine"}, \code{"dilation"}, \code{"none"}, \code{"shift"} or \code{"srsf"}. Defaults to
+\code{"affine"}. The SRSF class is the only class which is boundary-preserving.}
 }
 \value{
 An object of class \code{\link[stats:kmeans]{stats::kmeans}} if the input \code{x} is NOT of class
@@ -75,8 +79,9 @@ effectively a list with three components:
 aligned QTS;
 \item \code{qts_centers}: A list of objects of class \link{qts} representing the centers of
 the clusters;
-\item \code{best_kma_result}: An object of class \link[fdacluster:kma]{fdacluster::kma} storing the results
-of the best k-mean alignment result among all initialization that were tried.
+\item \code{best_kma_result}: An object of class \link[fdacluster:caps]{fdacluster::caps} storing the
+results of the best k-mean alignment result among all initialization that
+were tried.
 }
 }
 \description{
@@ -85,5 +90,5 @@ k-means alignment algorithm for jointly clustering and aligning the input
 QTS.
 }
 \examples{
-res_kma <- kmeans(vespa64$igp, k = 2)
+res_kma <- kmeans(vespa64$igp[1:10], k = 2)
 }

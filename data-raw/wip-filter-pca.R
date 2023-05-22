@@ -1,11 +1,12 @@
 library(squat)
 
+plot(vespa64$igp, memberships = vespa64$V)
+plot(vespa64$igp, memberships = vespa64$P)
+
 pca_res <- prcomp(vespa64$igp)
-pca_res$tpca$values
-p <- autoplot(pca_res, what = "scores", plane = 1:2)
-p + geom_point(aes(color = vespa64$V))
-p + geom_point(aes(color = vespa64$P))
-p + geom_point(aes(color = vespa64$S))
+p <- autoplot(pca_res, what = "scores")
+p + geom_point(color = vespa64$V)
+p + geom_point(color = vespa64$P)
 
 filter_by_pca <- function(qts_sample, component_ids, remove_components = FALSE) {
   N <- length(qts_sample)
@@ -50,6 +51,10 @@ mod2 <- vegan::adonis2(D2 ~ V+E+S+P, data = vespa64, add = "lingoes")
 
 mod1
 mod2
+
+plot(vespa64$igp, memberships = vespa64$V)
+plot(vespa64$igp, memberships = vespa64$P)
+plot(correctedQTS, memberships = vespa64$V)
 
 plot(vespa64$igp, memberships = vespa64$P)
 plot(correctedQTS, memberships = vespa64$P)
