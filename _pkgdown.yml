@@ -7,6 +7,7 @@ reference:
   - contents:
     - qts
     - centring
+    - autoplot.qts
     - plot.qts
   - title: QTS Sample Class
     contents:
@@ -17,6 +18,7 @@ reference:
     - scale
     - mean.qts_sample
     - median.qts_sample
+    - autoplot.qts_sample
     - plot.qts_sample
   - title: QTS Wrangling
   - contents:
@@ -39,10 +41,12 @@ reference:
   - title: Principal Component Analysis
     contents:
     - prcomp.qts_sample
+    - autoplot.prcomp_qts
     - plot.prcomp_qts
   - title: K-Means Alignment Clustering
     contents:
     - kmeans
+    - autoplot.kma_qts
     - plot.kma_qts
   - title: Distances
     contents:
