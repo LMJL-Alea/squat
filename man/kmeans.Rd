@@ -6,11 +6,11 @@
 \alias{kmeans.qts_sample}
 \title{QTS K-Means Alignment Algorithm}
 \usage{
-kmeans(x, k, ...)
+kmeans(x, n_clusters, ...)
 
 \method{kmeans}{default}(
   x,
-  k,
+  n_clusters = 1,
   iter_max = 10,
   nstart = 1,
   algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
@@ -20,10 +20,13 @@ kmeans(x, k, ...)
 
 \method{kmeans}{qts_sample}(
   x,
-  k = 1,
+  n_clusters = 1L,
+  seeds = NULL,
+  seeding_strategy = c("kmeans++", "exhaustive-kmeans++", "exhaustive", "hclust"),
+  warping_class = c("affine", "dilation", "none", "shift", "srsf"),
   centroid_type = "mean",
-  metric = "l2",
-  warping_class = "affine",
+  metric = c("l2", "pearson"),
+  cluster_on_phase = FALSE,
   ...
 )
 }
@@ -32,7 +35,8 @@ kmeans(x, k, ...)
 such a matrix (such as a numeric vector or a data frame with all numeric
 columns) or an object of class \link{qts_sample}.}
 
-\item{k}{An integer value specifying the number of clusters to be look for.}
+\item{n_clusters}{An integer value specifying the number of clusters to be
+look for.}
 
 \item{...}{not used.}
 
@@ -51,6 +55,28 @@ for terminating the k-mean algorithm. Defaults to \code{10L}.}
     tracing information on the progress of the algorithm is
     produced.  Higher values may produce more tracing information.}
 
+\item{seeds}{An integer value or vector specifying the indices of the initial
+centroids. If an integer vector, it is interpreted as the indices of the
+intial centroids and should therefore be of length \code{n_clusters}. If an
+integer value, it is interpreted as the index of the first initial centroid
+and subsequent centroids are chosen according to the k-means++ strategy. It
+can be \code{NULL} in which case the argument \code{seeding_strategy} is used to
+automatically provide suitable indices. Defaults to \code{NULL}.}
+
+\item{seeding_strategy}{A character string specifying the strategy for
+choosing the initial centroids in case the argument \code{seeds} is set to
+\code{NULL}. Choices are
+\href{https://en.wikipedia.org/wiki/K-means\%2B\%2B}{\code{"kmeans++"}},
+\code{"exhaustive-kmeans++"} which performs an exhaustive search over the choice
+of the first centroid, \code{"exhaustive"} which tries on all combinations of
+initial centroids or \code{"hclust"} which first performs hierarchical
+clustering using Ward's linkage criterion to identify initial centroids.
+Defaults to \code{"kmeans++"}, which is the fastest strategy.}
+
+\item{warping_class}{A string specifying the warping class Choices are
+\code{"affine"}, \code{"dilation"}, \code{"none"}, \code{"shift"} or \code{"srsf"}. Defaults to
+\code{"affine"}. The SRSF class is the only class which is boundary-preserving.}
+
 \item{centroid_type}{A string specifying the type of centroid to compute.
 Choices are \code{"mean"}, \code{"medoid"}, \code{"lowess"} or \code{"poly"}. Defaults to
 \code{"mean"}. If LOWESS appproximation is chosen, the user can append an
@@ -66,9 +92,9 @@ are \code{"l2"} or \code{"pearson"}. Defaults to \code{"l2"}. Used only when
 \code{warping_class != "srsf"}. For the boundary-preserving warping class, the
 L2 distance between the SRSFs of the original curves is used.}
 
-\item{warping_class}{A string specifying the warping class Choices are
-\code{"affine"}, \code{"dilation"}, \code{"none"}, \code{"shift"} or \code{"srsf"}. Defaults to
-\code{"affine"}. The SRSF class is the only class which is boundary-preserving.}
+\item{cluster_on_phase}{A boolean specifying whether clustering should be
+based on phase variation or amplitude variation. Defaults to \code{FALSE} which
+implies amplitude variation.}
 }
 \value{
 An object of class \code{\link[stats:kmeans]{stats::kmeans}} if the input \code{x} is NOT of class
@@ -90,5 +116,5 @@ k-means alignment algorithm for jointly clustering and aligning the input
 QTS.
 }
 \examples{
-res_kma <- kmeans(vespa64$igp[1:10], k = 2)
+res_kma <- kmeans(vespa64$igp[1:10], n_clusters = 2)
 }

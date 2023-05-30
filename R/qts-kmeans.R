@@ -7,7 +7,8 @@
 #' @param x Either a numeric matrix of data, or an object that can be coerced to
 #'   such a matrix (such as a numeric vector or a data frame with all numeric
 #'   columns) or an object of class [qts_sample].
-#' @param k An integer value specifying the number of clusters to be look for.
+#' @param n_clusters An integer value specifying the number of clusters to be
+#'   look for.
 #' @param iter_max An integer value specifying the maximum number of iterations
 #'   for terminating the k-mean algorithm. Defaults to `10L`.
 #' @inheritParams stats::kmeans
@@ -26,15 +27,15 @@
 #'
 #' @export
 #' @examples
-#' res_kma <- kmeans(vespa64$igp[1:10], k = 2)
-kmeans <- function(x, k, ...) {
+#' res_kma <- kmeans(vespa64$igp[1:10], n_clusters = 2)
+kmeans <- function(x, n_clusters, ...) {
   UseMethod("kmeans")
 }
 
 #' @export
 #' @rdname kmeans
 kmeans.default <- function(x,
-                           k,
+                           n_clusters = 1,
                            iter_max = 10,
                            nstart = 1,
                            algorithm =  c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
@@ -42,7 +43,7 @@ kmeans.default <- function(x,
                            ...) {
   stats::kmeans(
     x = x,
-    centers = k,
+    centers = n_clusters,
     iter.max = iter_max,
     nstart = nstart,
     algorithm = algorithm,
@@ -53,10 +54,13 @@ kmeans.default <- function(x,
 #' @export
 #' @rdname kmeans
 kmeans.qts_sample <-function(x,
-                             k = 1,
+                             n_clusters = 1L,
+                             seeds = NULL,
+                             seeding_strategy = c("kmeans++", "exhaustive-kmeans++", "exhaustive", "hclust"),
+                             warping_class = c("affine", "dilation", "none", "shift", "srsf"),
                              centroid_type = "mean",
-                             metric = "l2",
-                             warping_class = "affine",
+                             metric = c("l2", "pearson"),
+                             cluster_on_phase = FALSE,
                              ...) {
   if (!is_qts_sample(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts_sample}.")
@@ -86,12 +90,13 @@ kmeans.qts_sample <-function(x,
   out <- fdacluster::fdakmeans(
     x = grid,
     y = values,
-    n_clusters = k,
-    seeding_strategy = "kmeans++",
+    n_clusters = n_clusters,
+    seeds = seeds,
+    seeding_strategy = seeding_strategy,
     warping_class = warping_class,
     centroid_type = centroid_type,
     metric = metric,
-    cluster_on_phase = FALSE
+    cluster_on_phase = cluster_on_phase
   )
 
   res <- list(
