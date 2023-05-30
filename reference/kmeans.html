@@ -57,12 +57,12 @@ QTS.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">kmeans</span><span class="op">(</span><span class="va">x</span>, <span class="va">k</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">kmeans</span><span class="op">(</span><span class="va">x</span>, <span class="va">n_clusters</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for default</span></span>
 <span><span class="fu">kmeans</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  <span class="va">k</span>,</span>
+<span>  n_clusters <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  iter_max <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  nstart <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  algorithm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Hartigan-Wong"</span>, <span class="st">"Lloyd"</span>, <span class="st">"Forgy"</span>, <span class="st">"MacQueen"</span><span class="op">)</span>,</span>
@@ -73,10 +73,13 @@ QTS.</p>
 <span><span class="co"># S3 method for qts_sample</span></span>
 <span><span class="fu">kmeans</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  k <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  n_clusters <span class="op">=</span> <span class="fl">1L</span>,</span>
+<span>  seeds <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  seeding_strategy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"kmeans++"</span>, <span class="st">"exhaustive-kmeans++"</span>, <span class="st">"exhaustive"</span>, <span class="st">"hclust"</span><span class="op">)</span>,</span>
+<span>  warping_class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"affine"</span>, <span class="st">"dilation"</span>, <span class="st">"none"</span>, <span class="st">"shift"</span>, <span class="st">"srsf"</span><span class="op">)</span>,</span>
 <span>  centroid_type <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>  metric <span class="op">=</span> <span class="st">"l2"</span>,</span>
-<span>  warping_class <span class="op">=</span> <span class="st">"affine"</span>,</span>
+<span>  metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"l2"</span>, <span class="st">"pearson"</span><span class="op">)</span>,</span>
+<span>  cluster_on_phase <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -89,8 +92,9 @@ such a matrix (such as a numeric vector or a data frame with all numeric
 columns) or an object of class <a href="qts_sample.html">qts_sample</a>.</p></dd>
 
 
-<dt>k</dt>
-<dd><p>An integer value specifying the number of clusters to be look for.</p></dd>
+<dt>n_clusters</dt>
+<dd><p>An integer value specifying the number of clusters to be
+look for.</p></dd>
 
 
 <dt>...</dt>
@@ -120,6 +124,34 @@ for terminating the k-mean algorithm. Defaults to <code>10L</code>.</p></dd>
     produced.  Higher values may produce more tracing information.</p></dd>
 
 
+<dt>seeds</dt>
+<dd><p>An integer value or vector specifying the indices of the initial
+centroids. If an integer vector, it is interpreted as the indices of the
+intial centroids and should therefore be of length <code>n_clusters</code>. If an
+integer value, it is interpreted as the index of the first initial centroid
+and subsequent centroids are chosen according to the k-means++ strategy. It
+can be <code>NULL</code> in which case the argument <code>seeding_strategy</code> is used to
+automatically provide suitable indices. Defaults to <code>NULL</code>.</p></dd>
+
+
+<dt>seeding_strategy</dt>
+<dd><p>A character string specifying the strategy for
+choosing the initial centroids in case the argument <code>seeds</code> is set to
+<code>NULL</code>. Choices are
+<a href="https://en.wikipedia.org/wiki/K-means%2B%2B" class="external-link"><code>"kmeans++"</code></a>,
+<code>"exhaustive-kmeans++"</code> which performs an exhaustive search over the choice
+of the first centroid, <code>"exhaustive"</code> which tries on all combinations of
+initial centroids or <code>"hclust"</code> which first performs hierarchical
+clustering using Ward's linkage criterion to identify initial centroids.
+Defaults to <code>"kmeans++"</code>, which is the fastest strategy.</p></dd>
+
+
+<dt>warping_class</dt>
+<dd><p>A string specifying the warping class Choices are
+<code>"affine"</code>, <code>"dilation"</code>, <code>"none"</code>, <code>"shift"</code> or <code>"srsf"</code>. Defaults to
+<code>"affine"</code>. The SRSF class is the only class which is boundary-preserving.</p></dd>
+
+
 <dt>centroid_type</dt>
 <dd><p>A string specifying the type of centroid to compute.
 Choices are <code>"mean"</code>, <code>"medoid"</code>, <code>"lowess"</code> or <code>"poly"</code>. Defaults to
@@ -139,10 +171,10 @@ are <code>"l2"</code> or <code>"pearson"</code>. Defaults to <code>"l2"</code>. 
 L2 distance between the SRSFs of the original curves is used.</p></dd>
 
 
-<dt>warping_class</dt>
-<dd><p>A string specifying the warping class Choices are
-<code>"affine"</code>, <code>"dilation"</code>, <code>"none"</code>, <code>"shift"</code> or <code>"srsf"</code>. Defaults to
-<code>"affine"</code>. The SRSF class is the only class which is boundary-preserving.</p></dd>
+<dt>cluster_on_phase</dt>
+<dd><p>A boolean specifying whether clustering should be
+based on phase variation or amplitude variation. Defaults to <code>FALSE</code> which
+implies amplitude variation.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -162,8 +194,49 @@ were tried.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">res_kma</span> <span class="op">&lt;-</span> <span class="fu">kmeans</span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in format_inputs(x, y):</span> The package "fda" is required.</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">res_kma</span> <span class="op">&lt;-</span> <span class="fu">kmeans</span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, n_clusters <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Computing initial centroids using kmeans++ strategy...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Information about the data set:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of observations: 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of dimensions: 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of points: 101</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Information about cluster initialization:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters: 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Initial seeds for cluster centers:         3        9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Information about the methods used within the algorithm:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Warping method: affine</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Center method: mean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Dissimilarity method: l2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Optimization method: bobyqa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Information about warping parameter bounds:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Warping options:    0.1500   0.1500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Information about convergence criteria:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Maximum number of iterations: 100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Distance relative tolerance: 0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Information about parallelization setup:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of threads: 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Parallel method: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Other information:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Use fence to robustify: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Check total dissimilarity: 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Compute overall center: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Running k-centroid algorithm:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Iteration #1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #0: 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #1: 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Iteration #2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #0: 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #1: 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Active stopping criteria:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Memberships did not change.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
