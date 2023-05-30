@@ -51,7 +51,7 @@ reference:
   - title: Distances
     contents:
     - DTW
-    - distDTW
+    - dist
   - title: Datasets
     contents:
     - vespa
