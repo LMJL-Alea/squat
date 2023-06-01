@@ -34,7 +34,7 @@ distance matrix.}
 \item{metric}{A character string specifying the distance measure to be used.
 This must be one of \code{"euclidean"}, \code{"maximum"}, \code{"manhattan"},
 \code{"canberra"}, \code{"binary"} or \code{"minkowski"} if \code{x} is not a QTS sample.
-Otherwise, it must be one of \code{"l2"} or \code{"pearson"}.}
+Otherwise, it must be one of \code{"l2"}, \code{"pearson"} or \code{"dtw"}.}
 
 \item{...}{not used.}
 

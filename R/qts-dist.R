@@ -9,7 +9,7 @@
 #' @param metric A character string specifying the distance measure to be used.
 #'   This must be one of `"euclidean"`, `"maximum"`, `"manhattan"`,
 #'   `"canberra"`, `"binary"` or `"minkowski"` if `x` is not a QTS sample.
-#'   Otherwise, it must be one of `"l2"` or `"pearson"`.
+#'   Otherwise, it must be one of `"l2"`, `"pearson"` or `"dtw"`.
 #' @inheritParams stats::dist
 #' @inheritParams fdacluster::fdadist
 #' @param ... not used.
