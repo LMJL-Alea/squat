@@ -14,9 +14,10 @@
 #' @inheritParams stats::kmeans
 #' @inheritParams fdacluster::fdakmeans
 #'
-#' @return An object of class [`stats::kmeans`] or [`stats::hclust`] if the
-#'   input `x` is NOT of class [`qts_sample`]. Otherwise, an object of class
-#'   `qtsclust` which is effectively a list with four components:
+#' @return An object of class [`stats::kmeans`] or [`stats::hclust`] or
+#'   `dbscan_fast` if the input `x` is NOT of class [`qts_sample`]. Otherwise,
+#'   an object of class `qtsclust` which is effectively a list with four
+#'   components:
 #' - `qts_aligned`: An object of class [`qts_sample`] storing the sample of
 #' aligned QTS;
 #' - `qts_centers`: A list of objects of class [`qts`] representing the centers

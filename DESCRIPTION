@@ -32,6 +32,7 @@ LinkingTo:
     fdacluster
 Imports:
     cli,
+    dbscan,
     dtw,
     fdacluster,
     funData,

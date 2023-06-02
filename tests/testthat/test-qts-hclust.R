@@ -4,8 +4,6 @@ test_that("Function hclust.default() works", {
 })
 
 test_that("Function hclust.qts_sample() works", {
-  withr::with_seed(1234, {
-    out <- hclust(vespa64$igp[1:10], n_clusters = 2)
-  })
+  out <- hclust(vespa64$igp[1:10], n_clusters = 2)
   expect_equal(out$best_clustering$n_clusters, 2)
 })

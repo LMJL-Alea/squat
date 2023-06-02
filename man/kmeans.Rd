@@ -97,9 +97,10 @@ based on phase variation or amplitude variation. Defaults to \code{FALSE} which
 implies amplitude variation.}
 }
 \value{
-An object of class \code{\link[stats:kmeans]{stats::kmeans}} or \code{\link[stats:hclust]{stats::hclust}} if the
-input \code{x} is NOT of class \code{\link{qts_sample}}. Otherwise, an object of class
-\code{qtsclust} which is effectively a list with four components:
+An object of class \code{\link[stats:kmeans]{stats::kmeans}} or \code{\link[stats:hclust]{stats::hclust}} or
+\code{dbscan_fast} if the input \code{x} is NOT of class \code{\link{qts_sample}}. Otherwise,
+an object of class \code{qtsclust} which is effectively a list with four
+components:
 \itemize{
 \item \code{qts_aligned}: An object of class \code{\link{qts_sample}} storing the sample of
 aligned QTS;
