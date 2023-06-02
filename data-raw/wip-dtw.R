@@ -66,7 +66,7 @@ DTWi <- function(qts1, qts2,
     qts2 <- resample_qts(qts2, disable_normalization = TRUE)
   }
 
-  par <- compute_initial_guess(qts1, qts2, step_pattern = step_pattern)
+  par <- compute_initial_guess(qts1, qts2, step_pattern = step_pattern, k = 0)
   lb <- par - c(pi/2, pi, pi)
   ub <- par + c(pi/2, pi, pi)
 
@@ -155,6 +155,10 @@ quaternion_from_angles <- function(theta, phi, omega) {
 }
 
 angles_from_quaternion <- function(q) {
+  if (q[1] > 1 || q[1] < -1) {
+    q[1] <- 1.0 * sign(q[1])
+    q <- q / sqrt(sum(q^2))
+  }
   omega <- 2 * acos(q[1])
   denom <- sin(omega / 2)
   if (denom < .Machine$double.eps^0.5) {
@@ -162,13 +166,17 @@ angles_from_quaternion <- function(q) {
     phi <- 0
   } else {
     u <- q[2:4] / denom
+    if (u[3] > 1 || u[3] < -1) {
+      u[3] <- 1.0 * sign(u[3])
+      u <- u / sqrt(sum(u^2))
+    }
     theta <- acos(u[3])
     phi <- atan2(u[2], u[1])
   }
   c(theta, phi, omega)
 }
 
-compute_initial_guess <- function(qts1, qts2, step_pattern) {
+compute_initial_guess <- function(qts1, qts2, step_pattern, k = 2) {
   q1list <- purrr::pmap(list(qts1$w, qts1$x, qts1$y, qts1$z), c)
   q1list <- purrr::map(q1list, ~ c(.x[1], -.x[2:4]))
   q2list <- purrr::pmap(list(qts2$w, qts2$x, qts2$y, qts2$z), c)
@@ -177,11 +185,20 @@ compute_initial_guess <- function(qts1, qts2, step_pattern) {
   candidates <- c(candidates, q2list)
   candidates <- purrr::map(candidates, angles_from_quaternion)
   candidates[[length(candidates) + 1]] <- rep(0, 3)
+  if (k > 0) {
+    grd <- mvmesh::UnitSphere(n = 4, k = k)$V |>
+      purrr::array_tree(margin = 1) |>
+      purrr::map(angles_from_quaternion)
+    candidates <- c(candidates, grd)
+  }
+
   fn_values <- purrr::map_dbl(
     .x = candidates,
     .f = cost,
     qts1 = qts1, qts2 = qts2,
     step_pattern = step_pattern
   )
-  candidates[[which.min(fn_values)]]
+  idx <- which.min(fn_values)
+
+  candidates[[idx]]
 }

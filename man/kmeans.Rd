@@ -97,17 +97,21 @@ based on phase variation or amplitude variation. Defaults to \code{FALSE} which
 implies amplitude variation.}
 }
 \value{
-An object of class \code{\link[stats:kmeans]{stats::kmeans}} if the input \code{x} is NOT of class
-\code{\link{qts_sample}}. Otherwise, an object of class \code{kma_qts} which is
-effectively a list with three components:
+An object of class \code{\link[stats:kmeans]{stats::kmeans}} or \code{\link[stats:hclust]{stats::hclust}} if the
+input \code{x} is NOT of class \code{\link{qts_sample}}. Otherwise, an object of class
+\code{qtsclust} which is effectively a list with four components:
 \itemize{
-\item \code{qts_aligned}: An object of class \link{qts_sample} storing the sample of
+\item \code{qts_aligned}: An object of class \code{\link{qts_sample}} storing the sample of
 aligned QTS;
-\item \code{qts_centers}: A list of objects of class \link{qts} representing the centers of
-the clusters;
-\item \code{best_kma_result}: An object of class \link[fdacluster:caps]{fdacluster::caps} storing the
+\item \code{qts_centers}: A list of objects of class \code{\link{qts}} representing the centers
+of the clusters;
+\item \code{best_clustering}: An object of class \code{\link[fdacluster:caps]{fdacluster::caps}} storing the
 results of the best k-mean alignment result among all initialization that
 were tried.
+\item \code{call_name}: A string storing the name of the function that was used to
+produce the clustering structure;
+\item \code{call_args}: A list containing the exact arguments that were passed to
+the function \code{call_name} that produced this output.
 }
 }
 \description{
@@ -116,5 +120,5 @@ k-means alignment algorithm for jointly clustering and aligning the input
 QTS.
 }
 \examples{
-res_kma <- kmeans(vespa64$igp[1:10], n_clusters = 2)
+out <- kmeans(vespa64$igp[1:10], n_clusters = 2)
 }
