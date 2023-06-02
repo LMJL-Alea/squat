@@ -25,8 +25,14 @@ QTS."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathja
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-news">News</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-news">
+    <h6 class="dropdown-header" data-toc-skip>Releases</h6>
+    <a class="external-link dropdown-item" href="https://astamm.github.io/posts/2023-01-03-squat-010/">squat 0.0.1</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="../news/index.html">Changelog</a>
+  </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -181,20 +187,24 @@ implies amplitude variation.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>An object of class <code><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">stats::kmeans</a></code> if the input <code>x</code> is NOT of class
-<code><a href="qts_sample.html">qts_sample</a></code>. Otherwise, an object of class <code>kma_qts</code> which is
-effectively a list with three components:</p><ul><li><p><code>qts_aligned</code>: An object of class <a href="qts_sample.html">qts_sample</a> storing the sample of
+<p>An object of class <code><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">stats::kmeans</a></code> or <code><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">stats::hclust</a></code> if the
+input <code>x</code> is NOT of class <code><a href="qts_sample.html">qts_sample</a></code>. Otherwise, an object of class
+<code>qtsclust</code> which is effectively a list with four components:</p><ul><li><p><code>qts_aligned</code>: An object of class <code><a href="qts_sample.html">qts_sample</a></code> storing the sample of
 aligned QTS;</p></li>
-<li><p><code>qts_centers</code>: A list of objects of class <a href="qts.html">qts</a> representing the centers of
-the clusters;</p></li>
-<li><p><code>best_kma_result</code>: An object of class <a href="https://rdrr.io/pkg/fdacluster/man/caps.html" class="external-link">fdacluster::caps</a> storing the
+<li><p><code>qts_centers</code>: A list of objects of class <code><a href="qts.html">qts</a></code> representing the centers
+of the clusters;</p></li>
+<li><p><code>best_clustering</code>: An object of class <code><a href="https://rdrr.io/pkg/fdacluster/man/caps.html" class="external-link">fdacluster::caps</a></code> storing the
 results of the best k-mean alignment result among all initialization that
 were tried.</p></li>
+<li><p><code>call_name</code>: A string storing the name of the function that was used to
+produce the clustering structure;</p></li>
+<li><p><code>call_args</code>: A list containing the exact arguments that were passed to
+the function <code>call_name</code> that produced this output.</p></li>
 </ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">res_kma</span> <span class="op">&lt;-</span> <span class="fu">kmeans</span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, n_clusters <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">kmeans</span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, n_clusters <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Computing initial centroids using kmeans++ strategy...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Information about the data set:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of observations: 10</span>
@@ -203,7 +213,7 @@ were tried.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Information about cluster initialization:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters: 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Initial seeds for cluster centers:         7        4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Initial seeds for cluster centers:          3        10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Information about the methods used within the algorithm:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Warping method: affine</span>
@@ -229,11 +239,11 @@ were tried.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Running k-centroid algorithm:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Iteration #1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #0: 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #1: 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #0: 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #1: 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Iteration #2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #0: 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #1: 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #0: 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #1: 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Active stopping criteria:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Memberships did not change.</span>

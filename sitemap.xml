@@ -22,9 +22,6 @@
     <loc>https://lmjl-alea.github.io/squat/reference/append.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/autoplot.kma_qts.html</loc>
-  </url>
-  <url>
     <loc>https://lmjl-alea.github.io/squat/reference/autoplot.prcomp_qts.html</loc>
   </url>
   <url>
@@ -32,6 +29,9 @@
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/autoplot.qts_sample.html</loc>
+  </url>
+  <url>
+    <loc>https://lmjl-alea.github.io/squat/reference/autoplot.qtsclust.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/centring.html</loc>
@@ -44,6 +44,9 @@
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/exp.html</loc>
+  </url>
+  <url>
+    <loc>https://lmjl-alea.github.io/squat/reference/hclust.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/hemispherize.html</loc>
@@ -70,9 +73,6 @@
     <loc>https://lmjl-alea.github.io/squat/reference/normalize.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/plot.kma_qts.html</loc>
-  </url>
-  <url>
     <loc>https://lmjl-alea.github.io/squat/reference/plot.prcomp_qts.html</loc>
   </url>
   <url>
@@ -80,6 +80,9 @@
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/plot.qts_sample.html</loc>
+  </url>
+  <url>
+    <loc>https://lmjl-alea.github.io/squat/reference/plot.qtsclust.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/prcomp.qts_sample.html</loc>
