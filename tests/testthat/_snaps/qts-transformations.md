@@ -64,18 +64,18 @@
       qts2ats(vespa64$igp[[1]], disable_normalization = FALSE)
     Output
       # A tibble: 101 x 2
-          time    angle
-         <int>    <dbl>
-       1     0 1.53e-17
-       2     1 1.13e- 2
-       3     2 2.35e- 2
-       4     3 3.66e- 2
-       5     4 4.80e- 2
-       6     5 5.83e- 2
-       7     6 6.73e- 2
-       8     7 7.52e- 2
-       9     8 8.28e- 2
-      10     9 9.08e- 2
+          time  angle
+         <int>  <dbl>
+       1     0 0     
+       2     1 0.0113
+       3     2 0.0235
+       4     3 0.0366
+       5     4 0.0480
+       6     5 0.0583
+       7     6 0.0673
+       8     7 0.0752
+       9     8 0.0828
+      10     9 0.0908
       # i 91 more rows
 
 ---
@@ -84,18 +84,18 @@
       qts2ats(vespa64$igp[[1]], disable_normalization = TRUE)
     Output
       # A tibble: 101 x 2
-          time    angle
-         <int>    <dbl>
-       1     0 1.53e-17
-       2     1 1.13e- 2
-       3     2 2.35e- 2
-       4     3 3.66e- 2
-       5     4 4.80e- 2
-       6     5 5.83e- 2
-       7     6 6.73e- 2
-       8     7 7.52e- 2
-       9     8 8.28e- 2
-      10     9 9.08e- 2
+          time  angle
+         <int>  <dbl>
+       1     0 0     
+       2     1 0.0113
+       3     2 0.0235
+       4     3 0.0366
+       5     4 0.0480
+       6     5 0.0583
+       7     6 0.0673
+       8     7 0.0752
+       9     8 0.0828
+      10     9 0.0908
       # i 91 more rows
 
 # the function qts2avts() works

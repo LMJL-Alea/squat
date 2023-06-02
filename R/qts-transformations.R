@@ -67,7 +67,9 @@ qts2nts <- function(x, disable_normalization = FALSE) {
 qts2ats <- function(x, disable_normalization = FALSE) {
   if (!is_qts(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
-  qts2ats_impl(x, disable_normalization = disable_normalization)
+  out <- qts2ats_impl(x, disable_normalization = disable_normalization)
+  out$angle[out$angle < .Machine$double.eps] <- 0
+  out
 }
 
 #' QTS Transformation to Angular Velocity Time Series
