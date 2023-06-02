@@ -1,4 +1,14 @@
-# squat 0.1.0.9000
+# squat 0.2.0
+
+Major features:
+
+* Added hierarichal clustering;
+* Added DBSCAN clustering;
+* Added distance matrix computation.
+
+Minor improvements:
+
+* Adapted code to match new API in [**fdacluster**](https://astamm.github.io/fdacluster/index.html) package.
 
 # squat 0.1.0
 

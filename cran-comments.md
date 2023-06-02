@@ -1,6 +1,6 @@
 ## Test environments
 
-- local macOS R installation, R 4.2.2
+- local macOS R installation, R 4.3.0
 - continuous integration via GH actions:
     - macOS latest release
     - windows latest release
@@ -16,12 +16,4 @@
 
 ## R CMD check results
 
-There was no ERROR and no WARNINGs.
-
-There were 1 NOTE:
-
-    * checking installed package size ... NOTE
-      installed size is 13.0Mb
-      sub-directories of 1Mb or more:
-        data   1.1Mb
-        libs  11.6Mb
+There was no ERROR, no WARNINGs, no NOTEs.
