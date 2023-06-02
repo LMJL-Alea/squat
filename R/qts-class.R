@@ -151,7 +151,7 @@ autoplot.qts <- function(object, highlighted_points = NULL, ...) {
 #' @param x An object of class [qts].
 #' @inheritParams autoplot.qts
 #'
-#' @return NULL
+#' @return No return value, called for side effects.
 #'
 #' @importFrom graphics plot
 #' @export

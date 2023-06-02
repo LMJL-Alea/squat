@@ -67,11 +67,17 @@ is_qts_sample <- function(x) {
 
 #' QTS Sample Concatenation
 #'
-#' @param x An object of class [`qts_sample`].
+#' @param x Either a numeric vector or an object of class [`qts_sample`].
 #' @inheritParams base::append
-#' @param y Either an object of class [`qts_sample`] or an object of class
-#'   [`qts`].
+#' @param y Either a numeric vector or an object of class [`qts_sample`] or an
+#'   object of class [`qts`].
 #' @param ... Extra arguments to be passed on to next methods.
+#'
+#' @return If `x` is a numeric vector, the output is a numeric vector containing
+#'   the values in `x` with the elements of `values` appended after the
+#'   specified element of `x`. If `x` is of class [`qts_sample`], the output is
+#'   another object of class [`qts_sample`] containing the elements in `x` and
+#'   the ones in `y` appended after the last element of `x`.
 #'
 #' @export
 #' @examples
@@ -409,7 +415,7 @@ autoplot.qts_sample <- function(object,
 #' @param x An object of class [`qts_sample`].
 #' @inheritParams autoplot.qts_sample
 #'
-#' @return NULL
+#' @return No return value, called for side effects.
 #'
 #' @importFrom graphics plot
 #' @export

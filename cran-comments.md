@@ -1,3 +1,11 @@
+## Resubmission
+
+This is a resubmission in which I have:
+
+- Added documentation about return values where missing;
+- Added missing single-quotes for code language name in `DESCRIPTION`;
+- Fixed wrong URLs in `DESCRIPTION`.
+
 ## Test environments
 
 - local macOS R installation, R 4.3.0

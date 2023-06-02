@@ -15,6 +15,9 @@ with respect to the others.}
 
 \item{...}{Further arguments to be passed on to next methods.}
 }
+\value{
+No return value, called for side effects.
+}
 \description{
 This function creates a visualization of a QTS \strong{without} returning the plot
 data as an object.

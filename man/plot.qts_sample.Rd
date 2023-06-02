@@ -23,6 +23,9 @@ which will create a static plot.}
 
 \item{...}{Further arguments to be passed to methods.}
 }
+\value{
+No return value, called for side effects.
+}
 \description{
 This function creates a visualization of a sample of QTS \strong{without}
 returning the corresponding \link[ggplot2:ggplot]{ggplot2::ggplot} object

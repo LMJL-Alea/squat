@@ -26,6 +26,9 @@ can specify the plane onto which the individuals will be projected by
 providing a length-2 integer vector argument \code{plane} which defaults to
 \code{1:2}.}
 }
+\value{
+No return value, called for side effects.
+}
 \description{
 This function creates a visualization of the results of the PCA applied on a
 sample of QTS \strong{without} returning the plot data as an object.

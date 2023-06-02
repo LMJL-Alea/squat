@@ -158,7 +158,7 @@ autoplot.qtsclust <- function(object, ...) {
 #'   or [hclust.qts_sample()].
 #' @inheritParams autoplot.qtsclust
 #'
-#' @return NULL
+#' @return No return value, called for side effects.
 #'
 #' @importFrom graphics plot
 #' @export

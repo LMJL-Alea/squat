@@ -13,7 +13,7 @@ append(x, ...)
 \method{append}{qts_sample}(x, y, ...)
 }
 \arguments{
-\item{x}{An object of class \code{\link{qts_sample}}.}
+\item{x}{Either a numeric vector or an object of class \code{\link{qts_sample}}.}
 
 \item{...}{Extra arguments to be passed on to next methods.}
 
@@ -21,8 +21,15 @@ append(x, ...)
 
 \item{after}{a subscript, after which the values are to be appended.}
 
-\item{y}{Either an object of class \code{\link{qts_sample}} or an object of class
-\code{\link{qts}}.}
+\item{y}{Either a numeric vector or an object of class \code{\link{qts_sample}} or an
+object of class \code{\link{qts}}.}
+}
+\value{
+If \code{x} is a numeric vector, the output is a numeric vector containing
+the values in \code{x} with the elements of \code{values} appended after the
+specified element of \code{x}. If \code{x} is of class \code{\link{qts_sample}}, the output is
+another object of class \code{\link{qts_sample}} containing the elements in \code{x} and
+the ones in \code{y} appended after the last element of \code{x}.
 }
 \description{
 QTS Sample Concatenation

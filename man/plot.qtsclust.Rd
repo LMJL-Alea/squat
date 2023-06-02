@@ -12,6 +12,9 @@ or \code{\link[=hclust.qts_sample]{hclust.qts_sample()}}.}
 
 \item{...}{Further arguments to be passed to other methods.}
 }
+\value{
+No return value, called for side effects.
+}
 \description{
 This function creates a visualization of the clustering results obtained on a
 sample of QTS \strong{without} returning the plot data as an object.

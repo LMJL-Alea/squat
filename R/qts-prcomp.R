@@ -159,7 +159,7 @@ autoplot.prcomp_qts <- function(object, what = "PC1", ...) {
 #'   [prcomp.qts_sample()] method.
 #' @inheritParams autoplot.prcomp_qts
 #'
-#' @return NULL
+#' @return No return value, called for side effects.
 #'
 #' @importFrom graphics plot
 #' @export
