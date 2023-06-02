@@ -43,11 +43,12 @@ reference:
     - prcomp.qts_sample
     - autoplot.prcomp_qts
     - plot.prcomp_qts
-  - title: K-Means Alignment Clustering
+  - title: Clustering
     contents:
     - kmeans
-    - autoplot.kma_qts
-    - plot.kma_qts
+    - hclust
+    - autoplot.qtsclust
+    - plot.qtsclust
   - title: Distances
     contents:
     - DTW
@@ -56,3 +57,8 @@ reference:
     contents:
     - vespa
     - vespa64
+
+news:
+  releases:
+  - text: "squat 0.0.1"
+    href: https://astamm.github.io/posts/2023-01-03-squat-010/
