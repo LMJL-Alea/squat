@@ -1,3 +1,5 @@
+# squat (development version)
+
 # squat 0.2.0
 
 Major features:
