@@ -87,6 +87,7 @@ QTS.</p>
 <span>  centroid_type <span class="op">=</span> <span class="st">"mean"</span>,</span>
 <span>  metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"l2"</span>, <span class="st">"pearson"</span><span class="op">)</span>,</span>
 <span>  cluster_on_phase <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  use_fence <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -161,14 +162,15 @@ Defaults to <code>"kmeans++"</code>, which is the fastest strategy.</p></dd>
 
 <dt>centroid_type</dt>
 <dd><p>A string specifying the type of centroid to compute.
-Choices are <code>"mean"</code>, <code>"medoid"</code>, <code>"lowess"</code> or <code>"poly"</code>. Defaults to
-<code>"mean"</code>. If LOWESS appproximation is chosen, the user can append an
-integer between 0 and 100 as in <code>"lowess20"</code>. This number will be used as
-the smoother span. This gives the proportion of points in the plot which
-influence the smooth at each value. Larger values give more smoothness. The
-default value is 10%. If polynomial approximation is chosen, the user can
-append an positive integer as in <code>"poly3"</code>. This number will be used as the
-degree of the polynomial model. The default value is <code>4L</code>.</p></dd>
+Choices are <code>"mean"</code>, <code>"median"</code> <code>"medoid"</code>, <code>"lowess"</code> or <code>"poly"</code>.
+Defaults to <code>"mean"</code>. If LOWESS appproximation is chosen, the user can
+append an integer between 0 and 100 as in <code>"lowess20"</code>. This number will be
+used as the smoother span. This gives the proportion of points in the plot
+which influence the smooth at each value. Larger values give more
+smoothness. The default value is 10%. If polynomial approximation is
+chosen, the user can append an positive integer as in <code>"poly3"</code>. This
+number will be used as the degree of the polynomial model. The default
+value is <code>4L</code>.</p></dd>
 
 
 <dt>metric</dt>
@@ -182,6 +184,12 @@ L2 distance between the SRSFs of the original curves is used.</p></dd>
 <dd><p>A boolean specifying whether clustering should be
 based on phase variation or amplitude variation. Defaults to <code>FALSE</code> which
 implies amplitude variation.</p></dd>
+
+
+<dt>use_fence</dt>
+<dd><p>A boolean specifying whether the fence algorithm should be
+used to robustify the algorithm against outliers. Defaults to <code>FALSE</code>. This
+is used only when <code>warping_class != "srsf"</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -215,7 +223,7 @@ the function <code>call_name</code> that produced this output.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Information about cluster initialization:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Number of clusters: 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Initial seeds for cluster centers:          3        10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Initial seeds for cluster centers:         1        8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Information about the methods used within the algorithm:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Warping method: affine</span>
@@ -241,14 +249,19 @@ the function <code>call_name</code> that produced this output.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Running k-centroid algorithm:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Iteration #1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #0: 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #1: 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #0: 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #1: 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Iteration #2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #0: 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #1: 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #0: 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    * Size of cluster #1: 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Active stopping criteria:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Memberships did not change.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>longer object length is not a multiple of shorter object length</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in purrr::map(1:l$N, function(.id) {    exp(as_qts(tibble::tibble(time = out$aligned_grids[.id, ],         w = 0, x = out$original_curves[.id, 1, ], y = out$original_curves[.id,             2, ], z = out$original_curves[.id, 3, ])))}):</span> <span style="color: #00BBBB;">ℹ</span> In index: 1.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error in `as_qts()`:</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> The input tibble should have exactly the 5 following columns in that</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>   order: `time`, `w`, `x`, `y` and `z`.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
