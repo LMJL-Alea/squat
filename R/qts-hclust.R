@@ -47,9 +47,12 @@ hclust.qts_sample <-function(x,
                              ...) {
   call <- rlang::call_match(defaults = TRUE)
   call_args <- rlang::call_args(call)
-  call_args$metric <- rlang::arg_match(metric)
-  call_args$linkage_criterion <- rlang::arg_match(linkage_criterion)
-  call_args$warping_class <- rlang::arg_match(warping_class)
+  metric <- rlang::arg_match(metric)
+  linkage_criterion <- rlang::arg_match(linkage_criterion)
+  warping_class <- rlang::arg_match(warping_class)
+  call_args$metric <- metric
+  call_args$linkage_criterion <- linkage_criterion
+  call_args$warping_class <- warping_class
 
   l <- prep_data(x)
 
@@ -67,18 +70,17 @@ hclust.qts_sample <-function(x,
 
   res <- list(
     qts_aligned = purrr::map(1:l$N, \(.id) {
-      .label <- out$memberships[.id]
       exp(as_qts(tibble::tibble(
-        time = out$grids[.label, ],
+        time = out$aligned_grids[.id, ],
         w    = 0,
-        x    = out$aligned_curves[.id, 1, ],
-        y    = out$aligned_curves[.id, 2, ],
-        z    = out$aligned_curves[.id, 3, ]
+        x    = out$original_curves[.id, 1, ],
+        y    = out$original_curves[.id, 2, ],
+        z    = out$original_curves[.id, 3, ]
       )))
     }),
     qts_centers = purrr::map(1:out$n_clusters, \(.id) {
       exp(as_qts(tibble::tibble(
-        time = out$grids[.id, ],
+        time = out$center_grids[.id, ],
         w    = 0,
         x    = out$center_curves[.id, 1, ],
         y    = out$center_curves[.id, 2, ],

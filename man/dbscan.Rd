@@ -16,6 +16,7 @@ dbscan(x, ...)
   centroid_type = "mean",
   metric = c("l2", "pearson"),
   cluster_on_phase = FALSE,
+  use_fence = FALSE,
   ...
 )
 }
@@ -46,14 +47,15 @@ points are considered noise (see DBSCAN* in Campello et al, 2013).}
 \code{"affine"}. The SRSF class is the only class which is boundary-preserving.}
 
 \item{centroid_type}{A string specifying the type of centroid to compute.
-Choices are \code{"mean"}, \code{"medoid"}, \code{"lowess"} or \code{"poly"}. Defaults to
-\code{"mean"}. If LOWESS appproximation is chosen, the user can append an
-integer between 0 and 100 as in \code{"lowess20"}. This number will be used as
-the smoother span. This gives the proportion of points in the plot which
-influence the smooth at each value. Larger values give more smoothness. The
-default value is 10\%. If polynomial approximation is chosen, the user can
-append an positive integer as in \code{"poly3"}. This number will be used as the
-degree of the polynomial model. The default value is \code{4L}.}
+Choices are \code{"mean"}, \code{"median"} \code{"medoid"}, \code{"lowess"} or \code{"poly"}.
+Defaults to \code{"mean"}. If LOWESS appproximation is chosen, the user can
+append an integer between 0 and 100 as in \code{"lowess20"}. This number will be
+used as the smoother span. This gives the proportion of points in the plot
+which influence the smooth at each value. Larger values give more
+smoothness. The default value is 10\%. If polynomial approximation is
+chosen, the user can append an positive integer as in \code{"poly3"}. This
+number will be used as the degree of the polynomial model. The default
+value is \code{4L}.}
 
 \item{metric}{A character string specifying the distance measure to be used.
 This must be one of \code{"euclidean"}, \code{"maximum"}, \code{"manhattan"},
@@ -63,6 +65,10 @@ Otherwise, it must be one of \code{"l2"}, \code{"pearson"} or \code{"dtw"}.}
 \item{cluster_on_phase}{A boolean specifying whether clustering should be
 based on phase variation or amplitude variation. Defaults to \code{FALSE} which
 implies amplitude variation.}
+
+\item{use_fence}{A boolean specifying whether the fence algorithm should be
+used to robustify the algorithm against outliers. Defaults to \code{FALSE}. This
+is used only when \code{warping_class != "srsf"}.}
 }
 \value{
 An object of class \code{\link[stats:kmeans]{stats::kmeans}} or \code{\link[stats:hclust]{stats::hclust}} or

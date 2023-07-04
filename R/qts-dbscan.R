@@ -49,11 +49,14 @@ dbscan.qts_sample <-function(x,
                              centroid_type = "mean",
                              metric = c("l2", "pearson"),
                              cluster_on_phase = FALSE,
+                             use_fence = FALSE,
                              ...) {
   call <- rlang::call_match(defaults = TRUE)
+  warping_class <- rlang::arg_match(warping_class)
+  metric <- rlang::arg_match(metric)
   call_args <- rlang::call_args(call)
-  call_args$metric <- rlang::arg_match(metric)
-  call_args$warping_class <- rlang::arg_match(warping_class)
+  call_args$metric <- metric
+  call_args$warping_class <- warping_class
 
   l <- prep_data(x)
 
@@ -64,23 +67,23 @@ dbscan.qts_sample <-function(x,
     centroid_type = centroid_type,
     metric = metric,
     cluster_on_phase = cluster_on_phase,
-    use_verbose = FALSE
+    use_verbose = FALSE,
+    use_fence = use_fence
   )
 
   res <- list(
     qts_aligned = purrr::map(1:l$N, \(.id) {
       exp(as_qts(tibble::tibble(
-        time = out$grids[.id, ],
+        time = out$aligned_grids[.id, ],
         w    = 0,
-        x    = out$aligned_curves[.id, 1, ],
-        y    = out$aligned_curves[.id, 2, ],
-        z    = out$aligned_curves[.id, 3, ]
+        x    = out$original_curves[.id, 1, ],
+        y    = out$original_curves[.id, 2, ],
+        z    = out$original_curves[.id, 3, ]
       )))
     }),
     qts_centers = purrr::map(1:out$n_clusters, \(.id) {
-      idx <- which(out$memberships == .id)[1]
       exp(as_qts(tibble::tibble(
-        time = out$grids[idx, ],
+        time = out$center_grids[.id, ],
         w    = 0,
         x    = out$center_curves[.id, 1, ],
         y    = out$center_curves[.id, 2, ],
