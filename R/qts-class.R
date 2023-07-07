@@ -170,10 +170,6 @@ plot.qts <- function(x, highlighted_points = NULL, ...) {
 #'
 #' @return An object of class [`qts`] storing the left-multiplication of `x` by
 #'   `lhs`.
-#' @export
-#'
-#' @examples
-#' left_multiply(vespa64$igp[[1]], vespa64$igp[[2]])
 left_multiply <- function(x, lhs, invert = FALSE) {
   if (!is_qts(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")

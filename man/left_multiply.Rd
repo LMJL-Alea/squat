@@ -21,6 +21,3 @@ An object of class \code{\link{qts}} storing the left-multiplication of \code{x}
 \description{
 Left-multiplication of a QTS by another one
 }
-\examples{
-left_multiply(vespa64$igp[[1]], vespa64$igp[[2]])
-}
