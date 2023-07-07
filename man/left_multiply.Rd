@@ -21,3 +21,4 @@ An object of class \code{\link{qts}} storing the left-multiplication of \code{x}
 \description{
 Left-multiplication of a QTS by another one
 }
+\keyword{internal}
