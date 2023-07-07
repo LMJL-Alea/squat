@@ -241,6 +241,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// left_multiply_qts_impl
+Rcpp::DataFrame left_multiply_qts_impl(const Rcpp::DataFrame& qts, const Rcpp::DataFrame& lhs, const bool invert);
+RcppExport SEXP _squat_left_multiply_qts_impl(SEXP qtsSEXP, SEXP lhsSEXP, SEXP invertSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type lhs(lhsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type invert(invertSEXP);
+    rcpp_result_gen = Rcpp::wrap(left_multiply_qts_impl(qts, lhs, invert));
+    return rcpp_result_gen;
+END_RCPP
+}
 // GetCostMatrix
 Rcpp::NumericMatrix GetCostMatrix(const Rcpp::DataFrame& qts1, const Rcpp::DataFrame& qts2);
 RcppExport SEXP _squat_GetCostMatrix(SEXP qts1SEXP, SEXP qts2SEXP) {
@@ -434,6 +447,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_smooth_qts_impl", (DL_FUNC) &_squat_smooth_qts_impl, 2},
     {"_squat_hemispherize_qts_impl", (DL_FUNC) &_squat_hemispherize_qts_impl, 1},
     {"_squat_moving_average_qts_impl", (DL_FUNC) &_squat_moving_average_qts_impl, 2},
+    {"_squat_left_multiply_qts_impl", (DL_FUNC) &_squat_left_multiply_qts_impl, 3},
     {"_squat_GetCostMatrix", (DL_FUNC) &_squat_GetCostMatrix, 2},
     {"_squat_mean_qts_impl", (DL_FUNC) &_squat_mean_qts_impl, 1},
     {"_squat_median_qts_impl", (DL_FUNC) &_squat_median_qts_impl, 1},

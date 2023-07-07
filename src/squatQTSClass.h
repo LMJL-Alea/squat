@@ -34,5 +34,11 @@ Rcpp::DataFrame moving_average_qts_impl(
     const Rcpp::DataFrame &qts,
     const unsigned int window_size
 );
+// [[Rcpp::export]]
+Rcpp::DataFrame left_multiply_qts_impl(
+    const Rcpp::DataFrame &qts,
+    const Rcpp::DataFrame &lhs,
+    const bool invert = false
+);
 
 #endif /* SQUATQTSCLASS_H */

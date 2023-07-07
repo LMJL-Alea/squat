@@ -53,6 +53,10 @@ moving_average_qts_impl <- function(qts, window_size) {
     .Call(`_squat_moving_average_qts_impl`, qts, window_size)
 }
 
+left_multiply_qts_impl <- function(qts, lhs, invert = FALSE) {
+    .Call(`_squat_left_multiply_qts_impl`, qts, lhs, invert)
+}
+
 GetCostMatrix <- function(qts1, qts2) {
     .Call(`_squat_GetCostMatrix`, qts1, qts2)
 }

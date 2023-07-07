@@ -24,6 +24,7 @@
 #' @examples
 #' res_pca <- prcomp(vespa64$igp[1:16])
 prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
+  # Extract common evaluation grid
   check_common_grid <- x |>
     purrr::map("time") |>
     purrr::reduce(rbind) |>
@@ -31,68 +32,100 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
     sum()
   if (check_common_grid > 0)
     cli::cli_abort("All input QTS should be evaluated on the same grid.")
-  grid <- x[[1]]$time
-  npc_max <- min(length(x), length(grid)) - 1
-  if (M > npc_max)
-    cli::cli_abort("The maximum number of principal component is {npc_max}. Please choose a value of {.arg M} smaller or equal to that value.")
-  qts_log <- log(x)
+  common_grid <- x[[1]]$time
+
+  # Project QTS sample into tangent space
+  qts_c <- scale(x, scale = FALSE, keep_summary_stats = TRUE)
+  mean_rotations <- qts_c$mean_values |>
+    purrr::transpose() |>
+    purrr::simplify_all() |>
+    purrr::set_names(c("w", "x", "y", "z"))
+  mean_rotations <- as_qts(tibble::tibble(
+    time = common_grid,
+    w = mean_rotations$w,
+    x = mean_rotations$x,
+    y = mean_rotations$y,
+    z = mean_rotations$z
+  ))
+  qts_c <- qts_c$rescaled_sample
+  qts_log <- log(qts_c)
+
+  # Compute total variance and maximum number of components
+  mfd_roahd <- roahd::mfData(common_grid, list(
+    qts_log |> purrr::map("x") |> do.call(rbind, args = _),
+    qts_log |> purrr::map("y") |> do.call(rbind, args = _),
+    qts_log |> purrr::map("z") |> do.call(rbind, args = _)
+  ))
+  sample_cov <- roahd::cov_fun(mfd_roahd)
+  eigen_spectra <- sample_cov[c("1_1", "2_2", "3_3")] |>
+    purrr::map("values") |>
+    purrr::map(\(.x) eigen(.x, symmetric = TRUE, only.values = TRUE)$values)
+  tot_var <- eigen_spectra |>
+    purrr::map(\(.x) .x[.x > .Machine$double.eps]) |>
+    purrr::reduce(sum)
+  M_max <- eigen_spectra |>
+    purrr::map(\(.x) .x > .Machine$double.eps) |>
+    purrr::map_int(sum) |>
+    min()
+  if (M > M_max)
+    cli::cli_abort("The maximum number of principal component is {M_max}. Please choose a value of {.arg M} smaller or equal to that value.")
+
+  # Store log-QTS sample into multiFunData object
   fd_x <- funData::funData(
-    argvals = grid,
+    argvals = common_grid,
     X = qts_log |>
       purrr::map("x") |>
       purrr::reduce(rbind)
   )
   fd_y <- funData::funData(
-    argvals = grid,
+    argvals = common_grid,
     X = qts_log |>
       purrr::map("y") |>
       purrr::reduce(rbind)
   )
   fd_z <- funData::funData(
-    argvals = grid,
+    argvals = common_grid,
     X = qts_log |>
       purrr::map("z") |>
       purrr::reduce(rbind)
   )
   mfd <- funData::multiFunData(fd_x, fd_y, fd_z)
-  uniExpansions <- purrr::map(1:3, ~ list(type = "splines1Dpen", k = npc_max))
+
+  # Perform multivariate functional PCA
+  uniExpansions <- purrr::map(1:3, \(.x) {
+    list(type = "splines1Dpen", k = M_max)
+  })
   tpca <- MFPCA::MFPCA(mfd, M = M, uniExpansions = uniExpansions, fit = fit)
-  # uniExpansions <- purrr::map(1:3, ~ list(type = "splines1D", k = M))
-  # tpca <- MFPCA::MFPCA(mfd, M = M, uniExpansions = uniExpansions, fit = fit, approx.eigen = TRUE)
-  if (M == npc_max)
-    tot_var <- sum(tpca$values)
-  else {
-    # uniExpansions <- purrr::map(1:3, ~ list(type = "splines1Dpen", k = npc_max))
-    tpca_full <- MFPCA::MFPCA(mfd, M = npc_max, uniExpansions = uniExpansions, fit = FALSE)
-    # uniExpansions <- purrr::map(1:3, ~ list(type = "splines1D", k = npc_max))
-    # tpca_full <- MFPCA::MFPCA(mfd, M = npc_max, uniExpansions = uniExpansions, fit = FALSE, approx.eigen = TRUE)
-    tot_var <- sum(tpca_full$values)
-  }
+
+  # Consolidate output
   mean_qts <- tpca$meanFunction |>
-    purrr::map(~ as.numeric(.x@X)) |>
+    purrr::map(\(.x) as.numeric(.x@X)) |>
     purrr::set_names(c("x", "y", "z")) |>
     tibble::as_tibble()
-  mean_qts$time <- grid
+  mean_qts$time <- common_grid
   mean_qts$w <- 0
-  mean_qts <- exp(as_qts(mean_qts[c(4, 5, 1:3)]))
-  res <- list(
+  mean_qts <- left_multiply(exp(as_qts(mean_qts[c(4, 5, 1:3)])), mean_rotations)
+  out <- list(
     tpca = tpca,
     var_props = tpca$values / tot_var,
+    total_variance = tot_var,
+    center_qts = mean_rotations,
     mean_qts = mean_qts,
     principal_qts = tpca$functions |>
-      purrr::map(~ purrr::array_tree(.x@X, margin = 1)) |>
+      purrr::map(\(.x) purrr::array_tree(.x@X, margin = 1)) |>
       purrr::transpose() |>
-      purrr::map(~ as_qts(tibble::tibble(
-        time = grid,
+      purrr::map(\(.x) as_qts(tibble::tibble(
+        time = common_grid,
         w = 0,
         x = .x[[1]],
         y = .x[[2]],
         z = .x[[3]]
       ))) |>
-      purrr::map(exp)
+      purrr::map(exp) |>
+      purrr::map(\(qts) left_multiply(qts, lhs = mean_rotations))
   )
-  class(res) <- "prcomp_qts"
-  res
+  class(out) <- "prcomp_qts"
+  out
 }
 
 #' Plot for `prcomp_qts` objects
@@ -198,17 +231,25 @@ screeplot.prcomp_qts <- function(x, ...) {
 }
 
 plot_tpca_component <- function(tpca, component = 1, original_space = TRUE) {
-  plot_mean <- log(tpca$mean_qts)
-  plot_cp <- log(tpca$principal_qts[[component]])
+  plot_mean <- log(left_multiply(
+    tpca$mean_qts,
+    lhs = tpca$center_qts,
+    invert = TRUE
+  ))
+  plot_cp <- log(left_multiply(
+    tpca$principal_qts[[component]],
+    lhs = tpca$center_qts,
+    invert = TRUE
+  ))
   K <- stats::median(abs(tpca$tpca$scores[, component]))
   plot_lb <- plot_mean
   plot_lb[3:5] <- plot_lb[3:5] - K * plot_cp[3:5]
   plot_ub <- plot_mean
   plot_ub[3:5] <- plot_ub[3:5] + K * plot_cp[3:5]
   if (original_space) {
-    plot_mean <- exp(plot_mean)
-    plot_lb <- exp(plot_lb)
-    plot_ub <- exp(plot_ub)
+    plot_mean <- left_multiply(exp(plot_mean), lhs = tpca$center_qts)
+    plot_lb <- left_multiply(exp(plot_lb), lhs = tpca$center_qts)
+    plot_ub <- left_multiply(exp(plot_ub), lhs = tpca$center_qts)
   } else {
     plot_mean$w <- NULL
     plot_lb$w <- NULL

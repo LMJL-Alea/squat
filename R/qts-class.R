@@ -160,3 +160,25 @@ autoplot.qts <- function(object, highlighted_points = NULL, ...) {
 plot.qts <- function(x, highlighted_points = NULL, ...) {
   print(autoplot(x, highlighted_points = highlighted_points, ...))
 }
+
+#' Left-multiplication of a QTS by another one
+#'
+#' @param x An object of class [`qts`].
+#' @param lhs An object of class [`qts`].
+#' @param invert A boolean specifying whether the left handside QTS should be
+#'   inverted prior to compute the left-multiplication. Defaults to `FALSE`.
+#'
+#' @return An object of class [`qts`] storing the left-multiplication of `x` by
+#'   `lhs`.
+#' @export
+#'
+#' @examples
+#' left_multiply(vespa64$igp[[1]], vespa64$igp[[2]])
+left_multiply <- function(x, lhs, invert = FALSE) {
+  if (!is_qts(x))
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  if (!is_qts(lhs))
+    cli::cli_abort("The input argument {.arg lhs} should be of class {.cls qts}.")
+  out <- left_multiply_qts_impl(qts = x, lhs = lhs, invert = invert)
+  as_qts(out)
+}

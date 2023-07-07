@@ -435,3 +435,38 @@ Rcpp::DataFrame moving_average_qts_impl(const Rcpp::DataFrame &qts,
   return outValue;
 }
 
+Rcpp::DataFrame left_multiply_qts_impl(const Rcpp::DataFrame &qts,
+                                       const Rcpp::DataFrame &lhs,
+                                       const bool invert)
+{
+  unsigned int nGrid = qts.nrows();
+  if (lhs.nrows() != nGrid)
+    Rcpp::stop("The left handside QTS should be of the same length.");
+  Rcpp::DataFrame outValue = Rcpp::clone(qts);
+  Rcpp::NumericVector wValues = outValue["w"];
+  Rcpp::NumericVector xValues = outValue["x"];
+  Rcpp::NumericVector yValues = outValue["y"];
+  Rcpp::NumericVector zValues = outValue["z"];
+  Rcpp::NumericVector lhsWValues = lhs["w"];
+  Rcpp::NumericVector lhsXValues = lhs["x"];
+  Rcpp::NumericVector lhsYValues = lhs["y"];
+  Rcpp::NumericVector lhsZValues = lhs["z"];
+  Eigen::Quaterniond currQuat, lhsQuat;
+
+  for (int i = 0;i < nGrid;++i)
+  {
+    currQuat = Eigen::Quaterniond(wValues(i), xValues(i), yValues(i), zValues(i));
+    lhsQuat = Eigen::Quaterniond(lhsWValues(i), lhsXValues(i), lhsYValues(i), lhsZValues(i));
+    if (invert)
+      lhsQuat = lhsQuat.inverse();
+    currQuat = lhsQuat * currQuat;
+    wValues(i) = currQuat.w();
+    xValues(i) = currQuat.x();
+    yValues(i) = currQuat.y();
+    zValues(i) = currQuat.z();
+  }
+
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+  return outValue;
+}
+
