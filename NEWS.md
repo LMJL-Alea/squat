@@ -1,4 +1,9 @@
-# squat (development version)
+# squat 0.2.1
+
+* Add `use_fence` robustification option;
+* Adapt to changes in [**fdacluster**](https://astamm.github.io/fdacluster/index.html);
+* Properly compute tangent spaces along mean QTS;
+* Update *News* section of website.
 
 # squat 0.2.0
 
