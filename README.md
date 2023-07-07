@@ -93,7 +93,7 @@ plot(sample_and_mean, highlighted = c(rep(FALSE, 64), TRUE))
 You can compute the pairwise distance matrix (based on the DTW for now):
 
 ``` r
-D <- distDTW(vespa64$igp)
+D <- dist(vespa64$igp, metric = "dtw")
 C <- exp(-D / (sqrt(2) * 4 * bw.SJ(D))) |> 
   as.matrix() |> 
   corrr::as_cordf()
@@ -132,6 +132,50 @@ You can finally perform a k-means clustering and visualize it:
 
 ``` r
 km <- kmeans(vespa64$igp, k = 2)
+#> ℹ Computing initial centroids using kmeans++ strategy...
+#> Information about the data set:
+#>  - Number of observations: 64
+#>  - Number of dimensions: 3
+#>  - Number of points: 101
+#> 
+#> Information about cluster initialization:
+#>  - Number of clusters: 1
+#>  - Initial seeds for cluster centers:         21
+#> 
+#> Information about the methods used within the algorithm:
+#>  - Warping method: affine
+#>  - Center method: mean
+#>  - Dissimilarity method: l2
+#>  - Optimization method: bobyqa
+#> 
+#> Information about warping parameter bounds:
+#>  - Warping options:    0.1500   0.1500
+#> 
+#> Information about convergence criteria:
+#>  - Maximum number of iterations: 100
+#>  - Distance relative tolerance: 0.001
+#> 
+#> Information about parallelization setup:
+#>  - Number of threads: 1
+#>  - Parallel method: 0
+#> 
+#> Other information:
+#>  - Use fence to robustify: 0
+#>  - Check total dissimilarity: 1
+#>  - Compute overall center: 0
+#> 
+#> Running k-centroid algorithm:
+#>  - Iteration #1
+#>    * Size of cluster #0: 64
+#>  - Iteration #2
+#>    * Size of cluster #0: 64
+#>  - Iteration #3
+#>    * Size of cluster #0: 64
+#>  - Iteration #4
+#>    * Size of cluster #0: 64
+#> 
+#> Active stopping criteria:
+#>  - The total dissimilarity did not decrease.
 plot(km)
 ```
 

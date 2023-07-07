@@ -81,7 +81,7 @@ plot(sample_and_mean, highlighted = c(rep(FALSE, 64), TRUE))
 
 You can compute the pairwise distance matrix (based on the DTW for now):
 ```{r}
-D <- distDTW(vespa64$igp)
+D <- dist(vespa64$igp, metric = "dtw")
 C <- exp(-D / (sqrt(2) * 4 * bw.SJ(D))) |> 
   as.matrix() |> 
   corrr::as_cordf()
