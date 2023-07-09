@@ -107,7 +107,7 @@
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LMJL-Alea/squat" class="external-link">squat</a></span><span class="op">)</span></span></code></pre></div>
-<p>First, let us visualize the sample of QTS from the <code>vespa64</code> dataset included in the package. The package provides two ways of doing this: either via a static plot or via an animated one (which uses <a href="https://gganimate.com" class="external-link"><strong>gganimate</strong></a> behind the scences and will prompt you to install it in case you have not already).</p>
+<p>First, let us visualize the sample of QTS from the <code>vespa64</code> dataset included in the package. The package provides two ways of doing this: either via a static plot or via an animated one (which uses <a href="https://gganimate.com" class="external-link"><strong>gganimate</strong></a> behind the scenes and will prompt you to install it in case you have not already).</p>
 <p>Here is the static version:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span><span class="op">)</span></span></code></pre></div>
@@ -117,7 +117,6 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span>, with_animation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu">gganimate</span><span class="fu">::</span><span class="fu"><a href="https://gganimate.com/reference/anim_save.html" class="external-link">anim_save</a></span><span class="op">(</span><span class="st">"man/figures/README-animated-plot.gif"</span>, <span class="va">p</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-animated-plot.gif"></p>
 <p>You can compute the geometric mean of the sample and append it to the sample for visualization:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span><span class="op">)</span></span>
