@@ -1,3 +1,10 @@
+## Resubmission
+
+This is a resubmission in which I have:
+
+* removed the display of animated plot in the `README` to reduce the size of the 
+package.
+
 ## Test environments
 
 - local macOS R installation, R 4.3.1
