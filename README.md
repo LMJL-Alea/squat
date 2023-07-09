@@ -57,8 +57,8 @@ library(squat)
 First, let us visualize the sample of QTS from the `vespa64` dataset
 included in the package. The package provides two ways of doing this:
 either via a static plot or via an animated one (which uses
-[**gganimate**](https://gganimate.com) behind the scences and will
-prompt you to install it in case you have not already).
+[**gganimate**](https://gganimate.com) behind the scenes and will prompt
+you to install it in case you have not already).
 
 Here is the static version:
 
@@ -77,8 +77,6 @@ Here is the animated version:
 p <- ggplot2::autoplot(vespa64$igp, with_animation = TRUE)
 gganimate::anim_save("man/figures/README-animated-plot.gif", p)
 ```
-
-![](man/figures/README-animated-plot.gif)
 
 You can compute the geometric mean of the sample and append it to the
 sample for visualization:
