@@ -156,6 +156,16 @@ Eigen::VectorXd gmean(const std::vector<Eigen::VectorXd> &quaternionSample,
 {
   Eigen::MatrixXd rotationSample = GetRotationsFromQuaternions(quaternionSample);
   unsigned int numPoints = rotationSample.rows();
+
+  Eigen::Vector4d euclideanMean;
+  for (unsigned int i = 0;i < 4;++i)
+  {
+    euclideanMean(i) = 0.0;
+    for (unsigned int j = 0;j < numPoints;++j)
+      euclideanMean(i) += quaternionSample[j](i);
+    euclideanMean(i) /= (double)numPoints;
+  }
+
   unsigned int iterations = 0;
   Eigen::Matrix3d Rsi;
   Eigen::Matrix3d r;
@@ -181,6 +191,15 @@ Eigen::VectorXd gmean(const std::vector<Eigen::VectorXd> &quaternionSample,
   }
 
   Eigen::Quaterniond meanQValue(S);
+
+  double dotProduct = meanQValue.w() * euclideanMean(0) +
+    meanQValue.x() * euclideanMean(1) +
+    meanQValue.y() * euclideanMean(2) +
+    meanQValue.z() * euclideanMean(3);
+
+  if (dotProduct < 0)
+    meanQValue.coeffs() *= -1.0;
+
   Eigen::Vector4d outValue;
   outValue(0) = meanQValue.w();
   outValue(1) = meanQValue.x();

@@ -95,5 +95,5 @@ gmedian <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call('_squat_RcppExport_registerCCallable', PACKAGE = 'squat')
+    .Call(`_squat_RcppExport_registerCCallable`)
 })
