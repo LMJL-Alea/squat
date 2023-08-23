@@ -103,6 +103,7 @@ providing a length-2 integer vector argument <code>plane</code> which defaults t
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="qts_sample.html">as_qts_sample</a></span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">16</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">res_pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html" class="external-link">prcomp</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The maximum number of principal component is 15.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># You can plot the effect of a PC on the mean</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_pca</span>, what <span class="op">=</span> <span class="st">"PC1"</span><span class="op">)</span></span></span>
