@@ -67,6 +67,7 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
     purrr::map(\(.x) .x > .Machine$double.eps) |>
     purrr::map_int(sum) |>
     min()
+  cli::cli_alert_info("The maximum number of principal component is {M_max}.")
   if (M > M_max)
     cli::cli_abort("The maximum number of principal component is {M_max}. Please choose a value of {.arg M} smaller or equal to that value.")
 
@@ -92,9 +93,7 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
   mfd <- funData::multiFunData(fd_x, fd_y, fd_z)
 
   # Perform multivariate functional PCA
-  uniExpansions <- purrr::map(1:3, \(.x) {
-    list(type = "splines1Dpen", k = M_max)
-  })
+  uniExpansions <- purrr::map(1:3, \(.x) list(type = "splines1Dpen"))
   tpca <- MFPCA::MFPCA(mfd, M = M, uniExpansions = uniExpansions, fit = fit)
 
   # Consolidate output
