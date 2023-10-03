@@ -93,7 +93,7 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
   mfd <- funData::multiFunData(fd_x, fd_y, fd_z)
 
   # Perform multivariate functional PCA
-  uniExpansions <- purrr::map(1:3, \(.x) list(type = "splines1Dpen"))
+  uniExpansions <- purrr::map(1:3, \(.x) list(type = "splines1Dpen", k = M))
   tpca <- MFPCA::MFPCA(mfd, M = M, uniExpansions = uniExpansions, fit = fit)
 
   # Consolidate output
