@@ -138,6 +138,7 @@
 <p>You can perform tangent principal component analysis and visualize it:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tpca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html" class="external-link">prcomp</a></span><span class="op">(</span><span class="va">vespa64</span><span class="op">$</span><span class="va">igp</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ℹ The maximum number of principal component is 63.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tpca</span>, what <span class="op">=</span> <span class="st">"PC1"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; The `original_space` boolean argument is not specified. Defaulting to TRUE.</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="100%"></p>
@@ -201,7 +202,7 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/LMJL-Alea/squat/actions" class="external-link"><img src="https://github.com/LMJL-Alea/squat/workflows/R-CMD-check/badge.svg" alt="check-standard"></a></li>
+<li><a href="https://github.com/LMJL-Alea/squat/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/LMJL-Alea/squat/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://github.com/LMJL-Alea/squat/actions" class="external-link"><img src="https://github.com/LMJL-Alea/squat/workflows/test-coverage/badge.svg" alt="test-coverage"></a></li>
 <li><a href="https://app.codecov.io/gh/LMJL-Alea/squat?branch=master" class="external-link"><img src="https://codecov.io/gh/LMJL-Alea/squat/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://github.com/LMJL-Alea/squat/actions" class="external-link"><img src="https://github.com/LMJL-Alea/squat/workflows/pkgdown/badge.svg" alt="pkgdown"></a></li>
