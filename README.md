@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![check-standard](https://github.com/LMJL-Alea/squat/workflows/R-CMD-check/badge.svg)](https://github.com/LMJL-Alea/squat/actions)
+[![R-CMD-check](https://github.com/LMJL-Alea/squat/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LMJL-Alea/squat/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/LMJL-Alea/squat/workflows/test-coverage/badge.svg)](https://github.com/LMJL-Alea/squat/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/LMJL-Alea/squat/branch/master/graph/badge.svg)](https://app.codecov.io/gh/LMJL-Alea/squat?branch=master)
@@ -109,6 +109,7 @@ You can perform tangent principal component analysis and visualize it:
 
 ``` r
 tpca <- prcomp(vespa64$igp)
+#> ℹ The maximum number of principal component is 63.
 plot(tpca, what = "PC1")
 #> The `original_space` boolean argument is not specified. Defaulting to TRUE.
 ```

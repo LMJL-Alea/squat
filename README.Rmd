@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # squat
 
 <!-- badges: start -->
-[![check-standard](https://github.com/LMJL-Alea/squat/workflows/R-CMD-check/badge.svg)](https://github.com/LMJL-Alea/squat/actions)
+[![R-CMD-check](https://github.com/LMJL-Alea/squat/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LMJL-Alea/squat/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/LMJL-Alea/squat/workflows/test-coverage/badge.svg)](https://github.com/LMJL-Alea/squat/actions)
 [![Codecov test coverage](https://codecov.io/gh/LMJL-Alea/squat/branch/master/graph/badge.svg)](https://app.codecov.io/gh/LMJL-Alea/squat?branch=master)
 [![pkgdown](https://github.com/LMJL-Alea/squat/workflows/pkgdown/badge.svg)](https://github.com/LMJL-Alea/squat/actions)
