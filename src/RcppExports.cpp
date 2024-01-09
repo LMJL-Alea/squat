@@ -241,16 +241,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// left_multiply_qts_impl
-Rcpp::DataFrame left_multiply_qts_impl(const Rcpp::DataFrame& qts, const Rcpp::DataFrame& lhs, const bool invert);
-RcppExport SEXP _squat_left_multiply_qts_impl(SEXP qtsSEXP, SEXP lhsSEXP, SEXP invertSEXP) {
+// multiply_qts_impl
+Rcpp::DataFrame multiply_qts_impl(const Rcpp::DataFrame& qts_left, const Rcpp::DataFrame& qts_right);
+RcppExport SEXP _squat_multiply_qts_impl(SEXP qts_leftSEXP, SEXP qts_rightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts_left(qts_leftSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts_right(qts_rightSEXP);
+    rcpp_result_gen = Rcpp::wrap(multiply_qts_impl(qts_left, qts_right));
+    return rcpp_result_gen;
+END_RCPP
+}
+// inverse_qts_impl
+Rcpp::DataFrame inverse_qts_impl(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_inverse_qts_impl(SEXP qtsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type lhs(lhsSEXP);
-    Rcpp::traits::input_parameter< const bool >::type invert(invertSEXP);
-    rcpp_result_gen = Rcpp::wrap(left_multiply_qts_impl(qts, lhs, invert));
+    rcpp_result_gen = Rcpp::wrap(inverse_qts_impl(qts));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -333,6 +343,17 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
     Rcpp::traits::input_parameter< const bool >::type body_frame(body_frameSEXP);
     rcpp_result_gen = Rcpp::wrap(qts2avts_impl(qts, body_frame));
+    return rcpp_result_gen;
+END_RCPP
+}
+// qts2aats_impl
+Rcpp::DataFrame qts2aats_impl(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_qts2aats_impl(SEXP qtsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    rcpp_result_gen = Rcpp::wrap(qts2aats_impl(qts));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -447,7 +468,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_smooth_qts_impl", (DL_FUNC) &_squat_smooth_qts_impl, 2},
     {"_squat_hemispherize_qts_impl", (DL_FUNC) &_squat_hemispherize_qts_impl, 1},
     {"_squat_moving_average_qts_impl", (DL_FUNC) &_squat_moving_average_qts_impl, 2},
-    {"_squat_left_multiply_qts_impl", (DL_FUNC) &_squat_left_multiply_qts_impl, 3},
+    {"_squat_multiply_qts_impl", (DL_FUNC) &_squat_multiply_qts_impl, 2},
+    {"_squat_inverse_qts_impl", (DL_FUNC) &_squat_inverse_qts_impl, 1},
     {"_squat_GetCostMatrix", (DL_FUNC) &_squat_GetCostMatrix, 2},
     {"_squat_mean_qts_impl", (DL_FUNC) &_squat_mean_qts_impl, 1},
     {"_squat_median_qts_impl", (DL_FUNC) &_squat_median_qts_impl, 1},
@@ -455,6 +477,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_qts2nts_impl", (DL_FUNC) &_squat_qts2nts_impl, 2},
     {"_squat_qts2ats_impl", (DL_FUNC) &_squat_qts2ats_impl, 2},
     {"_squat_qts2avts_impl", (DL_FUNC) &_squat_qts2avts_impl, 2},
+    {"_squat_qts2aats_impl", (DL_FUNC) &_squat_qts2aats_impl, 1},
     {"_squat_gmean", (DL_FUNC) &_squat_gmean, 3},
     {"_squat_gmedian", (DL_FUNC) &_squat_gmedian, 3},
     {"_squat_RcppExport_registerCCallable", (DL_FUNC) &_squat_RcppExport_registerCCallable, 0},

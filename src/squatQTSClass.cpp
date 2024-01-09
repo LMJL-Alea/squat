@@ -435,31 +435,54 @@ Rcpp::DataFrame moving_average_qts_impl(const Rcpp::DataFrame &qts,
   return outValue;
 }
 
-Rcpp::DataFrame left_multiply_qts_impl(const Rcpp::DataFrame &qts,
-                                       const Rcpp::DataFrame &lhs,
-                                       const bool invert)
+Rcpp::DataFrame multiply_qts_impl(const Rcpp::DataFrame &qts_left,
+                                  const Rcpp::DataFrame &qts_right)
+{
+  unsigned int nGrid = qts_left.nrows();
+  if (qts_right.nrows() != nGrid)
+    Rcpp::stop("The left and right QTS should be of the same length.");
+
+  Rcpp::DataFrame outValue = Rcpp::clone(qts_left);
+  Rcpp::NumericVector lhsWValues = outValue["w"];
+  Rcpp::NumericVector lhsXValues = outValue["x"];
+  Rcpp::NumericVector lhsYValues = outValue["y"];
+  Rcpp::NumericVector lhsZValues = outValue["z"];
+  Rcpp::NumericVector rhsWValues = qts_right["w"];
+  Rcpp::NumericVector rhsXValues = qts_right["x"];
+  Rcpp::NumericVector rhsYValues = qts_right["y"];
+  Rcpp::NumericVector rhsZValues = qts_right["z"];
+  Eigen::Quaterniond lhsQuat, rhsQuat;
+
+  for (unsigned int i = 0;i < nGrid;++i)
+  {
+    lhsQuat = Eigen::Quaterniond(lhsWValues(i), lhsXValues(i), lhsYValues(i), lhsZValues(i));
+    rhsQuat = Eigen::Quaterniond(rhsWValues(i), rhsXValues(i), rhsYValues(i), rhsZValues(i));
+    lhsQuat *= rhsQuat;
+    lhsWValues(i) = lhsQuat.w();
+    lhsXValues(i) = lhsQuat.x();
+    lhsYValues(i) = lhsQuat.y();
+    lhsZValues(i) = lhsQuat.z();
+  }
+
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+  return outValue;
+}
+
+Rcpp::DataFrame inverse_qts_impl(const Rcpp::DataFrame &qts)
 {
   unsigned int nGrid = qts.nrows();
-  if (lhs.nrows() != nGrid)
-    Rcpp::stop("The left handside QTS should be of the same length.");
+
   Rcpp::DataFrame outValue = Rcpp::clone(qts);
   Rcpp::NumericVector wValues = outValue["w"];
   Rcpp::NumericVector xValues = outValue["x"];
   Rcpp::NumericVector yValues = outValue["y"];
   Rcpp::NumericVector zValues = outValue["z"];
-  Rcpp::NumericVector lhsWValues = lhs["w"];
-  Rcpp::NumericVector lhsXValues = lhs["x"];
-  Rcpp::NumericVector lhsYValues = lhs["y"];
-  Rcpp::NumericVector lhsZValues = lhs["z"];
-  Eigen::Quaterniond currQuat, lhsQuat;
+  Eigen::Quaterniond currQuat;
 
-  for (int i = 0;i < nGrid;++i)
+  for (unsigned int i = 0;i < nGrid;++i)
   {
     currQuat = Eigen::Quaterniond(wValues(i), xValues(i), yValues(i), zValues(i));
-    lhsQuat = Eigen::Quaterniond(lhsWValues(i), lhsXValues(i), lhsYValues(i), lhsZValues(i));
-    if (invert)
-      lhsQuat = lhsQuat.inverse();
-    currQuat = lhsQuat * currQuat;
+    currQuat = currQuat.inverse();
     wValues(i) = currQuat.w();
     xValues(i) = currQuat.x();
     yValues(i) = currQuat.y();

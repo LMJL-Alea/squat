@@ -26,13 +26,23 @@ components:
 \code{\link[MFPCA:MFPCA]{MFPCA::MFPCA()}},
 \item \code{var_props}: A numeric vector storing the percentage of variance explained
 by each PC,
-\item \code{mean_qts}: An object of class \link{qts} containing the mean QTS,
+\item \code{total_variance}: A numeric value storing the total variance of the sample,
+\item \code{mean_qts}: An object of class \link{qts} containing the mean QTS (used for
+centering the QTS sample before projecting it to the tangent space),
 \item \code{principal_qts}: A list of \link{qts}s containing the required principal
 components.
 }
 }
 \description{
-PCA for QTS Sample
+This is the \code{S3} specialization of the function \code{\link[stats:prcomp]{stats::prcomp()}} for QTS
+samples.
+}
+\details{
+The \code{mean_qts} component of the resulting object is the QTS used for
+centering. It it part of the \code{prcomp_qts} object because it is needed to
+reconstruct the sample from the retained PCs. The \code{prcomp_qts} object also
+contains the total variance of the sample and the percentage of variance
+explained by each PC.
 }
 \examples{
 res_pca <- prcomp(vespa64$igp[1:16])

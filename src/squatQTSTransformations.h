@@ -27,4 +27,10 @@ Rcpp::DataFrame qts2avts_impl(
     const bool body_frame = false
 );
 
+// [[Rcpp::export]]
+Rcpp::DataFrame qts2aats_impl(
+    const Rcpp::DataFrame &qts
+);
+
+
 #endif /* SQUATQTSTRANSFORMATIONS_H */

@@ -1,5 +1,14 @@
 #' PCA for QTS Sample
 #'
+#' This is the `S3` specialization of the function [stats::prcomp()] for QTS
+#' samples.
+#'
+#' The `mean_qts` component of the resulting object is the QTS used for
+#' centering. It it part of the `prcomp_qts` object because it is needed to
+#' reconstruct the sample from the retained PCs. The `prcomp_qts` object also
+#' contains the total variance of the sample and the percentage of variance
+#' explained by each PC.
+#'
 #' @param x An object of class [qts_sample].
 #' @param M An integer value specifying the number of principal component to
 #'   compute. Defaults to `5L`.
@@ -14,7 +23,9 @@
 #' [MFPCA::MFPCA()],
 #' - `var_props`: A numeric vector storing the percentage of variance explained
 #' by each PC,
-#' - `mean_qts`: An object of class [qts] containing the mean QTS,
+#' - `total_variance`: A numeric value storing the total variance of the sample,
+#' - `mean_qts`: An object of class [qts] containing the mean QTS (used for
+#' centering the QTS sample before projecting it to the tangent space),
 #' - `principal_qts`: A list of [qts]s containing the required principal
 #' components.
 #'
@@ -25,13 +36,7 @@
 #' res_pca <- prcomp(vespa64$igp[1:16])
 prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
   # Extract common evaluation grid
-  check_common_grid <- x |>
-    purrr::map("time") |>
-    purrr::reduce(rbind) |>
-    apply(MARGIN = 2, FUN = stats::var) |>
-    sum()
-  if (check_common_grid > 0)
-    cli::cli_abort("All input QTS should be evaluated on the same grid.")
+  x <- .prepare_sample_for_pca(x)
   common_grid <- x[[1]]$time
 
   # Project QTS sample into tangent space
@@ -103,13 +108,12 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
     tibble::as_tibble()
   mean_qts$time <- common_grid
   mean_qts$w <- 0
-  mean_qts <- left_multiply(exp(as_qts(mean_qts[c(4, 5, 1:3)])), mean_rotations)
+  mean_qts <- mean_rotations * exp(as_qts(mean_qts[c(4, 5, 1:3)]))
   out <- list(
     tpca = tpca,
     var_props = tpca$values / tot_var,
     total_variance = tot_var,
-    center_qts = mean_rotations,
-    mean_qts = mean_qts,
+    mean_qts = mean_rotations,
     principal_qts = tpca$functions |>
       purrr::map(\(.x) purrr::array_tree(.x@X, margin = 1)) |>
       purrr::transpose() |>
@@ -121,10 +125,111 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
         z = .x[[3]]
       ))) |>
       purrr::map(exp) |>
-      purrr::map(\(qts) left_multiply(qts, lhs = mean_rotations))
+      purrr::map(\(qts) mean_rotations * qts)
   )
   class(out) <- "prcomp_qts"
   out
+}
+
+.prepare_sample_for_pca <- function(x, x_ref = NULL) {
+  if (is.null(x_ref)) x_ref <- x
+
+  lower_bounds <- x_ref |>
+    purrr::map("time") |>
+    purrr::map_dbl(min)
+  if (stats::var(lower_bounds) > 0)
+    cli::cli_abort("All input QTS should be evaluated on the same grid.")
+  upper_bounds <- x_ref |>
+    purrr::map("time") |>
+    purrr::map_dbl(max)
+  if (stats::var(upper_bounds) > 0)
+    cli::cli_abort("All input QTS should be evaluated on the same grid.")
+
+  grid_sizes <- purrr::map_int(x_ref, nrow)
+  common_grid_size <- max(grid_sizes)
+  common_grid <- seq(
+    from = min(lower_bounds),
+    to = max(upper_bounds),
+    length.out = common_grid_size
+  )
+
+  if (any(lower_bounds != min(common_grid)) || any(upper_bounds != max(common_grid)))
+    cli::cli_abort("The sample stored in {.arg newdata} should contain QTSs defined on the same domain as those used to perform the PCA.")
+
+  as_qts_sample(purrr::map_if(x, \(.x) nrow(.x) < common_grid_size, \(.x) {
+    resample(.x, nout = common_grid_size)
+  }))
+}
+
+#' Predict QTS from PCA decomposition
+#'
+#' This function predicts the QTS of a new sample from the PCA decomposition of
+#' a previous sample.
+#'
+#' @param object An object of class `prcomp_qts` as produced by the
+#'   [prcomp.qts_sample()] method.
+#' @param newdata An object of class [`qts_sample`] specifying a sample of QTS.
+#'   The QTS should be evaluated on the same grid as the one used to fit the PCA
+#'   model. If the QTS are not evaluated on the same grid, they will be linearly
+#'   interpolated to the grid used to fit the PCA model. If the QTS are evaluated
+#'   on a finer grid, they will be averaged over the grid points of the coarser
+#'   grid. If the QTS are evaluated on a coarser grid, they will be linearly
+#'   interpolated to the grid used to fit the PCA model. If the QTS are evaluated
+#'   on a grid which is neither finer nor coarser than the grid used to fit the
+#'   PCA model, an error will be thrown.
+#' @param ... Additional arguments. Not used here.
+#'
+#' @return An object of class [`qts_sample`] containing the predicted QTS.
+#'
+#' @importFrom stats predict
+#' @export
+#'
+#' @examples
+#' # Fit PCA model
+#' pr <- prcomp(vespa64$igp, M = 5)
+#'
+#' # Predict QTS
+#' new_qts <- predict(pr)
+predict.prcomp_qts <- function(object, newdata, ...) {
+  if (missing(newdata)) {
+    score_matrix <- object$tpca$scores
+  } else {
+    if (is_qts(newdata)) {
+      newdata <- as_qts_sample(list(newdata))
+    }
+    newdata <- .prepare_sample_for_pca(newdata, x_ref = object$x)
+
+    log_newdata <- newdata |>
+      purrr::map(\(.x) inverse_qts(object$mean_qts) * .x) |>
+      as_qts_sample() |>
+      log()
+
+    score_matrix <- log_newdata |>
+      purrr::map(\(.x) {
+        1:3 |>
+          purrr::map(\(l) as.numeric(object$tpca$functions[[l]]@X %*% .x[[2 + l]])) |>
+          purrr::transpose() |>
+          purrr::simplify_all() |>
+          purrr::map_dbl(sum)
+      }) |>
+      do.call(rbind, args = _)
+  }
+
+  X <- score_matrix %*% object$tpca$functions[[1]]@X
+  Y <- score_matrix %*% object$tpca$functions[[2]]@X
+  Z <- score_matrix %*% object$tpca$functions[[3]]@X
+  N <- dim(X)[1]
+  common_time <- object$mean_qts$time
+  out <- purrr::map(1:N, \(.n) {
+    res <- tibble::tibble(time = common_time, w = 0)
+    res$x <- as.numeric(X[.n, ])
+    res$y <- as.numeric(Y[.n, ])
+    res$z <- as.numeric(Z[.n, ])
+    as_qts(res)
+  }) |>
+    as_qts_sample() |>
+    exp()
+  as_qts_sample(purrr::map(out, \(.qts) object$mean_qts * .qts))
 }
 
 #' Plot for `prcomp_qts` objects
@@ -230,25 +335,15 @@ screeplot.prcomp_qts <- function(x, ...) {
 }
 
 plot_tpca_component <- function(tpca, component = 1, original_space = TRUE) {
-  plot_mean <- log(left_multiply(
-    tpca$mean_qts,
-    lhs = tpca$center_qts,
-    invert = TRUE
-  ))
-  plot_cp <- log(left_multiply(
-    tpca$principal_qts[[component]],
-    lhs = tpca$center_qts,
-    invert = TRUE
-  ))
+  plot_mean <- log(inverse_qts(tpca$mean_qts) * tpca$mean_qts)
+  plot_cp <- log(inverse_qts(tpca$mean_qts) * tpca$principal_qts[[component]])
   K <- stats::median(abs(tpca$tpca$scores[, component]))
-  plot_lb <- plot_mean
-  plot_lb[3:5] <- plot_lb[3:5] - K * plot_cp[3:5]
-  plot_ub <- plot_mean
-  plot_ub[3:5] <- plot_ub[3:5] + K * plot_cp[3:5]
+  plot_lb <- plot_mean - plot_cp * K
+  plot_ub <- plot_mean + plot_cp * K
   if (original_space) {
-    plot_mean <- left_multiply(exp(plot_mean), lhs = tpca$center_qts)
-    plot_lb <- left_multiply(exp(plot_lb), lhs = tpca$center_qts)
-    plot_ub <- left_multiply(exp(plot_ub), lhs = tpca$center_qts)
+    plot_mean <- tpca$mean_qts * exp(plot_mean)
+    plot_lb <- tpca$mean_qts * exp(plot_lb)
+    plot_ub <- tpca$mean_qts * exp(plot_ub)
   } else {
     plot_mean$w <- NULL
     plot_lb$w <- NULL

@@ -161,21 +161,132 @@ plot.qts <- function(x, highlighted_points = NULL, ...) {
   print(autoplot(x, highlighted_points = highlighted_points, ...))
 }
 
-#' Left-multiplication of a QTS by another one
+#' Operator `+` for `qts` Objects
+#'
+#' This function implements the pointwise addition between two quaternion time
+#' series.
 #'
 #' @param x An object of class [`qts`].
-#' @param lhs An object of class [`qts`].
-#' @param invert A boolean specifying whether the left handside QTS should be
-#'   inverted prior to compute the left-multiplication. Defaults to `FALSE`.
+#' @param rhs Either an object of class [`qts`] or a numeric value.
 #'
-#' @return An object of class [`qts`] storing the left-multiplication of `x` by
-#'   `lhs`.
-#' @keywords internal
-left_multiply <- function(x, lhs, invert = FALSE) {
+#' @return An object of class [`qts`] storing the addition of the two inputs.
+#'
+#' @export
+#' @examples
+#' vespa64$igp[[1]] + vespa64$igp[[2]]
+"+.qts" <- function(x, rhs) {
+  if (!is_qts(rhs)) {
+    if (!is.numeric(rhs))
+      cli::cli_abort("The input argument {.arg rhs} should be of either of class {.cls qts} or of class {.cls numeric}.")
+    if (length(rhs) != 1)
+      cli::cli_abort("When the input argument {.arg rhs} is numeric, it should be scalar.")
+    out <- x
+    out$w <- x$w + rhs
+    out$x <- x$x + rhs
+    out$y <- x$y + rhs
+    out$z <- x$z + rhs
+    return(as_qts(out))
+  }
+
+  if (!all.equal(x$time, rhs$time))
+    cli::cli_abort("The time indices of the two QTS are not equal.")
+
+  out <- x
+  out$w <- x$w + rhs$w
+  out$x <- x$x + rhs$x
+  out$y <- x$y + rhs$y
+  out$z <- x$z + rhs$z
+  as_qts(out)
+}
+
+#' Operator `-` for `qts` Objects
+#'
+#' This function implements the pointwise subtraction between two quaternion
+#' time series.
+#'
+#' @param x An object of class [`qts`].
+#' @param rhs Either an object of class [`qts`] or a numeric value.
+#'
+#' @return An object of class [`qts`] storing the subtraction of the two
+#'   inputs.
+#'
+#' @export
+#' @examples
+#' vespa64$igp[[1]] - vespa64$igp[[2]]
+"-.qts" <- function(x, rhs) {
+  if (!is_qts(rhs)) {
+    if (!is.numeric(rhs))
+      cli::cli_abort("The input argument {.arg rhs} should be of either of class {.cls qts} or of class {.cls numeric}.")
+    if (length(rhs) != 1)
+      cli::cli_abort("When the input argument {.arg rhs} is numeric, it should be scalar.")
+    out <- x
+    out$w <- x$w - rhs
+    out$x <- x$x - rhs
+    out$y <- x$y - rhs
+    out$z <- x$z - rhs
+    return(as_qts(out))
+  }
+
+  if (!all.equal(x$time, rhs$time))
+    cli::cli_abort("The time indices of the two QTS are not equal.")
+
+  out <- x
+  out$w <- x$w - rhs$w
+  out$x <- x$x - rhs$x
+  out$y <- x$y - rhs$y
+  out$z <- x$z - rhs$z
+  as_qts(out)
+}
+
+#' Operator `*` for `qts` Objects
+#'
+#' This function implements the pointwise quaternion Hamilton multiplication
+#' between two quaternion time series.
+#'
+#' @param x An object of class [`qts`].
+#' @param rhs Either an object of class [`qts`] or a numeric value.
+#'
+#' @return An object of class [`qts`] storing the multiplication of the two
+#'   inputs.
+#'
+#' @export
+#' @examples
+#' vespa64$igp[[1]] * vespa64$igp[[2]]
+"*.qts" <- function(x, rhs) {
+  if (!is_qts(rhs)) {
+    if (!is.numeric(rhs))
+      cli::cli_abort("The input argument {.arg rhs} should be of either of class {.cls qts} or of class {.cls numeric}.")
+    if (length(rhs) != 1)
+      cli::cli_abort("When the input argument {.arg rhs} is numeric, it should be scalar.")
+    out <- x
+    out$w <- x$w * rhs
+    out$x <- x$x * rhs
+    out$y <- x$y * rhs
+    out$z <- x$z * rhs
+    return(as_qts(out))
+  }
+
+  if (!all.equal(x$time, rhs$time))
+    cli::cli_abort("The time indices of the two QTS are not equal.")
+
+  out <- multiply_qts_impl(x, rhs)
+  as_qts(out)
+}
+
+#' Inverse Operator for `qts` Objects
+#'
+#' This function implements the pointwise inverse of a quaternion time series.
+#'
+#' @param x An object of class [`qts`].
+#'
+#' @return An object of class [`qts`] storing the inverse of `x`.
+#'
+#' @export
+#' @examples
+#' inverse_qts(vespa64$igp[[1]])
+inverse_qts <- function(x) {
   if (!is_qts(x))
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
-  if (!is_qts(lhs))
-    cli::cli_abort("The input argument {.arg lhs} should be of class {.cls qts}.")
-  out <- left_multiply_qts_impl(qts = x, lhs = lhs, invert = invert)
+  out <- inverse_qts_impl(x)
   as_qts(out)
 }

@@ -93,3 +93,25 @@ qts2avts <- function(x, body_frame = FALSE) {
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
   qts2avts_impl(x, body_frame = body_frame)
 }
+
+#' QTS Transformation to Angle-Axis Time Series
+#'
+#' This function converts a quaternion time series into its angle-axis
+#' representation.
+#'
+#' @param x An object of class [qts].
+#'
+#' @return A time series stored as a [tibble::tibble] with columns `time`,
+#'   `angle`, `ux`, `uy` and `uz` containing the angle-axis representation of
+#'   the input quaternions.
+#'
+#' @export
+#' @examples
+#' qts2aats(vespa64$igp[[1]])
+qts2aats <- function(x) {
+  if (!is_qts(x))
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  out <- qts2aats_impl(x)
+  names(out) <- c("time", "angle", "ux", "uy", "uz")
+  out
+}

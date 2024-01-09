@@ -53,8 +53,12 @@ moving_average_qts_impl <- function(qts, window_size) {
     .Call(`_squat_moving_average_qts_impl`, qts, window_size)
 }
 
-left_multiply_qts_impl <- function(qts, lhs, invert = FALSE) {
-    .Call(`_squat_left_multiply_qts_impl`, qts, lhs, invert)
+multiply_qts_impl <- function(qts_left, qts_right) {
+    .Call(`_squat_multiply_qts_impl`, qts_left, qts_right)
+}
+
+inverse_qts_impl <- function(qts) {
+    .Call(`_squat_inverse_qts_impl`, qts)
 }
 
 GetCostMatrix <- function(qts1, qts2) {
@@ -83,6 +87,10 @@ qts2ats_impl <- function(qts, disable_normalization = FALSE) {
 
 qts2avts_impl <- function(qts, body_frame = FALSE) {
     .Call(`_squat_qts2avts_impl`, qts, body_frame)
+}
+
+qts2aats_impl <- function(qts) {
+    .Call(`_squat_qts2aats_impl`, qts)
 }
 
 gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {

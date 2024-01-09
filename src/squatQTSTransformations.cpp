@@ -161,3 +161,31 @@ Rcpp::DataFrame qts2avts_impl(const Rcpp::DataFrame &qts, const bool body_frame)
   outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
   return outValue;
 }
+
+Rcpp::DataFrame qts2aats_impl(const Rcpp::DataFrame &qts)
+{
+  unsigned int nGrid = qts.nrows();
+  Rcpp::DataFrame outValue = Rcpp::clone(qts);
+  Rcpp::NumericVector angleValues = outValue["w"];
+  Rcpp::NumericVector axisXValues = outValue["x"];
+  Rcpp::NumericVector axisYValues = outValue["y"];
+  Rcpp::NumericVector axisZValues = outValue["z"];
+
+  Eigen::Quaterniond quatValue;
+  Eigen::AngleAxisd axisAngleValue;
+  for (unsigned int i = 0;i < nGrid;++i)
+  {
+    quatValue.w() = angleValues(i);
+    quatValue.x() = axisXValues(i);
+    quatValue.y() = axisYValues(i);
+    quatValue.z() = axisZValues(i);
+    axisAngleValue = Eigen::AngleAxisd(quatValue);
+    angleValues(i) = axisAngleValue.angle();
+    axisXValues(i) = axisAngleValue.axis().x();
+    axisYValues(i) = axisAngleValue.axis().y();
+    axisZValues(i) = axisAngleValue.axis().z();
+  }
+
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+  return outValue;
+}
