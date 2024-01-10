@@ -168,15 +168,11 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
 #'
 #' @param object An object of class `prcomp_qts` as produced by the
 #'   [prcomp.qts_sample()] method.
-#' @param newdata An object of class [`qts_sample`] specifying a sample of QTS.
-#'   The QTS should be evaluated on the same grid as the one used to fit the PCA
-#'   model. If the QTS are not evaluated on the same grid, they will be linearly
-#'   interpolated to the grid used to fit the PCA model. If the QTS are evaluated
-#'   on a finer grid, they will be averaged over the grid points of the coarser
-#'   grid. If the QTS are evaluated on a coarser grid, they will be linearly
-#'   interpolated to the grid used to fit the PCA model. If the QTS are evaluated
-#'   on a grid which is neither finer nor coarser than the grid used to fit the
-#'   PCA model, an error will be thrown.
+#' @param newdata An object of class [`qts`] or [`qts_sample`] specifying a QTS
+#'   or a sample of QTS. The QTS should be evaluated on the same grid as the one
+#'   used to fit the PCA model. If the evaluation grids map the same domain but
+#'   with different sampling frequenciesa, the QTS will be linearly interpolated
+#'   (in the Lie algebra) to the common grid used to fit the PCA model.
 #' @param ... Additional arguments. Not used here.
 #'
 #' @return An object of class [`qts_sample`] containing the predicted QTS.
