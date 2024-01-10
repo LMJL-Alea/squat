@@ -79,7 +79,8 @@ p + geom_point(aes(color = vespa_corr$V))
 
 correctedQTS <- filter_by_pca(vespa_corr$igp, 1, remove_components = TRUE)
 
-D3 <- distKMA(correctedQTS)
+D3 <- dist(correctedQTS, metric = "dtw", warping_class = "none")
+
 mod3 <- vegan::adonis2(D3 ~ V+E+S, data = vespa_corr, add = "lingoes")
 mod3
 vegan::adonis2(D3 ~ E, data = vespa_corr, add = "lingoes")
