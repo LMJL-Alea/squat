@@ -67,6 +67,8 @@ reference:
 
 news:
   releases:
+  - text: "squat 0.3.0"
+    href: https://astamm.github.io/posts/2024-01-10-squat-030/
   - text: "squat 0.2.0"
     href: https://astamm.github.io/posts/2023-06-05-squat-020/
   - text: "squat 0.1.0"
