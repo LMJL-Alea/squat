@@ -9,6 +9,10 @@ reference:
     - centring
     - autoplot.qts
     - plot.qts
+    - "+.qts"
+    - "-.qts"
+    - "*.qts"
+    - inverse_qts
   - title: QTS Sample Class
     contents:
     - qts_sample
@@ -35,12 +39,14 @@ reference:
   - title: QTS Transformations
     contents:
     - qts2dts
+    - qts2aats
     - qts2nts
     - qts2ats
     - qts2avts
   - title: Principal Component Analysis
     contents:
     - prcomp.qts_sample
+    - predict.prcomp_qts
     - autoplot.prcomp_qts
     - plot.prcomp_qts
   - title: Clustering
