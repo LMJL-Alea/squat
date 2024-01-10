@@ -1,13 +1,6 @@
-## Resubmission
-
-This is a resubmission in which I have:
-
-* removed the display of animated plot in the `README` to reduce the size of the 
-package.
-
 ## Test environments
 
-- local macOS R installation, R 4.3.1
+- local macOS R installation, R 4.3.2
 - continuous integration via GH actions:
     - macOS latest release
     - windows latest release
@@ -23,4 +16,13 @@ package.
 
 ## R CMD check results
 
-There was no ERROR, no WARNINGs, no NOTEs.
+There was no ERROR and no WARNINGs.
+
+There was 1 NOTE (installed size varies depending on the OS):
+
+    * checking installed package size ... NOTE
+      installed size is 13.3Mb
+      sub-directories of 1Mb or more:
+        data   1.1Mb
+        help   1.1Mb
+        libs  10.8Mb

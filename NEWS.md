@@ -7,7 +7,8 @@ objects.
 * Added function `qts2aats()` which allows to switch from quaternion to 
 axis-angle representation of rotations.
 * Added usual operations `+`, `-`, `*` and `inverse_qts()` for quaternion time 
-series using the [Eigen](https://eigen.tuxfamily.org) library.
+series using the [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page) 
+library.
 
 ## Small improvements
 
