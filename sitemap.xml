@@ -46,6 +46,9 @@
     <loc>https://lmjl-alea.github.io/squat/reference/dist.html</loc>
   </url>
   <url>
+    <loc>https://lmjl-alea.github.io/squat/reference/dot-qts.html</loc>
+  </url>
+  <url>
     <loc>https://lmjl-alea.github.io/squat/reference/exp.html</loc>
   </url>
   <url>
@@ -58,10 +61,10 @@
     <loc>https://lmjl-alea.github.io/squat/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/kmeans.html</loc>
+    <loc>https://lmjl-alea.github.io/squat/reference/inverse_qts.html</loc>
   </url>
   <url>
-    <loc>https://lmjl-alea.github.io/squat/reference/left_multiply.html</loc>
+    <loc>https://lmjl-alea.github.io/squat/reference/kmeans.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/log.html</loc>
@@ -91,10 +94,19 @@
     <loc>https://lmjl-alea.github.io/squat/reference/plot.qtsclust.html</loc>
   </url>
   <url>
+    <loc>https://lmjl-alea.github.io/squat/reference/plus-.qts.html</loc>
+  </url>
+  <url>
     <loc>https://lmjl-alea.github.io/squat/reference/prcomp.qts_sample.html</loc>
   </url>
   <url>
+    <loc>https://lmjl-alea.github.io/squat/reference/predict.prcomp_qts.html</loc>
+  </url>
+  <url>
     <loc>https://lmjl-alea.github.io/squat/reference/qts.html</loc>
+  </url>
+  <url>
+    <loc>https://lmjl-alea.github.io/squat/reference/qts2aats.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/qts2ats.html</loc>
@@ -128,6 +140,9 @@
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/straighten.html</loc>
+  </url>
+  <url>
+    <loc>https://lmjl-alea.github.io/squat/reference/times-.qts.html</loc>
   </url>
   <url>
     <loc>https://lmjl-alea.github.io/squat/reference/vespa.html</loc>
