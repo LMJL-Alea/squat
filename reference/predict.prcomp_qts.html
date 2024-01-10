@@ -73,15 +73,11 @@ a previous sample.</p>
 
 
 <dt>newdata</dt>
-<dd><p>An object of class <code><a href="qts_sample.html">qts_sample</a></code> specifying a sample of QTS.
-The QTS should be evaluated on the same grid as the one used to fit the PCA
-model. If the QTS are not evaluated on the same grid, they will be linearly
-interpolated to the grid used to fit the PCA model. If the QTS are evaluated
-on a finer grid, they will be averaged over the grid points of the coarser
-grid. If the QTS are evaluated on a coarser grid, they will be linearly
-interpolated to the grid used to fit the PCA model. If the QTS are evaluated
-on a grid which is neither finer nor coarser than the grid used to fit the
-PCA model, an error will be thrown.</p></dd>
+<dd><p>An object of class <code><a href="qts.html">qts</a></code> or <code><a href="qts_sample.html">qts_sample</a></code> specifying a QTS
+or a sample of QTS. The QTS should be evaluated on the same grid as the one
+used to fit the PCA model. If the evaluation grids map the same domain but
+with different sampling frequenciesa, the QTS will be linearly interpolated
+(in the Lie algebra) to the common grid used to fit the PCA model.</p></dd>
 
 
 <dt>...</dt>
