@@ -19,8 +19,10 @@ dist(x, metric, ...)
 
 \method{dist}{qts_sample}(
   x,
-  metric = c("l2", "pearson", "dtw"),
-  warping_class = c("affine", "dilation", "none", "shift", "srsf"),
+  metric = c("l2", "normalized_l2", "pearson", "dtw"),
+  is_domain_interval = FALSE,
+  transformation = c("identity", "srsf"),
+  warping_class = c("none", "shift", "dilation", "affine", "bpd"),
   cluster_on_phase = FALSE,
   labels = NULL,
   ...
@@ -46,9 +48,18 @@ Otherwise, it must be one of \code{"l2"}, \code{"pearson"} or \code{"dtw"}.}
 
 \item{p}{The power of the Minkowski distance.}
 
-\item{warping_class}{A string specifying the warping class Choices are
-\code{"affine"}, \code{"dilation"}, \code{"none"}, \code{"shift"} or \code{"srsf"}. Defaults to
-\code{"affine"}. The SRSF class is the only class which is boundary-preserving.}
+\item{is_domain_interval}{A boolean specifying whether the sample of curves
+is defined on a fixed interval. Defaults to \code{FALSE}.}
+
+\item{transformation}{A string specifying the transformation to apply to the
+original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root slope function \code{transformation = "srsf"}.
+Defaults to \code{"identity"}.}
+
+\item{warping_class}{A string specifying the class of warping functions.
+Choices are no warping (\code{warping_class = "none"}), shift \code{y = x + b}
+(\code{warping_class = "shift"}), dilation \code{y = ax} (\code{warping_class = "dilation"}), affine \code{y = ax + b} (\code{warping_class = "affine"}) or
+boundary-preserving diffeomorphism (\code{warping_class = "bpd"}). Defaults to
+\code{"none"}.}
 
 \item{cluster_on_phase}{A boolean specifying whether clustering should be
 based on phase variation or amplitude variation. Defaults to \code{FALSE} which

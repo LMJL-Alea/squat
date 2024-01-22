@@ -63,19 +63,28 @@ kmeans.qts_sample <-function(x,
                              n_clusters = 1L,
                              seeds = NULL,
                              seeding_strategy = c("kmeans++", "exhaustive-kmeans++", "exhaustive", "hclust"),
-                             warping_class = c("affine", "dilation", "none", "shift", "srsf"),
+                             is_domain_interval = FALSE,
+                             transformation = c("identity", "srsf"),
+                             warping_class = c("none", "shift", "dilation", "affine", "bpd"),
                              centroid_type = "mean",
-                             metric = c("l2", "pearson"),
+                             metric = c("l2", "normalized_l2", "pearson"),
                              cluster_on_phase = FALSE,
                              use_fence = FALSE,
                              ...) {
   call <- rlang::call_match(defaults = TRUE)
+
   call_args <- rlang::call_args(call)
+
   seeding_strategy <- rlang::arg_match(seeding_strategy)
-  warping_class <- rlang::arg_match(warping_class)
-  metric <- rlang::arg_match(metric)
   call_args$seeding_strategy <- seeding_strategy
+
+  transformation <- rlang::arg_match(transformation)
+  call_args$transformation <- transformation
+
+  warping_class <- rlang::arg_match(warping_class)
   call_args$warping_class <- warping_class
+
+  metric <- rlang::arg_match(metric)
   call_args$metric <- metric
 
   l <- prep_data(x)
@@ -86,6 +95,8 @@ kmeans.qts_sample <-function(x,
     n_clusters = n_clusters,
     seeds = seeds,
     seeding_strategy = seeding_strategy,
+    is_domain_interval = is_domain_interval,
+    transformation = transformation,
     warping_class = warping_class,
     centroid_type = centroid_type,
     metric = metric,

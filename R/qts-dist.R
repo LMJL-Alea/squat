@@ -46,14 +46,16 @@ dist.default <- function(x,
 #' @export
 #' @rdname dist
 dist.qts_sample <-function(x,
-                           metric = c("l2", "pearson", "dtw"),
-                           warping_class = c("affine", "dilation", "none", "shift", "srsf"),
+                           metric = c("l2", "normalized_l2", "pearson", "dtw"),
+                           is_domain_interval = FALSE,
+                           transformation = c("identity", "srsf"),
+                           warping_class = c("none", "shift", "dilation", "affine", "bpd"),
                            cluster_on_phase = FALSE,
                            labels = NULL,
                            ...) {
-  metric <- match.arg(metric, choices = c(
-    c("l2", "pearson", "dtw")
-  ))
+  transformation <- rlang::arg_match(transformation)
+  metric <- rlang::arg_match(metric)
+  warping_class <- rlang::arg_match(warping_class)
 
   if (metric == "dtw") {
     return(distDTW(
@@ -71,6 +73,8 @@ dist.qts_sample <-function(x,
   fdacluster::fdadist(
     x = l$grid,
     y = l$values,
+    is_domain_interval = is_domain_interval,
+    transformation = transformation,
     warping_class = warping_class,
     metric = metric,
     cluster_on_phase = cluster_on_phase,

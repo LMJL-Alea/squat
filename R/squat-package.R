@@ -1,3 +1,5 @@
-#' @useDynLib squat, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
-NULL
+#' @useDynLib squat, .registration = TRUE
+#'
+#' @keywords internal
+"_PACKAGE"

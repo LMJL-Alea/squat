@@ -38,21 +38,30 @@ hclust.default <- function(x,
 #' @export
 #' @rdname hclust
 hclust.qts_sample <-function(x,
-                             metric = c("l2", "pearson"),
+                             metric = c("l2", "normalized_l2", "pearson"),
                              linkage_criterion = c("complete", "average", "single", "ward.D2"),
                              n_clusters = 1L,
-                             warping_class = c("affine", "dilation", "none", "shift", "srsf"),
+                             is_domain_interval = FALSE,
+                             transformation = c("identity", "srsf"),
+                             warping_class = c("none", "shift", "dilation", "affine", "bpd"),
                              centroid_type = "mean",
                              cluster_on_phase = FALSE,
                              ...) {
   call <- rlang::call_match(defaults = TRUE)
+
   call_args <- rlang::call_args(call)
-  metric <- rlang::arg_match(metric)
-  linkage_criterion <- rlang::arg_match(linkage_criterion)
+
+  transformation <- rlang::arg_match(transformation)
+  call_args$transformation <- transformation
+
   warping_class <- rlang::arg_match(warping_class)
-  call_args$metric <- metric
-  call_args$linkage_criterion <- linkage_criterion
   call_args$warping_class <- warping_class
+
+  metric <- rlang::arg_match(metric)
+  call_args$metric <- metric
+
+  linkage_criterion <- rlang::arg_match(linkage_criterion)
+  call_args$linkage_criterion <- linkage_criterion
 
   l <- prep_data(x)
 
@@ -60,6 +69,8 @@ hclust.qts_sample <-function(x,
     x = l$grid,
     y = l$values,
     n_clusters = n_clusters,
+    is_domain_interval = is_domain_interval,
+    transformation = transformation,
     warping_class = warping_class,
     centroid_type = centroid_type,
     metric = metric,

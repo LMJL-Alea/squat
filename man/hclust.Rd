@@ -17,10 +17,12 @@ hclust(x, metric, linkage_criterion, ...)
 
 \method{hclust}{qts_sample}(
   x,
-  metric = c("l2", "pearson"),
+  metric = c("l2", "normalized_l2", "pearson"),
   linkage_criterion = c("complete", "average", "single", "ward.D2"),
   n_clusters = 1L,
-  warping_class = c("affine", "dilation", "none", "shift", "srsf"),
+  is_domain_interval = FALSE,
+  transformation = c("identity", "srsf"),
+  warping_class = c("none", "shift", "dilation", "affine", "bpd"),
   centroid_type = "mean",
   cluster_on_phase = FALSE,
   ...
@@ -48,9 +50,18 @@ Defaults to \code{"complete"}.}
 \item{n_clusters}{An integer value specifying the number of clusters.
 Defaults to \code{1L}.}
 
-\item{warping_class}{A string specifying the warping class Choices are
-\code{"affine"}, \code{"dilation"}, \code{"none"}, \code{"shift"} or \code{"srsf"}. Defaults to
-\code{"affine"}. The SRSF class is the only class which is boundary-preserving.}
+\item{is_domain_interval}{A boolean specifying whether the sample of curves
+is defined on a fixed interval. Defaults to \code{FALSE}.}
+
+\item{transformation}{A string specifying the transformation to apply to the
+original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root slope function \code{transformation = "srsf"}.
+Defaults to \code{"identity"}.}
+
+\item{warping_class}{A string specifying the class of warping functions.
+Choices are no warping (\code{warping_class = "none"}), shift \code{y = x + b}
+(\code{warping_class = "shift"}), dilation \code{y = ax} (\code{warping_class = "dilation"}), affine \code{y = ax + b} (\code{warping_class = "affine"}) or
+boundary-preserving diffeomorphism (\code{warping_class = "bpd"}). Defaults to
+\code{"none"}.}
 
 \item{centroid_type}{A string specifying the type of centroid to compute.
 Choices are \code{"mean"}, \code{"median"} \code{"medoid"}, \code{"lowess"} or \code{"poly"}.
