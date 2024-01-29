@@ -22,6 +22,8 @@ to \code{FALSE}.}
 An object of class \code{prcomp_qts} which is a list with the following
 components:
 \itemize{
+\item \code{x}: An object of class \code{\link{qts_sample}} as provided by the user, possibly
+resampled;
 \item \code{tpca}: An object of class \code{MFPCAfit} as produced by the function
 \code{\link[MFPCA:MFPCA]{MFPCA::MFPCA()}},
 \item \code{var_props}: A numeric vector storing the percentage of variance explained

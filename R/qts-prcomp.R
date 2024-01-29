@@ -19,6 +19,8 @@
 #'
 #' @return An object of class `prcomp_qts` which is a list with the following
 #'   components:
+#' - `x`: An object of class [`qts_sample`] as provided by the user, possibly
+#' resampled;
 #' - `tpca`: An object of class `MFPCAfit` as produced by the function
 #' [MFPCA::MFPCA()],
 #' - `var_props`: A numeric vector storing the percentage of variance explained
@@ -110,6 +112,7 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
   mean_qts$w <- 0
   mean_qts <- mean_rotations * exp(as_qts(mean_qts[c(4, 5, 1:3)]))
   out <- list(
+    x = x,
     tpca = tpca,
     var_props = tpca$values / tot_var,
     total_variance = tot_var,
@@ -132,29 +135,40 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
 }
 
 .prepare_sample_for_pca <- function(x, x_ref = NULL) {
-  if (is.null(x_ref)) x_ref <- x
+  newdata <- TRUE
+  if (is.null(x_ref)) {
+    x_ref <- x
+    newdata <- FALSE
+  }
 
   lower_bounds <- x_ref |>
     purrr::map("time") |>
     purrr::map_dbl(min)
   if (stats::var(lower_bounds) > 0)
     cli::cli_abort("All input QTS should be evaluated on the same grid.")
+  lb <- lower_bounds[1]
   upper_bounds <- x_ref |>
     purrr::map("time") |>
     purrr::map_dbl(max)
   if (stats::var(upper_bounds) > 0)
     cli::cli_abort("All input QTS should be evaluated on the same grid.")
+  ub <- upper_bounds[1]
 
   grid_sizes <- purrr::map_int(x_ref, nrow)
   common_grid_size <- max(grid_sizes)
-  common_grid <- seq(
-    from = min(lower_bounds),
-    to = max(upper_bounds),
-    length.out = common_grid_size
-  )
+  common_grid <- seq(lb, ub, length.out = common_grid_size)
 
-  if (any(lower_bounds != min(common_grid)) || any(upper_bounds != max(common_grid)))
-    cli::cli_abort("The sample stored in {.arg newdata} should contain QTSs defined on the same domain as those used to perform the PCA.")
+  if (newdata) {
+    lower_bounds <- x |>
+      purrr::map("time") |>
+      purrr::map_dbl(min)
+    upper_bounds <- x |>
+      purrr::map("time") |>
+      purrr::map_dbl(max)
+
+    if (any(lower_bounds != lb) || any(upper_bounds != ub))
+      cli::cli_abort("The sample stored in {.arg newdata} should contain QTSs defined on the same domain as those used to perform the PCA.")
+  }
 
   as_qts_sample(purrr::map_if(x, \(.x) nrow(.x) < common_grid_size, \(.x) {
     resample(.x, nout = common_grid_size)
@@ -200,13 +214,23 @@ predict.prcomp_qts <- function(object, newdata, ...) {
       as_qts_sample() |>
       log()
 
+    common_time <- object$mean_qts$time
+    lb <- min(common_time)
+    ub <- max(common_time)
+    M <- length(object$principal_qts)
+    L <- 3L
+
     score_matrix <- log_newdata |>
       purrr::map(\(.x) {
-        1:3 |>
-          purrr::map(\(l) as.numeric(object$tpca$functions[[l]]@X %*% .x[[2 + l]])) |>
-          purrr::transpose() |>
-          purrr::simplify_all() |>
-          purrr::map_dbl(sum)
+        purrr::map_dbl(1:M, \(m) {
+          sum(purrr::map_dbl(1:L, \(l) {
+            FUN <- stats::splinefun(
+              x =common_time,
+              y = object$tpca$functions[[l]]@X[m, ] * .x[[2 + l]]
+            )
+            stats::integrate(FUN, lower = lb, upper = ub)$value
+          }))
+        })
       }) |>
       do.call(rbind, args = _)
   }
@@ -215,7 +239,7 @@ predict.prcomp_qts <- function(object, newdata, ...) {
   Y <- score_matrix %*% object$tpca$functions[[2]]@X
   Z <- score_matrix %*% object$tpca$functions[[3]]@X
   N <- dim(X)[1]
-  common_time <- object$mean_qts$time
+
   out <- purrr::map(1:N, \(.n) {
     res <- tibble::tibble(time = common_time, w = 0)
     res$x <- as.numeric(X[.n, ])
