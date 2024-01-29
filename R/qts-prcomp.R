@@ -201,6 +201,8 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
 #' # Predict QTS
 #' new_qts <- predict(pr)
 predict.prcomp_qts <- function(object, newdata, ...) {
+  common_time <- object$mean_qts$time
+
   if (missing(newdata)) {
     score_matrix <- object$tpca$scores
   } else {
@@ -214,7 +216,6 @@ predict.prcomp_qts <- function(object, newdata, ...) {
       as_qts_sample() |>
       log()
 
-    common_time <- object$mean_qts$time
     lb <- min(common_time)
     ub <- max(common_time)
     M <- length(object$principal_qts)
