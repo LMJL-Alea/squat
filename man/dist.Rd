@@ -23,6 +23,7 @@ dist(x, metric, ...)
   is_domain_interval = FALSE,
   transformation = c("identity", "srsf"),
   warping_class = c("none", "shift", "dilation", "affine", "bpd"),
+  rotation_invariance = FALSE,
   cluster_on_phase = FALSE,
   labels = NULL,
   ...
@@ -60,6 +61,11 @@ Choices are no warping (\code{warping_class = "none"}), shift \code{y = x + b}
 (\code{warping_class = "shift"}), dilation \code{y = ax} (\code{warping_class = "dilation"}), affine \code{y = ax + b} (\code{warping_class = "affine"}) or
 boundary-preserving diffeomorphism (\code{warping_class = "bpd"}). Defaults to
 \code{"none"}.}
+
+\item{rotation_invariance}{A boolean value specifying whether the distance
+should be invariant to rotation. This is only relevant when
+\code{is_domain_interval} is \code{TRUE} and \code{transformation} is \code{"srsf"} and
+\code{warped_class} is \code{"bpd"}. Defaults to \code{FALSE}.}
 
 \item{cluster_on_phase}{A boolean specifying whether clustering should be
 based on phase variation or amplitude variation. Defaults to \code{FALSE} which

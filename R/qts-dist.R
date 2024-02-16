@@ -12,6 +12,11 @@
 #'   Otherwise, it must be one of `"l2"`, `"pearson"` or `"dtw"`.
 #' @inheritParams stats::dist
 #' @inheritParams fdacluster::fdadist
+#' @param rotation_invariance A boolean value specifying whether the distance
+#'   should be invariant to rotation. This is only relevant when
+#'   `is_domain_interval` is `TRUE` and `transformation` is `"srsf"` and
+#'   `warped_class` is `"bpd"`. Defaults to `FALSE`.
+#'
 #' @param ... not used.
 #'
 #' @return An object of class [stats::dist].
@@ -50,12 +55,31 @@ dist.qts_sample <-function(x,
                            is_domain_interval = FALSE,
                            transformation = c("identity", "srsf"),
                            warping_class = c("none", "shift", "dilation", "affine", "bpd"),
+                           rotation_invariance = FALSE,
                            cluster_on_phase = FALSE,
                            labels = NULL,
                            ...) {
   transformation <- rlang::arg_match(transformation)
   metric <- rlang::arg_match(metric)
   warping_class <- rlang::arg_match(warping_class)
+
+  if (is_domain_interval && transformation == "srsf" && warping_class == "bpd") {
+    logx <- log(x)
+    L <- 3L
+    M <- nrow(logx[[1]])
+    N <- length(logx)
+    beta <- array(dim = c(L, M, N))
+    for (n in 1:N) {
+      beta[1, , n] <- logx[[n]]$x
+      beta[2, , n] <- logx[[n]]$y
+      beta[3, , n] <- logx[[n]]$z
+    }
+    out <- fdasrvf::curve_dist(beta, rotation = rotation_invariance, ncores = 10L)
+    if (cluster_on_phase)
+      return(out$Dp)
+    else
+      return(out$Da)
+  }
 
   if (metric == "dtw") {
     return(distDTW(
