@@ -63,7 +63,11 @@ dist.qts_sample <-function(x,
   metric <- rlang::arg_match(metric)
   warping_class <- rlang::arg_match(warping_class)
 
-  if (is_domain_interval && transformation == "srsf" && warping_class == "bpd") {
+  if (is_domain_interval && transformation == "srsf") {
+    if (!(warping_class %in% c("none", "bpd")))
+      cli::cli_abort("The warping class {.arg warping_class} is not compatible with the transformation {.arg transformation}.")
+    if (warping_class == "none" && rotation_invariance)
+      cli::cli_abort("Rotation invariance is not compatible with the warping class {.arg warping_class}.")
     logx <- log(x)
     L <- 3L
     M <- nrow(logx[[1]])
@@ -74,7 +78,10 @@ dist.qts_sample <-function(x,
       beta[2, , n] <- logx[[n]]$y
       beta[3, , n] <- logx[[n]]$z
     }
-    out <- fdasrvf::curve_dist(beta, rotation = rotation_invariance, ncores = 10L)
+    out <- fdasrvf::curve_dist(beta,
+                               alignment = (warping_class == "bpd"),
+                               rotation = rotation_invariance,
+                               ncores = 10L)
     if (cluster_on_phase)
       return(out$Dp)
     else
