@@ -93,6 +93,14 @@ qts2aats_impl <- function(qts) {
     .Call(`_squat_qts2aats_impl`, qts)
 }
 
+qts2rpyts_impl <- function(qts) {
+    .Call(`_squat_qts2rpyts_impl`, qts)
+}
+
+rpyts2qts_impl <- function(rpyts) {
+    .Call(`_squat_rpyts2qts_impl`, rpyts)
+}
+
 gmean <- function(quaternionSample, maxIterations = 2000L, maxEpsilon = 1.0e-5) {
     .Call(`_squat_gmean`, quaternionSample, maxIterations, maxEpsilon)
 }

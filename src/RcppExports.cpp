@@ -357,6 +357,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// qts2rpyts_impl
+Rcpp::DataFrame qts2rpyts_impl(const Rcpp::DataFrame& qts);
+RcppExport SEXP _squat_qts2rpyts_impl(SEXP qtsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
+    rcpp_result_gen = Rcpp::wrap(qts2rpyts_impl(qts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rpyts2qts_impl
+Rcpp::DataFrame rpyts2qts_impl(const Rcpp::DataFrame& rpyts);
+RcppExport SEXP _squat_rpyts2qts_impl(SEXP rpytsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type rpyts(rpytsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rpyts2qts_impl(rpyts));
+    return rcpp_result_gen;
+END_RCPP
+}
 // gmean
 Eigen::VectorXd gmean(const std::vector<Eigen::VectorXd>& quaternionSample, unsigned int maxIterations, double maxEpsilon);
 static SEXP _squat_gmean_try(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, SEXP maxEpsilonSEXP) {
@@ -478,6 +500,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_qts2ats_impl", (DL_FUNC) &_squat_qts2ats_impl, 2},
     {"_squat_qts2avts_impl", (DL_FUNC) &_squat_qts2avts_impl, 2},
     {"_squat_qts2aats_impl", (DL_FUNC) &_squat_qts2aats_impl, 1},
+    {"_squat_qts2rpyts_impl", (DL_FUNC) &_squat_qts2rpyts_impl, 1},
+    {"_squat_rpyts2qts_impl", (DL_FUNC) &_squat_rpyts2qts_impl, 1},
     {"_squat_gmean", (DL_FUNC) &_squat_gmean, 3},
     {"_squat_gmedian", (DL_FUNC) &_squat_gmedian, 3},
     {"_squat_RcppExport_registerCCallable", (DL_FUNC) &_squat_RcppExport_registerCCallable, 0},
