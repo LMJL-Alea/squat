@@ -189,3 +189,96 @@ Rcpp::DataFrame qts2aats_impl(const Rcpp::DataFrame &qts)
   outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
   return outValue;
 }
+
+Rcpp::DataFrame qts2rpyts_impl(const Rcpp::DataFrame &qts)
+{
+  unsigned int nGrid = qts.nrows();
+  Rcpp::NumericVector inputWValues = qts["w"];
+  Rcpp::NumericVector inputXValues = qts["x"];
+  Rcpp::NumericVector inputYValues = qts["y"];
+  Rcpp::NumericVector inputZValues = qts["z"];
+  Rcpp::NumericVector outputRollValues(nGrid);
+  Rcpp::NumericVector outputPitchValues(nGrid);
+  Rcpp::NumericVector outputYawValues(nGrid);
+
+  double roll, pitch, yaw;
+  for (unsigned int i = 0;i < nGrid;++i)
+  {
+    GetRPYAngles(
+      inputWValues(i), inputXValues(i), inputYValues(i), inputZValues(i),
+      roll, pitch, yaw
+    );
+    outputRollValues(i)  = roll;
+    outputPitchValues(i) = pitch;
+    outputYawValues(i)   = yaw;
+  }
+
+  Rcpp::DataFrame outValue = Rcpp::DataFrame::create(
+    Rcpp::Named("time")  = qts["time"],
+    Rcpp::Named("roll")  = outputRollValues,
+    Rcpp::Named("pitch") = outputPitchValues,
+    Rcpp::Named("yaw")   = outputYawValues
+  );
+
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+  return outValue;
+}
+
+Rcpp::DataFrame rpyts2qts_impl(const Rcpp::DataFrame &rpyts)
+{
+  unsigned int nGrid = rpyts.nrows();
+  Rcpp::NumericVector inputRollValues  = rpyts["roll"];
+  Rcpp::NumericVector inputPitchValues = rpyts["pitch"];
+  Rcpp::NumericVector inputYawValues   = rpyts["yaw"];
+  Rcpp::NumericVector outputWValues(nGrid);
+  Rcpp::NumericVector outputXValues(nGrid);
+  Rcpp::NumericVector outputYValues(nGrid);
+  Rcpp::NumericVector outputZValues(nGrid);
+
+  Eigen::Quaterniond quatValue;
+  for (unsigned int i = 0;i < nGrid;++i)
+  {
+    quatValue = Eigen::AngleAxisd(inputYawValues(i), Eigen::Vector3d::UnitZ()) *
+                Eigen::AngleAxisd(inputPitchValues(i), Eigen::Vector3d::UnitY()) *
+                Eigen::AngleAxisd(inputRollValues(i), Eigen::Vector3d::UnitX());
+    outputWValues(i) = quatValue.w();
+    outputXValues(i) = quatValue.x();
+    outputYValues(i) = quatValue.y();
+    outputZValues(i) = quatValue.z();
+  }
+
+  Rcpp::DataFrame outValue = Rcpp::DataFrame::create(
+    Rcpp::Named("time") = rpyts["time"],
+    Rcpp::Named("w") = outputWValues,
+    Rcpp::Named("x") = outputXValues,
+    Rcpp::Named("y") = outputYValues,
+    Rcpp::Named("z") = outputZValues
+  );
+
+  outValue.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
+  return outValue;
+}
+
+void GetRPYAngles(const double &w, const double &x, const double &y, const double &z,
+                  double &roll, double &pitch, double &yaw)
+{
+  // roll (x-axis rotation)
+  double sinr_cosp = 2 * (w * x + y * z);
+  double cosr_cosp = 1 - 2 * (x * x + y * y);
+  roll = std::atan2(sinr_cosp, cosr_cosp);
+
+  // pitch (y-axis rotation)
+  double sinp = 2 * (w * y - z * x);
+  if (std::abs(sinp) >= 1)
+    pitch = std::copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+  else
+    pitch = std::asin(sinp);
+  // double sinp = std::sqrt(1 + 2 * (w * y - x * z));
+  // double cosp = std::sqrt(1 - 2 * (w * y - x * z));
+  // pitch = 2 * std::atan2(sinp, cosp) - M_PI / 2;
+
+  // yaw (z-axis rotation)
+  double siny_cosp = 2 * (w * z + x * y);
+  double cosy_cosp = 1 - 2 * (y * y + z * z);
+  yaw = std::atan2(siny_cosp, cosy_cosp);
+}

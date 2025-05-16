@@ -12,9 +12,11 @@ dbscan(x, ...)
 
 \method{dbscan}{qts_sample}(
   x,
-  warping_class = c("affine", "dilation", "none", "shift", "srsf"),
+  is_domain_interval = FALSE,
+  transformation = c("identity", "srvf"),
+  warping_class = c("none", "shift", "dilation", "affine", "bpd"),
   centroid_type = "mean",
-  metric = c("l2", "pearson"),
+  metric = c("l2", "normalized_l2", "pearson"),
   cluster_on_phase = FALSE,
   use_fence = FALSE,
   ...
@@ -42,9 +44,18 @@ weighted clustering.}
 The default is \code{TRUE} for regular DBSCAN. If \code{FALSE} then border
 points are considered noise (see DBSCAN* in Campello et al, 2013).}
 
-\item{warping_class}{A string specifying the warping class Choices are
-\code{"affine"}, \code{"dilation"}, \code{"none"}, \code{"shift"} or \code{"srsf"}. Defaults to
-\code{"affine"}. The SRSF class is the only class which is boundary-preserving.}
+\item{is_domain_interval}{A boolean specifying whether the sample of curves
+is defined on a fixed interval. Defaults to \code{FALSE}.}
+
+\item{transformation}{A string specifying the transformation to apply to the
+original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root velocity function \code{transformation = "srvf"}.
+Defaults to \code{"identity"}.}
+
+\item{warping_class}{A string specifying the class of warping functions.
+Choices are no warping (\code{warping_class = "none"}), shift \code{y = x + b}
+(\code{warping_class = "shift"}), dilation \code{y = ax} (\code{warping_class = "dilation"}), affine \code{y = ax + b} (\code{warping_class = "affine"}) or
+boundary-preserving diffeomorphism (\code{warping_class = "bpd"}). Defaults to
+\code{"none"}.}
 
 \item{centroid_type}{A string specifying the type of centroid to compute.
 Choices are \code{"mean"}, \code{"median"} \code{"medoid"}, \code{"lowess"} or \code{"poly"}.
@@ -68,7 +79,7 @@ implies amplitude variation.}
 
 \item{use_fence}{A boolean specifying whether the fence algorithm should be
 used to robustify the algorithm against outliers. Defaults to \code{FALSE}. This
-is used only when \code{warping_class != "srsf"}.}
+is used only when \code{warping_class != "srvf"}.}
 }
 \value{
 An object of class \code{\link[stats:kmeans]{stats::kmeans}} or \code{\link[stats:hclust]{stats::hclust}} or

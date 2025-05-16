@@ -23,9 +23,11 @@ kmeans(x, n_clusters, ...)
   n_clusters = 1L,
   seeds = NULL,
   seeding_strategy = c("kmeans++", "exhaustive-kmeans++", "exhaustive", "hclust"),
-  warping_class = c("affine", "dilation", "none", "shift", "srsf"),
+  is_domain_interval = FALSE,
+  transformation = c("identity", "srvf"),
+  warping_class = c("none", "shift", "dilation", "affine", "bpd"),
   centroid_type = "mean",
-  metric = c("l2", "pearson"),
+  metric = c("l2", "normalized_l2", "pearson"),
   cluster_on_phase = FALSE,
   use_fence = FALSE,
   ...
@@ -74,9 +76,18 @@ initial centroids or \code{"hclust"} which first performs hierarchical
 clustering using Ward's linkage criterion to identify initial centroids.
 Defaults to \code{"kmeans++"}, which is the fastest strategy.}
 
-\item{warping_class}{A string specifying the warping class Choices are
-\code{"affine"}, \code{"dilation"}, \code{"none"}, \code{"shift"} or \code{"srsf"}. Defaults to
-\code{"affine"}. The SRSF class is the only class which is boundary-preserving.}
+\item{is_domain_interval}{A boolean specifying whether the sample of curves
+is defined on a fixed interval. Defaults to \code{FALSE}.}
+
+\item{transformation}{A string specifying the transformation to apply to the
+original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root velocity function \code{transformation = "srvf"}.
+Defaults to \code{"identity"}.}
+
+\item{warping_class}{A string specifying the class of warping functions.
+Choices are no warping (\code{warping_class = "none"}), shift \code{y = x + b}
+(\code{warping_class = "shift"}), dilation \code{y = ax} (\code{warping_class = "dilation"}), affine \code{y = ax + b} (\code{warping_class = "affine"}) or
+boundary-preserving diffeomorphism (\code{warping_class = "bpd"}). Defaults to
+\code{"none"}.}
 
 \item{centroid_type}{A string specifying the type of centroid to compute.
 Choices are \code{"mean"}, \code{"median"} \code{"medoid"}, \code{"lowess"} or \code{"poly"}.
@@ -90,9 +101,13 @@ number will be used as the degree of the polynomial model. The default
 value is \code{4L}.}
 
 \item{metric}{A string specifying the metric used to compare curves. Choices
-are \code{"l2"} or \code{"pearson"}. Defaults to \code{"l2"}. Used only when
-\code{warping_class != "srsf"}. For the boundary-preserving warping class, the
-L2 distance between the SRSFs of the original curves is used.}
+are \code{"l2"}, \code{"normalized_l2"} or \code{"pearson"}. If \code{transformation == "srvf"}, the metric \strong{must be} \code{"l2"} because the SRVF transform maps
+absolutely continuous functions to square-integrable functions. If
+\code{transformation == "identity"} and \code{warping_class} is either \code{dilation} or
+\code{affine}, the metric cab be either \code{"normalized_l2"} or \code{"pearson"}. The L2
+distance is indeed \strong{not} dilation-invariant or affine-invariant. The
+metric can also be \code{"l2"} if \code{warping_class == "shift"}. Defaults to
+\code{"l2"}.}
 
 \item{cluster_on_phase}{A boolean specifying whether clustering should be
 based on phase variation or amplitude variation. Defaults to \code{FALSE} which
@@ -100,7 +115,7 @@ implies amplitude variation.}
 
 \item{use_fence}{A boolean specifying whether the fence algorithm should be
 used to robustify the algorithm against outliers. Defaults to \code{FALSE}. This
-is used only when \code{warping_class != "srsf"}.}
+is used only when \code{warping_class != "srvf"}.}
 }
 \value{
 An object of class \code{\link[stats:kmeans]{stats::kmeans}} or \code{\link[stats:hclust]{stats::hclust}} or

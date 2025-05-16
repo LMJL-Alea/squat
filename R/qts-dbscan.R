@@ -45,24 +45,34 @@ dbscan.default <- function(x,
 #' @export
 #' @rdname dbscan
 dbscan.qts_sample <-function(x,
-                             warping_class = c("affine", "dilation", "none", "shift", "srsf"),
+                             is_domain_interval = FALSE,
+                             transformation = c("identity", "srvf"),
+                             warping_class = c("none", "shift", "dilation", "affine", "bpd"),
                              centroid_type = "mean",
-                             metric = c("l2", "pearson"),
+                             metric = c("l2", "normalized_l2", "pearson"),
                              cluster_on_phase = FALSE,
                              use_fence = FALSE,
                              ...) {
   call <- rlang::call_match(defaults = TRUE)
-  warping_class <- rlang::arg_match(warping_class)
-  metric <- rlang::arg_match(metric)
+
   call_args <- rlang::call_args(call)
-  call_args$metric <- metric
+
+  transformation <- rlang::arg_match(transformation)
+  call_args$transformation <- transformation
+
+  warping_class <- rlang::arg_match(warping_class)
   call_args$warping_class <- warping_class
+
+  metric <- rlang::arg_match(metric)
+  call_args$metric <- metric
 
   l <- prep_data(x)
 
   out <- fdacluster::fdadbscan(
     x = l$grid,
     y = l$values,
+    is_domain_interval = is_domain_interval,
+    transformation = transformation,
     warping_class = warping_class,
     centroid_type = centroid_type,
     metric = metric,
@@ -72,7 +82,7 @@ dbscan.qts_sample <-function(x,
   )
 
   res <- list(
-    qts_aligned = purrr::map(1:l$N, \(.id) {
+    qts_aligned = lapply(1:l$N, \(.id) {
       exp(as_qts(tibble::tibble(
         time = out$aligned_grids[.id, ],
         w    = 0,
@@ -81,7 +91,7 @@ dbscan.qts_sample <-function(x,
         z    = out$original_curves[.id, 3, ]
       )))
     }),
-    qts_centers = purrr::map(1:out$n_clusters, \(.id) {
+    qts_centers = lapply(1:out$n_clusters, \(.id) {
       exp(as_qts(tibble::tibble(
         time = out$center_grids[.id, ],
         w    = 0,

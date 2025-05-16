@@ -1,4 +1,22 @@
-# squat (development version)
+# squat 0.4.0
+
+## New features
+
+* Adaptation to new API of fdacluster.
+* Added rotation invariant elastic distance.
+* Added no alignment option in distance matrix computation via SRVF.
+* Added roll-pitch-yaw representation.
+* Added `format()`/`print()` pair correctly.
+
+## Minor improvements and bug fixes
+
+* Remove dependency to **purrr** in favor of base R `*apply()` family to reduce
+dependency trail.
+* Replace **furrr** with **future.apply** for consistency with the removal of
+**purrr**.
+* Update roxygen version.
+* Fix bug in predict from PCA with new data. Properly compute L2 inner product.
+* Fix bug in predict from prcomp object.
 
 # squat 0.3.0
 

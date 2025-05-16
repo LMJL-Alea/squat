@@ -19,10 +19,14 @@ dist(x, metric, ...)
 
 \method{dist}{qts_sample}(
   x,
-  metric = c("l2", "pearson", "dtw"),
-  warping_class = c("affine", "dilation", "none", "shift", "srsf"),
+  metric = c("l2", "normalized_l2", "pearson", "dtw"),
+  is_domain_interval = FALSE,
+  transformation = c("identity", "srvf"),
+  warping_class = c("none", "shift", "dilation", "affine", "bpd"),
+  rotation_invariance = FALSE,
   cluster_on_phase = FALSE,
   labels = NULL,
+  ncores = 1L,
   ...
 )
 }
@@ -46,9 +50,23 @@ Otherwise, it must be one of \code{"l2"}, \code{"pearson"} or \code{"dtw"}.}
 
 \item{p}{The power of the Minkowski distance.}
 
-\item{warping_class}{A string specifying the warping class Choices are
-\code{"affine"}, \code{"dilation"}, \code{"none"}, \code{"shift"} or \code{"srsf"}. Defaults to
-\code{"affine"}. The SRSF class is the only class which is boundary-preserving.}
+\item{is_domain_interval}{A boolean specifying whether the sample of curves
+is defined on a fixed interval. Defaults to \code{FALSE}.}
+
+\item{transformation}{A string specifying the transformation to apply to the
+original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root velocity function \code{transformation = "srvf"}.
+Defaults to \code{"identity"}.}
+
+\item{warping_class}{A string specifying the class of warping functions.
+Choices are no warping (\code{warping_class = "none"}), shift \code{y = x + b}
+(\code{warping_class = "shift"}), dilation \code{y = ax} (\code{warping_class = "dilation"}), affine \code{y = ax + b} (\code{warping_class = "affine"}) or
+boundary-preserving diffeomorphism (\code{warping_class = "bpd"}). Defaults to
+\code{"none"}.}
+
+\item{rotation_invariance}{A boolean value specifying whether the distance
+should be invariant to rotation. This is only relevant when
+\code{is_domain_interval} is \code{TRUE} and \code{transformation} is \code{"srvf"} and
+\code{warped_class} is \code{"bpd"}. Defaults to \code{FALSE}.}
 
 \item{cluster_on_phase}{A boolean specifying whether clustering should be
 based on phase variation or amplitude variation. Defaults to \code{FALSE} which
@@ -56,6 +74,9 @@ implies amplitude variation.}
 
 \item{labels}{A character vector specifying curve labels. Defaults to \code{NULL}
 which uses sequential numbers as labels.}
+
+\item{ncores}{An integer value specifying the number of cores to use for
+parallel computation. Defaults to \code{1}.}
 }
 \value{
 An object of class \link[stats:dist]{stats::dist}.

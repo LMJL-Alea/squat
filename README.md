@@ -8,7 +8,7 @@
 [![R-CMD-check](https://github.com/LMJL-Alea/squat/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LMJL-Alea/squat/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/LMJL-Alea/squat/workflows/test-coverage/badge.svg)](https://github.com/LMJL-Alea/squat/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/LMJL-Alea/squat/branch/master/graph/badge.svg)](https://app.codecov.io/gh/LMJL-Alea/squat?branch=master)
+coverage](https://codecov.io/gh/LMJL-Alea/squat/graph/badge.svg)](https://app.codecov.io/gh/LMJL-Alea/squat)
 [![pkgdown](https://github.com/LMJL-Alea/squat/workflows/pkgdown/badge.svg)](https://github.com/LMJL-Alea/squat/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/squat)](https://CRAN.R-project.org/package=squat)
@@ -92,7 +92,13 @@ plot(sample_and_mean, highlighted = c(rep(FALSE, 64), TRUE))
 You can compute the pairwise distance matrix (based on the DTW for now):
 
 ``` r
-D <- dist(vespa64$igp, metric = "l2", warping_class = "srsf")
+D <- dist(
+  vespa64$igp,
+  is_domain_interval = TRUE,
+  transformation = "srvf",
+  metric = "l2",
+  warping_class = "bpd"
+)
 C <- exp(-D / (sqrt(2) * sd(D)))
 C <- (C - min(C)) / diff(range(C))
 C <- C |> 
@@ -133,14 +139,13 @@ screeplot(tpca)
 You can finally perform a k-means clustering and visualize it:
 
 ``` r
-km <- kmeans(vespa64$igp, n_clusters = 2, warping_class = "srsf")
-#> ℹ Computing initial centroids using kmeans++ strategy...
-#> ℹ Running iteration 1...
-#> ℹ ----> Alignment step
-#> ℹ ----> Assignment step
-#> ℹ ----> Normalisation step
-#> ℹ ----> Template identification step
-#> ℹ Consolidating output...
+km <- kmeans(
+  vespa64$igp,
+  n_clusters = 2,
+  is_domain_interval = TRUE,
+  transformation = "srvf",
+  warping_class = "bpd"
+)
 plot(km)
 ```
 
