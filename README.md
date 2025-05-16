@@ -8,7 +8,7 @@
 [![R-CMD-check](https://github.com/LMJL-Alea/squat/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LMJL-Alea/squat/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/LMJL-Alea/squat/workflows/test-coverage/badge.svg)](https://github.com/LMJL-Alea/squat/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/LMJL-Alea/squat/branch/master/graph/badge.svg)](https://app.codecov.io/gh/LMJL-Alea/squat?branch=master)
+coverage](https://codecov.io/gh/LMJL-Alea/squat/graph/badge.svg)](https://app.codecov.io/gh/LMJL-Alea/squat)
 [![pkgdown](https://github.com/LMJL-Alea/squat/workflows/pkgdown/badge.svg)](https://github.com/LMJL-Alea/squat/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/squat)](https://CRAN.R-project.org/package=squat)

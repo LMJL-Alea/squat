@@ -43,6 +43,7 @@ reference:
     - qts2nts
     - qts2ats
     - qts2avts
+    - qts2rpyts
   - title: Principal Component Analysis
     contents:
     - prcomp.qts_sample
