@@ -26,7 +26,7 @@ differentiate.qts <- function(x) {
 #' @export
 #' @rdname differentiate
 differentiate.qts_sample <- function(x) {
-  res <- purrr::map(x, differentiate)
+  res <- lapply(x, differentiate)
   as_qts_sample(res)
 }
 
@@ -56,7 +56,7 @@ straighten.qts <- function(x) {
 #' @export
 #' @rdname straighten
 straighten.qts_sample <- function(x) {
-  res <- purrr::map(x, straighten)
+  res <- lapply(x, straighten)
   as_qts_sample(res)
 }
 
@@ -86,7 +86,7 @@ log.qts <- function(x, ...) {
 #' @export
 #' @rdname log
 log.qts_sample <- function(x, ...) {
-  res <- purrr::map(x, log)
+  res <- lapply(x, log)
   as_qts_sample(res)
 }
 
@@ -118,7 +118,7 @@ exp.qts <- function(x, ...) {
 #' @export
 #' @rdname exp
 exp.qts_sample <- function(x, ...) {
-  res <- purrr::map(x, exp)
+  res <- lapply(x, exp)
   as_qts_sample(res)
 }
 
@@ -152,7 +152,7 @@ reorient.qts <- function(x, disable_normalization = FALSE) {
 #' @export
 #' @rdname reorient
 reorient.qts_sample <- function(x, disable_normalization = FALSE) {
-  res <- purrr::map(x, reorient, disable_normalization = disable_normalization)
+  res <- lapply(x, \(.x) reorient(.x, disable_normalization = disable_normalization))
   as_qts_sample(res)
 }
 
@@ -183,7 +183,7 @@ normalize.qts <- function(x) {
 #' @export
 #' @rdname normalize
 normalize.qts_sample <- function(x) {
-  res <- purrr::map(x, normalize)
+  res <- lapply(x, normalize)
   as_qts_sample(res)
 }
 
@@ -240,13 +240,15 @@ resample.qts <- function(x,
 resample.qts_sample <- function(x,
                                 tmin = NA, tmax = NA, nout = 0L,
                                 disable_normalization = FALSE) {
-  res <- purrr::map(
-    x, resample,
-    tmin = tmin,
-    tmax = tmax,
-    nout = nout,
-    disable_normalization = disable_normalization
-  )
+  res <- lapply(x, \(.x) {
+    resample(
+      x = .x,
+      tmin = tmin,
+      tmax = tmax,
+      nout = nout,
+      disable_normalization = disable_normalization
+    )
+  })
   as_qts_sample(res)
 }
 
@@ -291,7 +293,7 @@ smooth.qts <- function(x, alpha = 0.5, ...) {
 #' @export
 #' @rdname smooth
 smooth.qts_sample <- function(x, alpha = 0.5, ...) {
-  res <- purrr::map(x, smooth, alpha = alpha)
+  res <- lapply(x, \(.x) smooth(.x, alpha = alpha))
   as_qts_sample(res)
 }
 
@@ -323,7 +325,7 @@ hemispherize.qts <- function(x) {
 #' @export
 #' @rdname hemispherize
 hemispherize.qts_sample <- function(x) {
-  res <- purrr::map(x, hemispherize)
+  res <- lapply(x, hemispherize)
   as_qts_sample(res)
 }
 
@@ -355,6 +357,6 @@ moving_average.qts <- function(x, window_size = 0) {
 #' @export
 #' @rdname moving_average
 moving_average.qts_sample <- function(x, window_size = 0) {
-  res <- purrr::map(x, moving_average, window_size = window_size)
+  res <- lapply(x, \(.x) moving_average(.x, window_size = window_size))
   as_qts_sample(res)
 }

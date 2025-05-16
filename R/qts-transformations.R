@@ -138,7 +138,6 @@ qts2rpyts <- function(x) {
   out
 }
 
-#' @export
 rpyts2qts <- function(x) {
   x |>
     rpyts2qts_impl() |>

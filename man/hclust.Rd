@@ -21,7 +21,7 @@ hclust(x, metric, linkage_criterion, ...)
   linkage_criterion = c("complete", "average", "single", "ward.D2"),
   n_clusters = 1L,
   is_domain_interval = FALSE,
-  transformation = c("identity", "srsf"),
+  transformation = c("identity", "srvf"),
   warping_class = c("none", "shift", "dilation", "affine", "bpd"),
   centroid_type = "mean",
   cluster_on_phase = FALSE,
@@ -54,7 +54,7 @@ Defaults to \code{1L}.}
 is defined on a fixed interval. Defaults to \code{FALSE}.}
 
 \item{transformation}{A string specifying the transformation to apply to the
-original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root slope function \code{transformation = "srsf"}.
+original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root velocity function \code{transformation = "srvf"}.
 Defaults to \code{"identity"}.}
 
 \item{warping_class}{A string specifying the class of warping functions.

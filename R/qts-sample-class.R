@@ -42,9 +42,8 @@ NULL
 as_qts_sample <- function(x) {
   if (is_qts_sample(x)) return(x)
   if (is_qts(x)) x <- list(x)
-  if (!is.list(x))
-    cli::cli_abort("The input {.arg x} should be a list.")
-  x <- purrr::map_if(x, ~ !is_qts(.x), as_qts)
+  if (!is.list(x)) cli::cli_abort("The input {.arg x} should be a list.")
+  x <- lapply(x, function(item) if (!is_qts(item)) as_qts(item) else item)
   class(x) <- c("qts_sample", class(x))
   x
 }
@@ -99,7 +98,9 @@ append.qts_sample <- function(x, y, ...) {
   if (missing(y)) return(x)
   if (is_qts(y)) y <- as_qts_sample(y)
   if (!is_qts_sample(y))
-    cli::cli_abort("The rhs object should be of class either {.cls qts} or {.cls qts_sample}.")
+    cli::cli_abort(
+      "The rhs object should be of class either {.cls qts} or {.cls qts_sample}."
+    )
   x[(length(x) + 1):(length(x) + length(y))] <- y
   as_qts_sample(x)
 }
@@ -127,7 +128,9 @@ append.qts_sample <- function(x, y, ...) {
 #' rnorm_qts(1, vespa64$igp[[1]])
 rnorm_qts <- function(n, mean_qts, alpha = 0.01, beta = 0.001) {
   if (!is_qts(mean_qts))
-    cli::cli_abort("The {.arg mean_qts} parameter should be of class {.cls qts}.")
+    cli::cli_abort(
+      "The {.arg mean_qts} parameter should be of class {.cls qts}."
+    )
   mean_qts <- log(mean_qts)
   time_grid <- mean_qts$time
   C1 <- roahd::exp_cov_function(time_grid, alpha = alpha, beta = beta)
@@ -144,7 +147,7 @@ rnorm_qts <- function(n, mean_qts, alpha = 0.01, beta = 0.001) {
     correlations = rep(0, 3),
     listCholCov = list(CholC1, CholC2, CholC3)
   )
-  qts_list <- purrr::map(1:n, ~ {
+  qts_list <- lapply(1:n, \(.x) {
     as_qts(tibble::tibble(
       time = time_grid,
       w = 0,
@@ -153,7 +156,7 @@ rnorm_qts <- function(n, mean_qts, alpha = 0.01, beta = 0.001) {
       z = mean_qts[[3]][.x, ]
     ))
   })
-  out <- purrr::map(qts_list, exp_qts)
+  out <- lapply(qts_list, exp_qts)
   as_qts_sample(out)
 }
 
@@ -202,12 +205,14 @@ scale.default <- function(x, center = TRUE, scale = TRUE, ...) {
 
 #' @export
 #' @rdname scale
-scale.qts_sample <- function(x,
-                             center = TRUE,
-                             scale = TRUE,
-                             by_row = FALSE,
-                             keep_summary_stats = FALSE,
-                             ...) {
+scale.qts_sample <- function(
+  x,
+  center = TRUE,
+  scale = TRUE,
+  by_row = FALSE,
+  keep_summary_stats = FALSE,
+  ...
+) {
   if (!center) {
     if (!keep_summary_stats) return(x)
     return(list(
@@ -218,32 +223,32 @@ scale.qts_sample <- function(x,
   }
 
   if (!by_row) {
-    x <- x |>
-      purrr::map(purrr::array_tree, margin = 1) |>
-      purrr::transpose() |>
-      purrr::map(purrr::reduce, rbind) |>
-      purrr::map(tibble::as_tibble) |>
-      purrr::map(as_qts)
+    x <- lapply(x, function(x) lapply(1:nrow(x), function(i) x[i, ]))
+    x <- transpose(x)
+    x <- lapply(x, function(x) do.call(rbind, x))
+    x <- lapply(x, tibble::as_tibble)
+    x <- lapply(x, as_qts)
   }
 
-  std_data <- purrr::map(x, centring, standardize = scale, keep_summary_stats = TRUE)
-  x <- purrr::map(std_data, "qts")
+  std_data <- lapply(x, \(.x) {
+    centring(x = .x, standardize = scale, keep_summary_stats = TRUE)
+  })
+  x <- lapply(std_data, \(.x) .x$qts)
 
   if (!by_row) {
-    x <- x |>
-      purrr::map(purrr::array_tree, margin = 1) |>
-      purrr::transpose() |>
-      purrr::map(purrr::reduce, rbind) |>
-      purrr::map(tibble::as_tibble) |>
-      purrr::map(as_qts)
+    x <- lapply(x, function(x) lapply(1:nrow(x), function(i) x[i, ]))
+    x <- transpose(x)
+    x <- lapply(x, function(x) do.call(rbind, x))
+    x <- lapply(x, tibble::as_tibble)
+    x <- lapply(x, as_qts)
   }
 
   if (!keep_summary_stats) return(as_qts_sample(x))
 
   list(
     rescaled_sample = as_qts_sample(x),
-    mean_values = purrr::map(std_data, "mean"),
-    sd_values = purrr::map_dbl(std_data, "sd")
+    mean_values = lapply(std_data, \(.x) .x$mean),
+    sd_values = sapply(std_data, \(.x) .x$sd)
   )
 }
 
@@ -310,45 +315,59 @@ median.qts_sample <- function(x, na.rm = FALSE, ...) {
 #' @export
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
 #' ggplot2::autoplot(vespa64$igp)
-autoplot.qts_sample <- function(object,
-                                memberships = NULL,
-                                highlighted = NULL,
-                                with_animation = FALSE,
-                                ...) {
+autoplot.qts_sample <- function(
+  object,
+  memberships = NULL,
+  highlighted = NULL,
+  with_animation = FALSE,
+  ...
+) {
   if (!is.null(memberships)) {
     if (length(memberships) != length(object))
-      cli::cli_abort("The length of the {.arg memberships} argument should match
-                     the number of QTS in the sample.")
+      cli::cli_abort(
+        "The length of the {.arg memberships} argument should match
+                     the number of QTS in the sample."
+      )
     memberships <- as.factor(memberships)
   }
   if (!is.null(highlighted)) {
     if (length(highlighted) != length(object))
-      cli::cli_abort("The length of the {.arg highlighted} argument should match
-                     the number of QTS in the sample.")
+      cli::cli_abort(
+        "The length of the {.arg highlighted} argument should match
+                     the number of QTS in the sample."
+      )
     if (!is.logical(highlighted))
-      cli::cli_abort("The {.arg highlighted} argument should be a logical vector.")
+      cli::cli_abort(
+        "The {.arg highlighted} argument should be a logical vector."
+      )
   }
 
   n <- length(object)
   if (is.null(highlighted)) highlighted <- rep(FALSE, n)
   use_memberships <- FALSE
-  if (is.null(memberships))
-    memberships <- as.factor(seq_len(n))
-  else
+  if (is.null(memberships)) memberships <- as.factor(seq_len(n)) else
     use_memberships <- TRUE
 
-  data <- tibble::tibble(object, id = as.factor(seq_len(n)), highlighted, memberships) |>
+  data <- tibble::tibble(
+    object,
+    id = as.factor(seq_len(n)),
+    highlighted,
+    memberships
+  ) |>
     tidyr::unnest("object")
 
   if (with_animation) {
     if (!requireNamespace("gganimate", quietly = TRUE))
-      cli::cli_abort("You first need to install the {.pkg gganimate} package to
-                     create animation plots.")
+      cli::cli_abort(
+        "You first need to install the {.pkg gganimate} package to
+                     create animation plots."
+      )
     return(
       data |>
         tidyr::pivot_longer(cols = "x":"z") |>
         ggplot2::ggplot(ggplot2::aes(
-          x = .data$w, y = .data$value,
+          x = .data$w,
+          y = .data$value,
           group = .data$id,
           colour = .data$memberships
         )) +
@@ -365,7 +384,11 @@ autoplot.qts_sample <- function(object,
         ggplot2::theme(
           aspect.ratio = 1,
           legend.position = if (use_memberships) "top" else "none",
-          axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5)
+          axis.text.x = ggplot2::element_text(
+            angle = 90,
+            hjust = 1,
+            vjust = 0.5
+          )
         ) +
         gganimate::transition_reveal(.data$time) +
         gganimate::ease_aes()
@@ -373,12 +396,15 @@ autoplot.qts_sample <- function(object,
   }
 
   data <- tidyr::pivot_longer(data, cols = "w":"z")
-  p <- ggplot2::ggplot(data, ggplot2::aes(
-    x = .data$time,
-    y = .data$value,
-    group = .data$id,
-    colour = .data$memberships
-  ) ) +
+  p <- ggplot2::ggplot(
+    data,
+    ggplot2::aes(
+      x = .data$time,
+      y = .data$value,
+      group = .data$id,
+      colour = .data$memberships
+    )
+  ) +
     ggplot2::geom_line() +
     ggplot2::facet_wrap(ggplot2::vars(.data$name), ncol = 1, scales = "free") +
     ggplot2::theme_linedraw() +
@@ -391,8 +417,9 @@ autoplot.qts_sample <- function(object,
 
   if (sum(highlighted) > 0) {
     if (!requireNamespace("gghighlight", quietly = TRUE))
-      cli::cli_alert_info("You need to install the {.pkg gghighlight} package to enable highlighting QTS.")
-    else {
+      cli::cli_alert_info(
+        "You need to install the {.pkg gghighlight} package to enable highlighting QTS."
+      ) else {
       p <- p +
         gghighlight::gghighlight(
           any(.data$highlighted),
@@ -421,11 +448,13 @@ autoplot.qts_sample <- function(object,
 #' @export
 #' @examples
 #' plot(vespa64$igp)
-plot.qts_sample <- function(x,
-                            memberships = NULL,
-                            highlighted = NULL,
-                            with_animation = FALSE,
-                            ...) {
+plot.qts_sample <- function(
+  x,
+  memberships = NULL,
+  highlighted = NULL,
+  with_animation = FALSE,
+  ...
+) {
   print(autoplot(
     x,
     memberships = memberships,

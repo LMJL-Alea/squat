@@ -60,6 +60,12 @@ format.qts <- function(x, digits = 5, ...) {
   NextMethod()
 }
 
+#' @export
+#' @rdname qts
+print.qts <- function(x, ...) {
+  cat(format(x, ...), sep = "\n")
+}
+
 #' QTS Centering and Standardization
 #'
 #' This function operates a centering of the QTS around the geometric mean of

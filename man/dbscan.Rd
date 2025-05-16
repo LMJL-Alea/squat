@@ -13,7 +13,7 @@ dbscan(x, ...)
 \method{dbscan}{qts_sample}(
   x,
   is_domain_interval = FALSE,
-  transformation = c("identity", "srsf"),
+  transformation = c("identity", "srvf"),
   warping_class = c("none", "shift", "dilation", "affine", "bpd"),
   centroid_type = "mean",
   metric = c("l2", "normalized_l2", "pearson"),
@@ -48,7 +48,7 @@ points are considered noise (see DBSCAN* in Campello et al, 2013).}
 is defined on a fixed interval. Defaults to \code{FALSE}.}
 
 \item{transformation}{A string specifying the transformation to apply to the
-original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root slope function \code{transformation = "srsf"}.
+original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root velocity function \code{transformation = "srvf"}.
 Defaults to \code{"identity"}.}
 
 \item{warping_class}{A string specifying the class of warping functions.
@@ -79,7 +79,7 @@ implies amplitude variation.}
 
 \item{use_fence}{A boolean specifying whether the fence algorithm should be
 used to robustify the algorithm against outliers. Defaults to \code{FALSE}. This
-is used only when \code{warping_class != "srsf"}.}
+is used only when \code{warping_class != "srvf"}.}
 }
 \value{
 An object of class \code{\link[stats:kmeans]{stats::kmeans}} or \code{\link[stats:hclust]{stats::hclust}} or

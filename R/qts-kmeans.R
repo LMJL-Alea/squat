@@ -64,7 +64,7 @@ kmeans.qts_sample <-function(x,
                              seeds = NULL,
                              seeding_strategy = c("kmeans++", "exhaustive-kmeans++", "exhaustive", "hclust"),
                              is_domain_interval = FALSE,
-                             transformation = c("identity", "srsf"),
+                             transformation = c("identity", "srvf"),
                              warping_class = c("none", "shift", "dilation", "affine", "bpd"),
                              centroid_type = "mean",
                              metric = c("l2", "normalized_l2", "pearson"),
@@ -105,7 +105,7 @@ kmeans.qts_sample <-function(x,
   )
 
   res <- list(
-    qts_aligned = as_qts_sample(purrr::map(1:l$N, \(.id) {
+    qts_aligned = as_qts_sample(lapply(1:l$N, \(.id) {
       exp(as_qts(tibble::tibble(
         time = out$aligned_grids[.id, ],
         w    = 0,
@@ -114,7 +114,7 @@ kmeans.qts_sample <-function(x,
         z    = out$original_curves[.id, 3, ]
       )))
     })),
-    qts_centers = purrr::map(1:out$n_clusters, \(.id) {
+    qts_centers = lapply(1:out$n_clusters, \(.id) {
       exp(as_qts(tibble::tibble(
         time = out$center_grids[.id, ],
         w    = 0,

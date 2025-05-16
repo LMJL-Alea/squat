@@ -5,6 +5,7 @@
 \alias{as_qts}
 \alias{is_qts}
 \alias{format.qts}
+\alias{print.qts}
 \title{QTS Class}
 \usage{
 as_qts(x)
@@ -12,6 +13,8 @@ as_qts(x)
 is_qts(x)
 
 \method{format}{qts}(x, digits = 5, ...)
+
+\method{print}{qts}(x, ...)
 }
 \arguments{
 \item{x}{A \code{\link[tibble:tibble]{tibble::tibble}} with columns \code{time}, \code{w}, \code{x}, \code{y} and \code{z}.}

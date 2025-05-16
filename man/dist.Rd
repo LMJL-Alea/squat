@@ -21,11 +21,12 @@ dist(x, metric, ...)
   x,
   metric = c("l2", "normalized_l2", "pearson", "dtw"),
   is_domain_interval = FALSE,
-  transformation = c("identity", "srsf"),
+  transformation = c("identity", "srvf"),
   warping_class = c("none", "shift", "dilation", "affine", "bpd"),
   rotation_invariance = FALSE,
   cluster_on_phase = FALSE,
   labels = NULL,
+  ncores = 1L,
   ...
 )
 }
@@ -53,7 +54,7 @@ Otherwise, it must be one of \code{"l2"}, \code{"pearson"} or \code{"dtw"}.}
 is defined on a fixed interval. Defaults to \code{FALSE}.}
 
 \item{transformation}{A string specifying the transformation to apply to the
-original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root slope function \code{transformation = "srsf"}.
+original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root velocity function \code{transformation = "srvf"}.
 Defaults to \code{"identity"}.}
 
 \item{warping_class}{A string specifying the class of warping functions.
@@ -64,7 +65,7 @@ boundary-preserving diffeomorphism (\code{warping_class = "bpd"}). Defaults to
 
 \item{rotation_invariance}{A boolean value specifying whether the distance
 should be invariant to rotation. This is only relevant when
-\code{is_domain_interval} is \code{TRUE} and \code{transformation} is \code{"srsf"} and
+\code{is_domain_interval} is \code{TRUE} and \code{transformation} is \code{"srvf"} and
 \code{warped_class} is \code{"bpd"}. Defaults to \code{FALSE}.}
 
 \item{cluster_on_phase}{A boolean specifying whether clustering should be
@@ -73,6 +74,9 @@ implies amplitude variation.}
 
 \item{labels}{A character vector specifying curve labels. Defaults to \code{NULL}
 which uses sequential numbers as labels.}
+
+\item{ncores}{An integer value specifying the number of cores to use for
+parallel computation. Defaults to \code{1}.}
 }
 \value{
 An object of class \link[stats:dist]{stats::dist}.

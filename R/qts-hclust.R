@@ -42,7 +42,7 @@ hclust.qts_sample <-function(x,
                              linkage_criterion = c("complete", "average", "single", "ward.D2"),
                              n_clusters = 1L,
                              is_domain_interval = FALSE,
-                             transformation = c("identity", "srsf"),
+                             transformation = c("identity", "srvf"),
                              warping_class = c("none", "shift", "dilation", "affine", "bpd"),
                              centroid_type = "mean",
                              cluster_on_phase = FALSE,
@@ -80,7 +80,7 @@ hclust.qts_sample <-function(x,
   )
 
   res <- list(
-    qts_aligned = purrr::map(1:l$N, \(.id) {
+    qts_aligned = lapply(1:l$N, \(.id) {
       exp(as_qts(tibble::tibble(
         time = out$aligned_grids[.id, ],
         w    = 0,
@@ -89,7 +89,7 @@ hclust.qts_sample <-function(x,
         z    = out$original_curves[.id, 3, ]
       )))
     }),
-    qts_centers = purrr::map(1:out$n_clusters, \(.id) {
+    qts_centers = lapply(1:out$n_clusters, \(.id) {
       exp(as_qts(tibble::tibble(
         time = out$center_grids[.id, ],
         w    = 0,

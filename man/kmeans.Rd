@@ -24,7 +24,7 @@ kmeans(x, n_clusters, ...)
   seeds = NULL,
   seeding_strategy = c("kmeans++", "exhaustive-kmeans++", "exhaustive", "hclust"),
   is_domain_interval = FALSE,
-  transformation = c("identity", "srsf"),
+  transformation = c("identity", "srvf"),
   warping_class = c("none", "shift", "dilation", "affine", "bpd"),
   centroid_type = "mean",
   metric = c("l2", "normalized_l2", "pearson"),
@@ -80,7 +80,7 @@ Defaults to \code{"kmeans++"}, which is the fastest strategy.}
 is defined on a fixed interval. Defaults to \code{FALSE}.}
 
 \item{transformation}{A string specifying the transformation to apply to the
-original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root slope function \code{transformation = "srsf"}.
+original sample of curves. Choices are no transformation (\code{transformation = "identity"}) or square-root velocity function \code{transformation = "srvf"}.
 Defaults to \code{"identity"}.}
 
 \item{warping_class}{A string specifying the class of warping functions.
@@ -101,7 +101,7 @@ number will be used as the degree of the polynomial model. The default
 value is \code{4L}.}
 
 \item{metric}{A string specifying the metric used to compare curves. Choices
-are \code{"l2"}, \code{"normalized_l2"} or \code{"pearson"}. If \code{transformation == "srsf"}, the metric \strong{must be} \code{"l2"} because the SRSF transform maps
+are \code{"l2"}, \code{"normalized_l2"} or \code{"pearson"}. If \code{transformation == "srvf"}, the metric \strong{must be} \code{"l2"} because the SRVF transform maps
 absolutely continuous functions to square-integrable functions. If
 \code{transformation == "identity"} and \code{warping_class} is either \code{dilation} or
 \code{affine}, the metric cab be either \code{"normalized_l2"} or \code{"pearson"}. The L2
@@ -115,7 +115,7 @@ implies amplitude variation.}
 
 \item{use_fence}{A boolean specifying whether the fence algorithm should be
 used to robustify the algorithm against outliers. Defaults to \code{FALSE}. This
-is used only when \code{warping_class != "srsf"}.}
+is used only when \code{warping_class != "srvf"}.}
 }
 \value{
 An object of class \code{\link[stats:kmeans]{stats::kmeans}} or \code{\link[stats:hclust]{stats::hclust}} or

@@ -44,9 +44,8 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
   # Project QTS sample into tangent space
   qts_c <- scale(x, scale = FALSE, keep_summary_stats = TRUE)
   mean_rotations <- qts_c$mean_values |>
-    purrr::transpose() |>
-    purrr::simplify_all() |>
-    purrr::set_names(c("w", "x", "y", "z"))
+    transpose_flatten() |>
+    rlang::set_names(c("w", "x", "y", "z"))
   mean_rotations <- as_qts(tibble::tibble(
     time = common_grid,
     w = mean_rotations$w,
@@ -58,55 +57,55 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
   qts_log <- log(qts_c)
 
   # Compute total variance and maximum number of components
-  mfd_roahd <- roahd::mfData(common_grid, list(
-    qts_log |> purrr::map("x") |> do.call(rbind, args = _),
-    qts_log |> purrr::map("y") |> do.call(rbind, args = _),
-    qts_log |> purrr::map("z") |> do.call(rbind, args = _)
-  ))
+  mfd_roahd <- roahd::mfData(
+    common_grid,
+    list(
+      qts_log |> lapply(\(.x) .x$x) |> do.call(rbind, args = _),
+      qts_log |> lapply(\(.x) .x$y) |> do.call(rbind, args = _),
+      qts_log |> lapply(\(.x) .x$z) |> do.call(rbind, args = _)
+    )
+  )
   sample_cov <- roahd::cov_fun(mfd_roahd)
   eigen_spectra <- sample_cov[c("1_1", "2_2", "3_3")] |>
-    purrr::map("values") |>
-    purrr::map(\(.x) eigen(.x, symmetric = TRUE, only.values = TRUE)$values)
-  tot_var <- eigen_spectra |>
-    purrr::map(\(.x) .x[.x > .Machine$double.eps]) |>
-    purrr::reduce(sum)
+    lapply(\(.x) .x$values) |>
+    lapply(\(.x) eigen(.x, symmetric = TRUE, only.values = TRUE)$values)
+  tot_var <- sum(unlist(lapply(
+    eigen_spectra,
+    function(x) x[x > .Machine$double.eps]
+  )))
   M_max <- eigen_spectra |>
-    purrr::map(\(.x) .x > .Machine$double.eps) |>
-    purrr::map_int(sum) |>
+    lapply(\(.x) .x > .Machine$double.eps) |>
+    sapply(sum) |>
     min()
   cli::cli_alert_info("The maximum number of principal component is {M_max}.")
   if (M > M_max)
-    cli::cli_abort("The maximum number of principal component is {M_max}. Please choose a value of {.arg M} smaller or equal to that value.")
+    cli::cli_abort(
+      "The maximum number of principal component is {M_max}. Please choose a value of {.arg M} smaller or equal to that value."
+    )
 
   # Store log-QTS sample into multiFunData object
   fd_x <- funData::funData(
     argvals = common_grid,
-    X = qts_log |>
-      purrr::map("x") |>
-      purrr::reduce(rbind)
+    X = do.call(rbind, lapply(qts_log, function(x) x$x))
   )
   fd_y <- funData::funData(
     argvals = common_grid,
-    X = qts_log |>
-      purrr::map("y") |>
-      purrr::reduce(rbind)
+    X = do.call(rbind, lapply(qts_log, function(x) x$y))
   )
   fd_z <- funData::funData(
     argvals = common_grid,
-    X = qts_log |>
-      purrr::map("z") |>
-      purrr::reduce(rbind)
+    X = do.call(rbind, lapply(qts_log, function(x) x$z))
   )
   mfd <- funData::multiFunData(fd_x, fd_y, fd_z)
 
   # Perform multivariate functional PCA
-  uniExpansions <- purrr::map(1:3, \(.x) list(type = "splines1Dpen", k = M))
+  uniExpansions <- lapply(1:3, \(.x) list(type = "splines1Dpen", k = M))
   tpca <- MFPCA::MFPCA(mfd, M = M, uniExpansions = uniExpansions, fit = fit)
 
   # Consolidate output
   mean_qts <- tpca$meanFunction |>
-    purrr::map(\(.x) as.numeric(.x@X)) |>
-    purrr::set_names(c("x", "y", "z")) |>
+    lapply(\(.x) as.numeric(.x@X)) |>
+    rlang::set_names(c("x", "y", "z")) |>
     tibble::as_tibble()
   mean_qts$time <- common_grid
   mean_qts$w <- 0
@@ -118,17 +117,20 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
     total_variance = tot_var,
     mean_qts = mean_rotations,
     principal_qts = tpca$functions |>
-      purrr::map(\(.x) purrr::array_tree(.x@X, margin = 1)) |>
-      purrr::transpose() |>
-      purrr::map(\(.x) as_qts(tibble::tibble(
-        time = common_grid,
-        w = 0,
-        x = .x[[1]],
-        y = .x[[2]],
-        z = .x[[3]]
-      ))) |>
-      purrr::map(exp) |>
-      purrr::map(\(qts) mean_rotations * qts)
+      lapply(\(.x) lapply(1:nrow(.x@X), \(i) .x@X[i, ])) |>
+      transpose() |>
+      lapply(
+        \(.x)
+          as_qts(tibble::tibble(
+            time = common_grid,
+            w = 0,
+            x = .x[[1]],
+            y = .x[[2]],
+            z = .x[[3]]
+          ))
+      ) |>
+      lapply(exp) |>
+      lapply(\(qts) mean_rotations * qts)
   )
   class(out) <- "prcomp_qts"
   out
@@ -142,37 +144,43 @@ prcomp.qts_sample <- function(x, M = 5, fit = FALSE, ...) {
   }
 
   lower_bounds <- x_ref |>
-    purrr::map("time") |>
-    purrr::map_dbl(min)
+    lapply(\(.x) .x$time) |>
+    sapply(min)
   if (stats::var(lower_bounds) > 0)
     cli::cli_abort("All input QTS should be evaluated on the same grid.")
   lb <- lower_bounds[1]
   upper_bounds <- x_ref |>
-    purrr::map("time") |>
-    purrr::map_dbl(max)
+    lapply(\(.x) .x$time) |>
+    sapply(max)
   if (stats::var(upper_bounds) > 0)
     cli::cli_abort("All input QTS should be evaluated on the same grid.")
   ub <- upper_bounds[1]
 
-  grid_sizes <- purrr::map_int(x_ref, nrow)
+  grid_sizes <- sapply(x_ref, nrow)
   common_grid_size <- max(grid_sizes)
   common_grid <- seq(lb, ub, length.out = common_grid_size)
 
   if (newdata) {
     lower_bounds <- x |>
-      purrr::map("time") |>
-      purrr::map_dbl(min)
+      lapply(\(.x) .x$time) |>
+      sapply(min)
     upper_bounds <- x |>
-      purrr::map("time") |>
-      purrr::map_dbl(max)
+      lapply(\(.x) .x$time) |>
+      sapply(max)
 
     if (any(lower_bounds != lb) || any(upper_bounds != ub))
-      cli::cli_abort("The sample stored in {.arg newdata} should contain QTSs defined on the same domain as those used to perform the PCA.")
+      cli::cli_abort(
+        "The sample stored in {.arg newdata} should contain QTSs defined on the same domain as those used to perform the PCA."
+      )
   }
 
-  as_qts_sample(purrr::map_if(x, \(.x) nrow(.x) < common_grid_size, \(.x) {
-    resample(.x, nout = common_grid_size)
-  }))
+  lapply(
+    x,
+    function(x)
+      if (nrow(x) < common_grid_size) resample(x, nout = common_grid_size) else
+        x
+  ) |>
+    as_qts_sample()
 }
 
 #' Predict QTS from PCA decomposition
@@ -212,7 +220,7 @@ predict.prcomp_qts <- function(object, newdata, ...) {
     newdata <- .prepare_sample_for_pca(newdata, x_ref = object$x)
 
     log_newdata <- newdata |>
-      purrr::map(\(.x) inverse_qts(object$mean_qts) * .x) |>
+      lapply(\(.x) inverse_qts(object$mean_qts) * .x) |>
       as_qts_sample() |>
       log()
 
@@ -222,11 +230,11 @@ predict.prcomp_qts <- function(object, newdata, ...) {
     L <- 3L
 
     score_matrix <- log_newdata |>
-      purrr::map(\(.x) {
-        purrr::map_dbl(1:M, \(m) {
-          sum(purrr::map_dbl(1:L, \(l) {
+      lapply(\(.x) {
+        sapply(1:M, \(m) {
+          sum(sapply(1:L, \(l) {
             FUN <- stats::splinefun(
-              x =common_time,
+              x = common_time,
               y = object$tpca$functions[[l]]@X[m, ] * .x[[2 + l]]
             )
             stats::integrate(FUN, lower = lb, upper = ub)$value
@@ -241,7 +249,7 @@ predict.prcomp_qts <- function(object, newdata, ...) {
   Z <- score_matrix %*% object$tpca$functions[[3]]@X
   N <- dim(X)[1]
 
-  out <- purrr::map(1:N, \(.n) {
+  out <- lapply(1:N, \(.n) {
     res <- tibble::tibble(time = common_time, w = 0)
     res$x <- as.numeric(X[.n, ])
     res$y <- as.numeric(Y[.n, ])
@@ -250,7 +258,7 @@ predict.prcomp_qts <- function(object, newdata, ...) {
   }) |>
     as_qts_sample() |>
     exp()
-  as_qts_sample(purrr::map(out, \(.qts) object$mean_qts * .qts))
+  as_qts_sample(lapply(out, \(.qts) object$mean_qts * .qts))
 }
 
 #' Plot for `prcomp_qts` objects
@@ -290,22 +298,30 @@ autoplot.prcomp_qts <- function(object, what = "PC1", ...) {
   if (substr(what, 1, 2) == "PC") {
     component <- as.numeric(substr(what, 3, nchar(what)))
     if ("original_space" %in% names(dots))
-      plot_tpca_component(object, component = component, original_space = dots$original_space)
-    else {
-      cli::cli_inform("The {.code original_space} boolean argument is not specified. Defaulting to {.field TRUE}.")
+      plot_tpca_component(
+        object,
+        component = component,
+        original_space = dots$original_space
+      ) else {
+      cli::cli_inform(
+        "The {.code original_space} boolean argument is not specified. Defaulting to {.field TRUE}."
+      )
       plot_tpca_component(object, component = component, original_space = TRUE)
     }
   } else if (what == "scores") {
     if ("plane" %in% names(dots))
-      plot_tpca_scores(object, plane = dots$plane)
-    else {
-      cli::cli_inform("The {.code plane} length-2 integer vector argument is not specified. Defaulting to {.field 1:2}.")
+      plot_tpca_scores(object, plane = dots$plane) else {
+      cli::cli_inform(
+        "The {.code plane} length-2 integer vector argument is not specified. Defaulting to {.field 1:2}."
+      )
       plot_tpca_scores(object, plane = 1:2)
     }
   } else if (what == "variance") {
     screeplot(object)
   } else
-    cli::cli_abort("The {.arg what} argument should be either {.field scores} or {.field variance} or a principal component specified starting with {.field PC}.")
+    cli::cli_abort(
+      "The {.arg what} argument should be either {.field scores} or {.field variance} or a principal component specified starting with {.field PC}."
+    )
 }
 
 #' Plot for `prcomp_qts` objects
@@ -378,13 +394,19 @@ plot_tpca_component <- function(tpca, component = 1, original_space = TRUE) {
     tidyr::pivot_longer(-c("time", "col"))
 
   plot_data |>
-    ggplot2::ggplot(ggplot2::aes(x = .data$time, y = .data$value, color = .data$col)) +
+    ggplot2::ggplot(ggplot2::aes(
+      x = .data$time,
+      y = .data$value,
+      color = .data$col
+    )) +
     ggplot2::geom_line() +
     ggplot2::facet_wrap(ggplot2::vars(.data$name), ncol = 1, scales = "free") +
     ggplot2::theme_linedraw() +
     ggplot2::labs(
       title = cli::pluralize("Mean QTS perturbed by PC{component}"),
-      subtitle = cli::pluralize("Percentage of variance explained: {round(tpca$var_props[component] * 100, digits = 1)}%"),
+      subtitle = cli::pluralize(
+        "Percentage of variance explained: {round(tpca$var_props[component] * 100, digits = 1)}%"
+      ),
       x = "Time (%)",
       y = "",
       color = ""
@@ -405,9 +427,17 @@ plot_tpca_scores <- function(tpca, plane = 1:2) {
     ggrepel::geom_label_repel(seed = 1234) +
     ggplot2::theme_linedraw() +
     ggplot2::labs(
-      title = cli::pluralize("Individuals projected on the PC{plane[1]}-{plane[2]} plane"),
-      subtitle = cli::pluralize("Combined percentage of variance explained: {round(sum(tpca$var_props[plane]) * 100, digits = 1)}%"),
-      x = cli::pluralize("PC{plane[1]} ({round(sum(tpca$var_props[plane[1]]) * 100, digits = 1)}%)"),
-      y = cli::pluralize("PC{plane[2]} ({round(sum(tpca$var_props[plane[2]]) * 100, digits = 1)}%)")
+      title = cli::pluralize(
+        "Individuals projected on the PC{plane[1]}-{plane[2]} plane"
+      ),
+      subtitle = cli::pluralize(
+        "Combined percentage of variance explained: {round(sum(tpca$var_props[plane]) * 100, digits = 1)}%"
+      ),
+      x = cli::pluralize(
+        "PC{plane[1]} ({round(sum(tpca$var_props[plane[1]]) * 100, digits = 1)}%)"
+      ),
+      y = cli::pluralize(
+        "PC{plane[2]} ({round(sum(tpca$var_props[plane[2]]) * 100, digits = 1)}%)"
+      )
     )
 }
