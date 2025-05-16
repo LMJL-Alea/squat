@@ -39,7 +39,14 @@ as_qts <- function(x) {
   if (!tibble::is_tibble(x))
     cli::cli_abort("The input object should be of class {.cls tbl}.")
   if (!all(names(x) == c("time", "w", "x", "y", "z")))
-    cli::cli_abort("The input tibble should have exactly the 5 following columns in that order: {.code time}, {.code w}, {.code x}, {.code y} and {.code z}.")
+    cli::cli_abort(
+      "The input tibble should have exactly the 5 following columns in that order: {.code time}, {.code w}, {.code x}, {.code y} and {.code z}."
+    )
+  if (nrow(x) < 2L)
+    cli::cli_abort(c(
+      "The input tibble should have at least 2 rows.",
+      "i" = "If you are analysing samples of rotations (without the time component), you should use the {.pkg rotations} package."
+    ))
   class(x) <- c("qts", class(x))
   x
 }
@@ -125,10 +132,13 @@ autoplot.qts <- function(object, highlighted_points = NULL, ...) {
     highlighted_points <- object$time[highlighted_points]
   }
   x <- tidyr::pivot_longer(object, cols = "w":"z")
-  p <- ggplot2::ggplot(x, ggplot2::aes(
-    x = .data$time,
-    y = .data$value
-  )) +
+  p <- ggplot2::ggplot(
+    x,
+    ggplot2::aes(
+      x = .data$time,
+      y = .data$value
+    )
+  ) +
     ggplot2::geom_line() +
     ggplot2::facet_wrap(ggplot2::vars(.data$name), ncol = 1, scales = "free") +
     ggplot2::theme_linedraw() +
@@ -183,9 +193,13 @@ plot.qts <- function(x, highlighted_points = NULL, ...) {
 "+.qts" <- function(x, rhs) {
   if (!is_qts(rhs)) {
     if (!is.numeric(rhs))
-      cli::cli_abort("The input argument {.arg rhs} should be of either of class {.cls qts} or of class {.cls numeric}.")
+      cli::cli_abort(
+        "The input argument {.arg rhs} should be of either of class {.cls qts} or of class {.cls numeric}."
+      )
     if (length(rhs) != 1)
-      cli::cli_abort("When the input argument {.arg rhs} is numeric, it should be scalar.")
+      cli::cli_abort(
+        "When the input argument {.arg rhs} is numeric, it should be scalar."
+      )
     out <- x
     out$w <- x$w + rhs
     out$x <- x$x + rhs
@@ -222,9 +236,13 @@ plot.qts <- function(x, highlighted_points = NULL, ...) {
 "-.qts" <- function(x, rhs) {
   if (!is_qts(rhs)) {
     if (!is.numeric(rhs))
-      cli::cli_abort("The input argument {.arg rhs} should be of either of class {.cls qts} or of class {.cls numeric}.")
+      cli::cli_abort(
+        "The input argument {.arg rhs} should be of either of class {.cls qts} or of class {.cls numeric}."
+      )
     if (length(rhs) != 1)
-      cli::cli_abort("When the input argument {.arg rhs} is numeric, it should be scalar.")
+      cli::cli_abort(
+        "When the input argument {.arg rhs} is numeric, it should be scalar."
+      )
     out <- x
     out$w <- x$w - rhs
     out$x <- x$x - rhs
@@ -261,9 +279,13 @@ plot.qts <- function(x, highlighted_points = NULL, ...) {
 "*.qts" <- function(x, rhs) {
   if (!is_qts(rhs)) {
     if (!is.numeric(rhs))
-      cli::cli_abort("The input argument {.arg rhs} should be of either of class {.cls qts} or of class {.cls numeric}.")
+      cli::cli_abort(
+        "The input argument {.arg rhs} should be of either of class {.cls qts} or of class {.cls numeric}."
+      )
     if (length(rhs) != 1)
-      cli::cli_abort("When the input argument {.arg rhs} is numeric, it should be scalar.")
+      cli::cli_abort(
+        "When the input argument {.arg rhs} is numeric, it should be scalar."
+      )
     out <- x
     out$w <- x$w * rhs
     out$x <- x$x * rhs
