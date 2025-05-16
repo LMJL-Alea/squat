@@ -51,7 +51,7 @@ Imports:
     tidyr
 Roxygen: list(markdown = TRUE)
 Depends: 
-    R (>= 4.1.0)
+    R (>= 4.2.0)
 Suggests: 
     covr,
     future,
