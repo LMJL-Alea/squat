@@ -1,3 +1,5 @@
+# squat (development version)
+
 # squat 0.4.0
 
 ## New features
