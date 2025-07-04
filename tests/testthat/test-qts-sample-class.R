@@ -81,6 +81,7 @@ test_that("Visualization code for QTS samples work", {
   p <- ggplot2::autoplot(vespa64$igp, memberships = c(rep(1, 32), rep(2, 32)))
   expect_equal(dim(p$data), c(25856, 6))
   p <- ggplot2::autoplot(vespa64$igp, highlighted = c(TRUE, rep(FALSE, 63)))
+  skip_if_not_installed("gghighlight")
   expect_equal(dim(p$data), c(404, 6))
 })
 
@@ -96,6 +97,7 @@ test_that("Visualization functions for QTS work", {
     title = "QTS sample plot with memberships",
     fig = plot(vespa64$igp, memberships = c(rep(1, 32), rep(2, 32)))
   )
+  skip_if_not_installed("gghighlight")
   vdiffr::expect_doppelganger(
     title = "QTS sample plot with highlighted observations",
     fig = plot(vespa64$igp, highlighted = c(TRUE, rep(FALSE, 63)))
