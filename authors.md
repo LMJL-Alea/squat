@@ -17,13 +17,13 @@ Source:
 [`DESCRIPTION`](https://github.com/LMJL-Alea/squat/blob/master/DESCRIPTION)
 
 Bellanger L, Drouin P, Stamm A (2026). *squat: Statistics for Quaternion
-Temporal Data*. R package version 0.4.0.9000,
+Temporal Data*. R package version 0.5.0,
 <https://github.com/LMJL-Alea/squat>.
 
     @Manual{,
       title = {squat: Statistics for Quaternion Temporal Data},
       author = {Lise Bellanger and Pierre Drouin and Aymeric Stamm},
       year = {2026},
-      note = {R package version 0.4.0.9000},
+      note = {R package version 0.5.0},
       url = {https://github.com/LMJL-Alea/squat},
     }

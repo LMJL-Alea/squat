@@ -1,6 +1,20 @@
 # Changelog
 
-## squat (development version)
+## squat 0.5.0
+
+### New features
+
+Add QTS transformations into:
+
+- smooth representation using b-spline smoothing curves;
+- angular velocity vector and magnitude;
+- angular acceleration vector and magnitude.
+
+### Minor improvements and bug fixes
+
+- Skip tests using **gghightlight** if not installed;
+- Some documentation updates;
+- Updates of GitHub action workflows.
 
 ## squat 0.4.0
 
