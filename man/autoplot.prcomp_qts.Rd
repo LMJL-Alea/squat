@@ -32,7 +32,7 @@ sample of QTS and returns the corresponding \link[ggplot2:ggplot]{ggplot2::ggplo
 enable further customization of the plot.
 }
 \examples{
-\dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 df <- as_qts_sample(vespa64$igp[1:16])
 res_pca <- prcomp(df)
 

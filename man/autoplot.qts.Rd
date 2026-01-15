@@ -23,7 +23,7 @@ This function creates a visualization of a QTS and returns the corresponding
 \link[ggplot2:ggplot]{ggplot2::ggplot} object which enable further customization of the plot.
 }
 \examples{
-\dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 ggplot2::autoplot(vespa64$igp[[1]])
 \dontshow{\}) # examplesIf}
 }
