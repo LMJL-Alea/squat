@@ -17,12 +17,17 @@
 #' @examples
 #' qts2dts(vespa64$igp[[1]], vespa64$igp[[2]])
 qts2dts <- function(x, y) {
-  if (!is_qts(x))
+  if (!is_qts(x)) {
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
-  if (!is_qts(y))
+  }
+  if (!is_qts(y)) {
     cli::cli_abort("The input argument {.arg y} should be of class {.cls qts}.")
-  if (!all(x$time == y$time))
-    cli::cli_abort("The two input QTS should be evaluated on the same time grid.")
+  }
+  if (!all(x$time == y$time)) {
+    cli::cli_abort(
+      "The two input QTS should be evaluated on the same time grid."
+    )
+  }
   qts2dts_impl(x, y)
 }
 
@@ -43,8 +48,9 @@ qts2dts <- function(x, y) {
 #' @examples
 #' qts2nts(vespa64$igp[[1]])
 qts2nts <- function(x, disable_normalization = FALSE) {
-  if (!is_qts(x))
+  if (!is_qts(x)) {
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  }
   qts2nts_impl(x, disable_normalization = disable_normalization)
 }
 
@@ -65,33 +71,140 @@ qts2nts <- function(x, disable_normalization = FALSE) {
 #' @examples
 #' qts2ats(vespa64$igp[[1]])
 qts2ats <- function(x, disable_normalization = FALSE) {
-  if (!is_qts(x))
+  if (!is_qts(x)) {
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  }
   out <- qts2ats_impl(x, disable_normalization = disable_normalization)
   out$angle[out$angle < .Machine$double.eps] <- 0
   out
 }
 
-#' QTS Transformation to Angular Velocity Time Series
+#' QTS Transformation to Angular Velocity Vector Time Series
 #'
 #' This function projects a quaternion time series into the space of angular
-#' velocities.
+#' velocity vectors.
 #'
 #' @param x An object of class [qts].
-#' @param body_frame A boolean specifying whether the fixed frame with respect
-#'   to which coordinates of the angular velocity should be computed is the body
-#'   frame or the global frame. Defaults to `FALSE`.
+#' @inheritParams stats::smooth.spline
 #'
 #' @return A time series stored as a [tibble::tibble] with columns `time`, `x`,
-#'   `y` and `z` containing the angular velocity at each time point.
+#'   `y` and `z` containing the angular velocity vector at each time point.
 #'
 #' @export
 #' @examples
-#' qts2avts(vespa64$igp[[1]])
-qts2avts <- function(x, body_frame = FALSE) {
-  if (!is_qts(x))
+#' qts2avvts(vespa64$igp[[1]])
+qts2avvts <- function(x, spar = 0) {
+  if (!is_qts(x)) {
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
-  qts2avts_impl(x, body_frame = body_frame)
+  }
+  tmp <- log(x)
+  mod_x <- stats::smooth.spline(tmp$time, tmp$x, spar = spar)
+  mod_y <- stats::smooth.spline(tmp$time, tmp$y, spar = spar)
+  mod_z <- stats::smooth.spline(tmp$time, tmp$z, spar = spar)
+  tibble::tibble(
+    time = tmp$time,
+    x = 2 * stats::predict(mod_x, tmp$time, deriv = 1)$y,
+    y = 2 * stats::predict(mod_y, tmp$time, deriv = 1)$y,
+    z = 2 * stats::predict(mod_z, tmp$time, deriv = 1)$y
+  )
+}
+
+#' QTS Transformation to Angular Velocity Magnitude Time Series
+#'
+#' This function projects a quaternion time series into the space of angular
+#' velocity magnitudes.
+#'
+#' @param x An object of class [qts].
+#' @inheritParams stats::smooth.spline
+#'
+#' @return A time series stored as a [tibble::tibble] with columns `time` and
+#'   `magnitude` containing the angular velocity magnitude at each time point.
+#'
+#' @export
+#' @examples
+#' qts2avmts(vespa64$igp[[1]])
+qts2avmts <- function(x, spar = 0) {
+  out <- qts2avvts(x, spar = spar)
+  out$magnitude <- sqrt(out$x^2 + out$y^2 + out$z^2)
+  out$x <- out$y <- out$z <- NULL
+  out
+}
+
+#' QTS Transformation to Smoothed Quaternion Time Series
+#'
+#' This function smooths a given QTS using a b-spline functional representation.
+#'
+#' @param x An object of class [qts].
+#' @inheritParams stats::smooth.spline
+#'
+#' @return An object of class `qts` storing the smoothed QTS.
+#'
+#' @export
+#' @examples
+#' qts2sqts(vespa64$igp[[1]], spar = 0.3)
+qts2sqts <- function(x, spar = 0) {
+  if (!is_qts(x)) {
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  }
+  tmp <- log(x)
+  exp(as_qts(tibble::tibble(
+    time = unique(tmp$time),
+    w = 0,
+    x = stats::smooth.spline(tmp$time, tmp$x, spar = spar)$y,
+    y = stats::smooth.spline(tmp$time, tmp$x, spar = spar)$y,
+    z = stats::smooth.spline(tmp$time, tmp$x, spar = spar)$y
+  )))
+}
+
+#' QTS Transformation to Angular Acceleration Vector Time Series
+#'
+#' This function projects a quaternion time series into the space of angular
+#' acceleration vectors.
+#'
+#' @param x An object of class [qts].
+#' @inheritParams stats::smooth.spline
+#'
+#' @return A time series stored as a [tibble::tibble] with columns `time`, `x`,
+#'   `y` and `z` containing the angular acceleration vector at each time point.
+#'
+#' @export
+#' @examples
+#' qts2aavts(vespa64$igp[[1]])
+qts2aavts <- function(x, spar = 0) {
+  if (!is_qts(x)) {
+    cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  }
+  tmp <- log(x)
+  mod_x <- stats::smooth.spline(tmp$time, tmp$x, spar = spar)
+  mod_y <- stats::smooth.spline(tmp$time, tmp$y, spar = spar)
+  mod_z <- stats::smooth.spline(tmp$time, tmp$z, spar = spar)
+  tibble::tibble(
+    time = tmp$time,
+    x = 2 * stats::predict(mod_x, tmp$time, deriv = 2)$y,
+    y = 2 * stats::predict(mod_y, tmp$time, deriv = 2)$y,
+    z = 2 * stats::predict(mod_z, tmp$time, deriv = 2)$y
+  )
+}
+
+#' QTS Transformation to Angular Acceleration Magnitude Time Series
+#'
+#' This function projects a quaternion time series into the space of angular
+#' acceleration magnitudes.
+#'
+#' @param x An object of class [qts].
+#' @inheritParams stats::smooth.spline
+#'
+#' @return A time series stored as a [tibble::tibble] with columns `time` and
+#'   `mag` containing the angular acceleration magnitude at each time point.
+#'
+#' @export
+#' @examples
+#' qts2aamts(vespa64$igp[[1]])
+qts2aamts <- function(x, spar = 0) {
+  out <- qts2aavts(x, spar = spar)
+  out$magnitude <- sqrt(out$x^2 + out$y^2 + out$z^2)
+  out$x <- out$y <- out$z <- NULL
+  out
 }
 
 #' QTS Transformation to Angle-Axis Time Series
@@ -109,8 +222,9 @@ qts2avts <- function(x, body_frame = FALSE) {
 #' @examples
 #' qts2aats(vespa64$igp[[1]])
 qts2aats <- function(x) {
-  if (!is_qts(x))
+  if (!is_qts(x)) {
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  }
   out <- qts2aats_impl(x)
   names(out) <- c("time", "angle", "ux", "uy", "uz")
   out
@@ -131,8 +245,9 @@ qts2aats <- function(x) {
 #' @examples
 #' qts2rpyts(vespa64$igp[[1]])
 qts2rpyts <- function(x) {
-  if (!is_qts(x))
+  if (!is_qts(x)) {
     cli::cli_abort("The input argument {.arg x} should be of class {.cls qts}.")
+  }
   out <- qts2rpyts_impl(x)
   names(out) <- c("time", "roll", "pitch", "yaw")
   out

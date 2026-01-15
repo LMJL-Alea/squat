@@ -42,7 +42,11 @@ reference:
     - qts2aats
     - qts2nts
     - qts2ats
-    - qts2avts
+    - qts2sqts
+    - qts2avvts
+    - qts2avmts
+    - qts2aavts
+    - qts2aamts
     - qts2rpyts
   - title: Principal Component Analysis
     contents:

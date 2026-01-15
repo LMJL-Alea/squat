@@ -48,7 +48,7 @@ RcppExport SEXP _squat_GeodesicQuaternionDistance(SEXP M1SEXP, SEXP M2SEXP, SEXP
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+        (Rf_error)("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -86,7 +86,7 @@ RcppExport SEXP _squat_RegularizeGrid(SEXP gridSEXP, SEXP valuesSEXP, SEXP gridL
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+        (Rf_error)("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -120,7 +120,7 @@ RcppExport SEXP _squat_GetGeodesicMean(SEXP valuesSEXP) {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+        (Rf_error)("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -334,18 +334,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// qts2avts_impl
-Rcpp::DataFrame qts2avts_impl(const Rcpp::DataFrame& qts, const bool body_frame);
-RcppExport SEXP _squat_qts2avts_impl(SEXP qtsSEXP, SEXP body_frameSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type qts(qtsSEXP);
-    Rcpp::traits::input_parameter< const bool >::type body_frame(body_frameSEXP);
-    rcpp_result_gen = Rcpp::wrap(qts2avts_impl(qts, body_frame));
-    return rcpp_result_gen;
-END_RCPP
-}
 // qts2aats_impl
 Rcpp::DataFrame qts2aats_impl(const Rcpp::DataFrame& qts);
 RcppExport SEXP _squat_qts2aats_impl(SEXP qtsSEXP) {
@@ -410,7 +398,7 @@ RcppExport SEXP _squat_gmean(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP, 
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+        (Rf_error)("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -446,7 +434,7 @@ RcppExport SEXP _squat_gmedian(SEXP quaternionSampleSEXP, SEXP maxIterationsSEXP
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+        (Rf_error)("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -498,7 +486,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_squat_qts2dts_impl", (DL_FUNC) &_squat_qts2dts_impl, 2},
     {"_squat_qts2nts_impl", (DL_FUNC) &_squat_qts2nts_impl, 2},
     {"_squat_qts2ats_impl", (DL_FUNC) &_squat_qts2ats_impl, 2},
-    {"_squat_qts2avts_impl", (DL_FUNC) &_squat_qts2avts_impl, 2},
     {"_squat_qts2aats_impl", (DL_FUNC) &_squat_qts2aats_impl, 1},
     {"_squat_qts2rpyts_impl", (DL_FUNC) &_squat_qts2rpyts_impl, 1},
     {"_squat_rpyts2qts_impl", (DL_FUNC) &_squat_rpyts2qts_impl, 1},

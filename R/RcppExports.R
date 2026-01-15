@@ -85,10 +85,6 @@ qts2ats_impl <- function(qts, disable_normalization = FALSE) {
     .Call(`_squat_qts2ats_impl`, qts, disable_normalization)
 }
 
-qts2avts_impl <- function(qts, body_frame = FALSE) {
-    .Call(`_squat_qts2avts_impl`, qts, body_frame)
-}
-
 qts2aats_impl <- function(qts) {
     .Call(`_squat_qts2aats_impl`, qts)
 }
