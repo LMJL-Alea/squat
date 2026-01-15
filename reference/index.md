@@ -108,8 +108,16 @@
   : QTS Transformation To Norm Time Series
 - [`qts2ats()`](https://lmjl-alea.github.io/squat/reference/qts2ats.md)
   : QTS Transformation To Angle Time Series
-- [`qts2avts()`](https://lmjl-alea.github.io/squat/reference/qts2avts.md)
-  : QTS Transformation to Angular Velocity Time Series
+- [`qts2sqts()`](https://lmjl-alea.github.io/squat/reference/qts2sqts.md)
+  : QTS Transformation to Smoothed Quaternion Time Series
+- [`qts2avvts()`](https://lmjl-alea.github.io/squat/reference/qts2avvts.md)
+  : QTS Transformation to Angular Velocity Vector Time Series
+- [`qts2avmts()`](https://lmjl-alea.github.io/squat/reference/qts2avmts.md)
+  : QTS Transformation to Angular Velocity Magnitude Time Series
+- [`qts2aavts()`](https://lmjl-alea.github.io/squat/reference/qts2aavts.md)
+  : QTS Transformation to Angular Acceleration Vector Time Series
+- [`qts2aamts()`](https://lmjl-alea.github.io/squat/reference/qts2aamts.md)
+  : QTS Transformation to Angular Acceleration Magnitude Time Series
 - [`qts2rpyts()`](https://lmjl-alea.github.io/squat/reference/qts2rpyts.md)
   : QTS Transformation to Roll-Pitch-Yaw Time Series
 
