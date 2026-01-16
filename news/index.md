@@ -1,5 +1,7 @@
 # Changelog
 
+## squat (development version)
+
 ## squat 0.5.0
 
 CRAN release: 2026-01-15
