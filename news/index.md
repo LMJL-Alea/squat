@@ -2,6 +2,8 @@
 
 ## squat 0.5.0
 
+CRAN release: 2026-01-15
+
 ### New features
 
 Add QTS transformations into:

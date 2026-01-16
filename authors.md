@@ -14,7 +14,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/LMJL-Alea/squat/blob/master/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/LMJL-Alea/squat/blob/v0.5.0/DESCRIPTION)
 
 Bellanger L, Drouin P, Stamm A (2026). *squat: Statistics for Quaternion
 Temporal Data*. R package version 0.5.0,
